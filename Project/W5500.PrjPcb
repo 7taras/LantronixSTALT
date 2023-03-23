@@ -55,7 +55,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=MYBMVQTD
+DocumentUniqueId=JCQFMXUM
 
 [Document2]
 DocumentPath=Sheet1_MCU.SchDoc
@@ -90,6 +90,10 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OLXDHOQE
+
+[GeneratedDocument1]
+DocumentPath=Project Outputs for W5500\Design Rule Check - W5500_V1.html
+DItemRevisionGUID=
 
 [Configuration1]
 Name=Sources
