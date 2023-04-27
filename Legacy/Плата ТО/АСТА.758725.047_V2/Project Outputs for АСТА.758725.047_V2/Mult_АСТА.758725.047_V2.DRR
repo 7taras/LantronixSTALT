@@ -1,0 +1,25 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: Mult_¿—“¿.758725.047_V2.PcbDoc   09.11.2020  10:16:29
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII Plated RoundHoles File : Mult_¿—“¿.758725.047_V2-Plated.TXT
+ASCII Non-Plated RoundHoles File : Mult_¿—“¿.758725.047_V2-NonPlated.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      18mil (0.457mm)                                           Round             36        PTH        16.39inch (416.21mm)
+T2      20mil (0.5mm)                                             Round             1173      PTH        281.86inch (7159.31mm)
+T3      32mil (0.8mm)                                             Round             507       PTH        133.19inch (3383.09mm)
+T4      35mil (0.9mm)                                             Round             24        PTH        8.63inch (219.32mm)
+T5      39mil (1mm)                                               Round             36        PTH        57.02inch (1448.22mm)
+T6      47mil (1.2mm)                                             Round             210       PTH        104.43inch (2652.60mm)
+T7      51mil (1.3mm)                                             Round             6         PTH        11.85inch (300.93mm)
+T8      59mil (1.5mm)                                             Round             12        PTH        12.17inch (309.07mm)
+T9      63mil (1.6mm)                                             Round             6         PTH        6.93inch (176.05mm)
+T10     128mil (3.25mm)                                           Round             6         NPTH       6.78inch (172.30mm)
+T11     134mil (3.4mm)                                            Round             24        NPTH       86.97inch (2209.03mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              2040
+
+Total Processing Time (hh:mm:ss) : 00:00:01

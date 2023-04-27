@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: D:\SVN\Проекты\Платы\Плата ТО\АСТА.758725.047_V2\Mult_АСТА.758725.047_V2.PcbDoc
+LayersSetName=Top_Bot_Plated_Thru_Holes|DrillFile=mult_АСТА.758725.047_v2-plated.txt|DrillLayers=gtl,gbl
+LayersSetName=Top_Bot_NonPlated_Thru_Holes|DrillFile=mult_АСТА.758725.047_v2-nonplated.txt|DrillLayers=gtl,gbl

@@ -1,0 +1,15 @@
+Source PCB Design Mult_¿—“¿.758725.047_V2.PcbDoc contains embedded board array. It is recomended to generate individual BOM for each embedded board PCB design.
+
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [¿—“¿.758725.047_V2.PrjPcb]
+   Generated File[Mult_¿—“¿.758725.047_V2-Plated.TXT]
+   Generated File[Mult_¿—“¿.758725.047_V2-NonPlated.TXT]
+   Generated File[Mult_¿—“¿.758725.047_V2.LDP]
+   Generated File[Mult_¿—“¿.758725.047_V2.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 10:16:30 On 09.11.2020
