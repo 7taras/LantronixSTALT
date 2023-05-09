@@ -454,6 +454,53 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
 	}
 }
+
+void WriteConfig() {
+	// Открываем доступ к FLASH (она закрыта от случайной записи)
+	HAL_FLASH_Unlock();
+	
+	// В структуре settings хранятся настройки, преобразую ее в 16-битный массив для удобства доступа
+	uint16_t* data = (uint16_t*) &settings; 
+	
+	// Объявляем структуру, необходимую для функции стирания страницы
+	FLASH_EraseInitTypeDef eraseInit; 
+	
+	HAL_StatusTypeDef statusHAL;
+	eraseInit.TypeErase = FLASH_TYPEERASE_PAGES; // Стирать постранично
+	eraseInit.PageAddress = SETTINGS_ADDRESS; // Адрес страницы для стирания
+	eraseInit.NbPages = 1; //Число страниц = 1
+	
+	uint32_t temp; // Временная переменная для результата стирания (не использую)
+	
+	HAL_FLASHEx_Erase(&eraseInit, &temp); // Вызов функции стирания
+	
+	// Будьте уверены, что размер структуры настроек кратен 2 байтам
+	// Запись всех настроек
+	for (int i = 0; i < sizeof(settings); i += 2) 
+	{ 
+		statusHAL = HAL_FLASH_Program (FLASH_TYPEPROGRAM_HALFWORD, SETTINGS_ADDRESS + i, *(data++)); 
+		if (statusHAL != HAL_OK) break; // Если что-то пошло не так - выскочить из цикла
+	}
+	
+	HAL_FLASH_Lock(); // Закрыть флешку от случайной записи
+}
+
+// Пример чтения только 4 байт настроек. Для бОльшего объема данных используйте цикл
+void ReadConfig() 
+{
+	// Структуру настроек превращаю в указатель на массив 8-ми битных значений
+	uint8_t* setData = (uint8_t*)&settings; 
+	uint32_t tempData = FlashRead(SETTINGS_ADDRESS); // Прочесть слово из флешки
+	if (tempData != 0xffffffff) 
+	{ // Если флешка не пустая
+		setData[0] = (uint8_t)((tempData & 0xff000000) >> 24); // Извлечь первый байт из слова
+		setData[1] = (uint8_t)((tempData & 0x00ff0000) >> 16); // Извлечь второй байт из слова
+		setData[2] = (uint8_t)((tempData & 0x0000ff00) >> 8); // Излечь третий байт из слова
+		setData[3] = tempData & 0xff; // Извлечь четвертый байт из слова
+	}	
+}
+
+
 /* USER CODE END 4 */
 
 /**
