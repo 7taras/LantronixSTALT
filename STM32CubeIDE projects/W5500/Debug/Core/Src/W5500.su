@@ -1,4 +1,6 @@
 ../Core/Src/W5500.cpp:4:1:W5500::W5500(SPI_HandleTypeDef*, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t)	24	static
 ../Core/Src/W5500.cpp:19:1:W5500::~W5500()	16	static
 ../Core/Src/W5500.cpp:23:6:void W5500::reset()	16	static
-../Core/Src/W5500.cpp:28:9:uint8_t W5500::readVersion()	24	static
+../Core/Src/W5500.cpp:30:6:void W5500::switchOn()	16	static
+../Core/Src/W5500.cpp:35:6:void W5500::shutDown()	16	static
+../Core/Src/W5500.cpp:40:9:uint8_t W5500::readVersion()	24	static

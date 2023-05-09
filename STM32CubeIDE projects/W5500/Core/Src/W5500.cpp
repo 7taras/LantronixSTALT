@@ -22,7 +22,19 @@ W5500::~W5500()
 
 void W5500::reset()
 {
+	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_RESET);
+	HAL_Delay(1);
+	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_SET);
+}
 
+void W5500::switchOn()
+{
+	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_SET);
+}
+
+void W5500::shutDown()
+{
+	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_RESET);
 }
 
 uint8_t W5500::readVersion()

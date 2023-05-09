@@ -43,6 +43,7 @@
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
 
+TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
 UART_HandleTypeDef huart1;
@@ -53,6 +54,9 @@ uint8_t txByte {0};
 uint8_t rxHello[20] = "\nHello everyone!!!!";
 uint8_t mosiBytes[10] {0, 0x19, 0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t misoBytes[10] {0};
+uint8_t rxBytes[128] {0};
+uint8_t rxCounter {0};
+bool rxDataIsReadyToParse {false};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,6 +65,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -101,13 +106,20 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   MX_TIM4_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
-  HAL_UART_Receive_IT(&huart1, &rxByte, 1);
-  HAL_GPIO_WritePin(W5500_RST_GPIO_Port, W5500_RST_Pin, GPIO_PIN_SET);
 
-  // �?оздаем интерфей�? �? чипом W5500
+
+
+  // Cоздаем интерфейc c чипом W5500
   W5500 port1(&hspi1, W5500_CS_GPIO_Port, W5500_CS_Pin, W5500_RST_GPIO_Port, W5500_RST_Pin);
+
+  // Включаем чип W5500
+  port1.switchOn();
+
+  // Разрешаем прием по UART
+  HAL_UART_Receive_IT(&huart1, &rxByte, 1);
 
   /* USER CODE END 2 */
 
@@ -115,15 +127,23 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_Delay(1000);
+	  if (rxDataIsReadyToParse)
+	  {
+		  if(rxBytes[0] == 'A' && rxBytes[1] == 'T')
+		  {
+
+		  }
+	  }
+
+	  //HAL_Delay(1000);
 	  //HAL_GPIO_TogglePin(LED_TX_GPIO_Port, LED_TX_Pin);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
 	  //HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, 10, 100);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_SET);
-	  txByte = port1.readVersion();
+	  ////txByte = port1.readVersion();
 
-	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+	  ////HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  ////HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
 
 
 	  //HAL_UART_Transmit(&huart1, rxHello, 20, 1000 );
@@ -209,6 +229,51 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 16;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 10000;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
 
 }
 
@@ -355,7 +420,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   {
 	  HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_RESET);
 	  HAL_TIM_Base_Start_IT(&htim4);
-	  buf1.put(rxByte);
+	  //HAL_TIM_Base_Stop(&htim3);
+	  __HAL_TIM_SET_COUNTER(&htim3, 0);
+	  HAL_TIM_Base_Start_IT(&htim3);
+	  rxBytes[rxCounter] = rxByte;
+	  //buf1.put(rxByte);
+	  rxCounter++;
 	  HAL_UART_Receive_IT(&huart1, &rxByte, 1);
   }
 }
@@ -363,17 +433,26 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
   if(huart == &huart1)
   {
-	  // га�?им �?ветодиод "TX"
+	  // гаcим cветодиод "TX"
 	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_SET);
   }
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-        if(htim->Instance == TIM4) //check if the interrupt comes from TIM4
-        {
-        	HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
-        }
+	if(htim->Instance == TIM3) //check if the interrupt comes from TIM4
+	{
+		HAL_TIM_Base_Stop(&htim3);
+		HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		HAL_UART_Transmit_IT(&huart1, rxBytes, rxCounter);
+		rxCounter = 0;
+		//HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
+	}
+	if(htim->Instance == TIM4) //check if the interrupt comes from TIM4
+	{
+		HAL_TIM_Base_Stop(&htim4);
+		HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
+	}
 }
 /* USER CODE END 4 */
 
