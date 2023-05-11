@@ -32,7 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define CONFIG_FLASHPAGE 0x0801FC00
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -57,6 +57,7 @@ uint8_t misoBytes[10] {0};
 uint8_t rxBytes[128] {0};
 uint8_t rxCounter {0};
 bool rxDataIsReadyToParse {false};
+uint8_t regSHA[6] {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,7 +68,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
-
+void WriteConfig(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -110,7 +111,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
 
-
+  //WriteConfig();
 
   // Cоздаем интерфейc c чипом W5500
   W5500 port1(&hspi1, W5500_CS_GPIO_Port, W5500_CS_Pin, W5500_RST_GPIO_Port, W5500_RST_Pin);
@@ -135,15 +136,21 @@ int main(void)
 		  }
 	  }
 
-	  //HAL_Delay(1000);
+	  HAL_Delay(1000);
 	  //HAL_GPIO_TogglePin(LED_TX_GPIO_Port, LED_TX_Pin);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
 	  //HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, 10, 100);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_SET);
-	  ////txByte = port1.readVersion();
+	  txByte = port1.readVersion();
 
-	  ////HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  ////HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+
+	  HAL_Delay(1000);
+	  //port1.writeSHA();
+	  port1.readSHA(regSHA);
+	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  HAL_UART_Transmit_IT(&huart1, regSHA, 6 );
 
 
 	  //HAL_UART_Transmit(&huart1, rxHello, 20, 1000 );
@@ -188,7 +195,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -251,9 +258,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 16;
+  htim3.Init.Prescaler = 11;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 10000;
+  htim3.Init.Period = 20000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -296,9 +303,9 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 1626;
+  htim4.Init.Prescaler = 3;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 10;
+  htim4.Init.Period = 12000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -460,31 +467,34 @@ void WriteConfig() {
 	HAL_FLASH_Unlock();
 	
 	// В структуре settings хранятся настройки, преобразую ее в 16-битный массив для удобства доступа
+	uint16_t settings[5] {0x5555, 0x6666, 0x7777, 0x8888, 0xAAAA};
 	uint16_t* data = (uint16_t*) &settings; 
 	
 	// Объявляем структуру, необходимую для функции стирания страницы
 	FLASH_EraseInitTypeDef eraseInit; 
-	
-	HAL_StatusTypeDef statusHAL;
 	eraseInit.TypeErase = FLASH_TYPEERASE_PAGES; // Стирать постранично
-	eraseInit.PageAddress = SETTINGS_ADDRESS; // Адрес страницы для стирания
+	//eraseInit.Banks = FLASH_BANK_1;
+	eraseInit.PageAddress = CONFIG_FLASHPAGE; // Адрес страницы для стирания
 	eraseInit.NbPages = 1; //Число страниц = 1
 	
-	uint32_t temp; // Временная переменная для результата стирания (не использую)
+	HAL_StatusTypeDef statusHAL;
+
+	uint32_t temp {0}; // Временная переменная куда HAL_FLASHEx_Erase() помещает результата стирания, д.б. 0xFFFFFFFF (не используем)
 	
 	HAL_FLASHEx_Erase(&eraseInit, &temp); // Вызов функции стирания
 	
 	// Будьте уверены, что размер структуры настроек кратен 2 байтам
 	// Запись всех настроек
-	for (int i = 0; i < sizeof(settings); i += 2) 
+	for (unsigned int i = 0; i < sizeof(settings); i += 2)
 	{ 
-		statusHAL = HAL_FLASH_Program (FLASH_TYPEPROGRAM_HALFWORD, SETTINGS_ADDRESS + i, *(data++)); 
+		statusHAL = HAL_FLASH_Program (FLASH_TYPEPROGRAM_HALFWORD, CONFIG_FLASHPAGE + i, *(data++));
 		if (statusHAL != HAL_OK) break; // Если что-то пошло не так - выскочить из цикла
 	}
 	
 	HAL_FLASH_Lock(); // Закрыть флешку от случайной записи
 }
 
+/*
 // Пример чтения только 4 байт настроек. Для бОльшего объема данных используйте цикл
 void ReadConfig() 
 {
@@ -493,12 +503,15 @@ void ReadConfig()
 	uint32_t tempData = FlashRead(SETTINGS_ADDRESS); // Прочесть слово из флешки
 	if (tempData != 0xffffffff) 
 	{ // Если флешка не пустая
-		setData[0] = (uint8_t)((tempData & 0xff000000) >> 24); // Извлечь первый байт из слова
-		setData[1] = (uint8_t)((tempData & 0x00ff0000) >> 16); // Извлечь второй байт из слова
-		setData[2] = (uint8_t)((tempData & 0x0000ff00) >> 8); // Излечь третий байт из слова
-		setData[3] = tempData & 0xff; // Извлечь четвертый байт из слова
+		setData[0] = (uint8_t)((tempData & 0xff000000) >> 24); // �?звлечь первый байт из слова
+		setData[1] = (uint8_t)((tempData & 0x00ff0000) >> 16); // �?звлечь второй байт из слова
+		setData[2] = (uint8_t)((tempData & 0x0000ff00) >> 8); // �?злечь третий байт из слова
+		setData[3] = tempData & 0xff; // �?звлечь четвертый байт из слова
 	}	
 }
+*/
+#define FIRMWARE_PAGE_OFFSET 	0x0C00
+
 
 
 /* USER CODE END 4 */

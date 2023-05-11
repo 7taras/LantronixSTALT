@@ -4,3 +4,5 @@ W5500.cpp:23:6:void W5500::reset()	1
 W5500.cpp:30:6:void W5500::switchOn()	1
 W5500.cpp:35:6:void W5500::shutDown()	1
 W5500.cpp:40:9:uint8_t W5500::readVersion()	1
+W5500.cpp:52:6:void W5500::readSHA(uint8_t*)	1
+W5500.cpp:70:6:void W5500::writeSHA()	1

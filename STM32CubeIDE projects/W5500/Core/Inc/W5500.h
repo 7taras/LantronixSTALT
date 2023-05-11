@@ -22,6 +22,8 @@ public:
 	void switchOn();
 	void shutDown();
 	uint8_t readVersion();
+	void readSHA(uint8_t* regSHA);
+	void writeSHA();
 
 private:
 	SPI_HandleTypeDef* hspi_w;
