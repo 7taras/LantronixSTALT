@@ -32,7 +32,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define CONFIG_FLASHPAGE 0x0801FC00
+#define CONFIG_FLASHPAGE	0x0801FC00
+#define FIRMWARE_PAGE_OFFSET 	0x0C00
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,6 +50,123 @@ TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
+typedef struct
+{
+	uint8_t mr {0};			// offset 0x00
+	uint8_t gar0 {0};		// offset 0x01
+	uint8_t gar1 {0};		// offset 0x02
+	uint8_t gar2 {0};		// offset 0x03
+	uint8_t gar3 {0};		// offset 0x04
+	uint8_t subr0 {0};		// offset 0x05
+	uint8_t subr1 {0};		// offset 0x06
+	uint8_t subr2 {0};		// offset 0x07
+	uint8_t subr3 {0};		// offset 0x08
+	uint8_t shar0 {0};		// offset 0x09
+	uint8_t shar1 {0};		// offset 0x0A
+	uint8_t shar2 {0};		// offset 0x0B
+	uint8_t shar3 {0};		// offset 0x0C
+	uint8_t shar4 {0};		// offset 0x0D
+	uint8_t shar5 {0};		// offset 0x0E
+	uint8_t sipr0 {0};		// offset 0x0F
+	uint8_t sipr1 {0};		// offset 0x10
+	uint8_t sipr2 {0};		// offset 0x11
+	uint8_t sipr3 {0};		// offset 0x12
+	uint8_t intlevel0 {0};	// offset 0x13
+	uint8_t intlevel1 {0};	// offset 0x14
+	uint8_t ir {0};			// offset 0x15
+	uint8_t imr {0};		// offset 0x16
+	uint8_t sir {0};		// offset 0x17
+	uint8_t simr {0};		// offset 0x18
+	uint8_t rtr0 {0x07};	// offset 0x19
+	uint8_t rtr1 {0xD0};	// offset 0x1A
+	uint8_t rcr {0x08};		// offset 0x1B
+	uint8_t ptimer {0x28};	// offset 0x1C
+	uint8_t pmagic {0};		// offset 0x1D
+	uint8_t phar0 {0};		// offset 0x1E
+	uint8_t phar1 {0};		// offset 0x1F
+	uint8_t phar2 {0};		// offset 0x20
+	uint8_t phar3 {0};		// offset 0x21
+	uint8_t phar4 {0};		// offset 0x22
+	uint8_t phar5 {0};		// offset 0x23
+	uint8_t psid0 {0};		// offset 0x24
+	uint8_t psid1 {0};		// offset 0x25
+	uint8_t pmru0 {0xFF};	// offset 0x26
+	uint8_t pmru1 {0xFF};	// offset 0x27
+	uint8_t uipr0 {0};		// offset 0x28
+	uint8_t uipr1 {0};		// offset 0x29
+	uint8_t uipr2 {0};		// offset 0x2A
+	uint8_t uipr3 {0};		// offset 0x2B
+	uint8_t uportr0 {0};	// offset 0x2C
+	uint8_t uportr1 {0};	// offset 0x2D
+	uint8_t phycfgr {0b10111000};	// offset 0x2E
+	uint8_t reserved {0};	// offset 0x2F
+} CommonRegisterBlock;
+
+
+// создаем регистры
+typedef struct
+{
+	uint8_t sNmr {0};			// offset 0x00
+	uint8_t sNcr {0};			// offset 0x01
+	uint8_t sNir {0};			// offset 0x02
+	uint8_t sNsr {0};			// offset 0x03
+	uint8_t sNport0 {0};		// offset 0x04
+	uint8_t sNport1 {0};		// offset 0x05
+	uint8_t sNdhar0 {0xFF};		// offset 0x06
+	uint8_t sNdhar1 {0xFF};		// offset 0x07
+	uint8_t sNdhar2 {0xFF};		// offset 0x08
+	uint8_t sNdhar3 {0xFF};		// offset 0x09
+	uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	uint8_t sNdipr0 {0};		// offset 0x0C
+	uint8_t sNdipr1 {0};		// offset 0x0D
+	uint8_t sNdipr2 {0};		// offset 0x0E
+	uint8_t sNdipr3 {0};		// offset 0x0F
+	uint8_t sNdport0 {0};		// offset 0x10
+	uint8_t sNdport1 {0};		// offset 0x11
+	uint8_t sNmssr0 {0};		// offset 0x12
+	uint8_t sNmssr1 {0};		// offset 0x13
+	uint8_t reserved14 {0};		// offset 0x14
+	uint8_t sNtos {0};			// offset 0x15
+	uint8_t sNttl {0x80};		// offset 0x16
+	uint8_t reserved17 {0};		// offset 0x17
+	uint8_t reserved18 {0};		// offset 0x18
+	uint8_t reserved19 {0};		// offset 0x19
+	uint8_t reserved1A {0};		// offset 0x1A
+	uint8_t reserved1B {0};		// offset 0x1B
+	uint8_t reserved1C {0};		// offset 0x1C
+	uint8_t reserved1D {0};		// offset 0x1D
+	uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	uint8_t sNtxFsr1 {0};		// offset 0x21
+	uint8_t sNtxRd0 {0};		// offset 0x22
+	uint8_t sNtxRd1 {0};		// offset 0x23
+	uint8_t sNtxWr0 {0};		// offset 0x24
+	uint8_t sNtxWr1 {0};		// offset 0x25
+	uint8_t sNrxRsr0 {0};		// offset 0x26
+	uint8_t sNrxRsr1 {0};		// offset 0x27
+	uint8_t sNrxRd0 {0};		// offset 0x28
+	uint8_t sNrxRd1 {0};		// offset 0x29
+	uint8_t sNrxWr0 {0};		// offset 0x2A
+	uint8_t sNrxWr1 {0};		// offset 0x2B
+	uint8_t sNimr {0xFF};		// offset 0x2C
+	uint8_t sNfrag0  {0x40};	// offset 0x2D
+	uint8_t sNfrag1 {0};		// offset 0x2E
+	uint8_t sNkpalvtr {0};		// offset 0x2F
+} SocketRegisterBlock;
+
+CommonRegisterBlock crb;
+SocketRegisterBlock srb0;
+SocketRegisterBlock srb1;
+SocketRegisterBlock srb2;
+SocketRegisterBlock srb3;
+SocketRegisterBlock srb4;
+SocketRegisterBlock srb5;
+SocketRegisterBlock srb6;
+SocketRegisterBlock srb7;
+
+
 uint8_t rxByte {0};
 uint8_t txByte {0};
 uint8_t rxHello[20] = "\nHello everyone!!!!";
@@ -68,7 +186,10 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
-void WriteConfig(void);
+void writeFLASH(void);
+void writeBlockFLASH(uint32_t address, uint64_t* pData64, unsigned int size);
+void readFLASH(void);
+void readBlockFlash(uint32_t address, uint32_t* pData32, unsigned int size);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -111,7 +232,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
 
-  //WriteConfig();
+  writeFLASH();
+
+  readFLASH();
 
   // Cоздаем интерфейc c чипом W5500
   W5500 port1(&hspi1, W5500_CS_GPIO_Port, W5500_CS_Pin, W5500_RST_GPIO_Port, W5500_RST_Pin);
@@ -462,55 +585,110 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
-void WriteConfig() {
+// Последняя (128-я) страница (1 кбайт) FLASH-памяти используется для сохранения данных регистров чипа W5500
+// Для одного чипа W5500 используется половина страницы 512 байт
+// Карта памяти следуюшая:
+// 0x0000 - 0x003F - блок Common Register
+// 0x0040 - 0x0077 - блок Socket 0 Register
+// 0x0078 - 0x00AF - блок Socket 1 Register
+// 0x00B0 - 0x00E7 - блок Socket 2 Register
+// 0x00E8 - 0x011F - блок Socket 3 Register
+// 0x0120 - 0x0157 - блок Socket 4 Register
+// 0x0158 - 0x018F - блок Socket 5 Register
+// 0x0190 - 0x01C7 - блок Socket 6 Register
+// 0x01C8 - 0x01FF - блок Socket 7 Register
+
+// Запись во FLASH
+void writeFLASH() {
 	// Открываем доступ к FLASH (она закрыта от случайной записи)
 	HAL_FLASH_Unlock();
 	
-	// В структуре settings хранятся настройки, преобразую ее в 16-битный массив для удобства доступа
-	uint16_t settings[5] {0x5555, 0x6666, 0x7777, 0x8888, 0xAAAA};
-	uint16_t* data = (uint16_t*) &settings; 
-	
 	// Объявляем структуру, необходимую для функции стирания страницы
 	FLASH_EraseInitTypeDef eraseInit; 
-	eraseInit.TypeErase = FLASH_TYPEERASE_PAGES; // Стирать постранично
+	eraseInit.TypeErase = FLASH_TYPEERASE_PAGES; // Стираем постранично
 	//eraseInit.Banks = FLASH_BANK_1;
 	eraseInit.PageAddress = CONFIG_FLASHPAGE; // Адрес страницы для стирания
-	eraseInit.NbPages = 1; //Число страниц = 1
+	eraseInit.NbPages = 1; // Число страниц = 1
 	
-	HAL_StatusTypeDef statusHAL;
+	// Объявляем переменную для сохранения результата стирания FLASH (функции HAL_FLASHEx_Erase()), д.б. 0xFFFFFFFF (не используем)
+	uint32_t statusFLASHerase {0};
 
-	uint32_t temp {0}; // Временная переменная куда HAL_FLASHEx_Erase() помещает результата стирания, д.б. 0xFFFFFFFF (не используем)
-	
-	HAL_FLASHEx_Erase(&eraseInit, &temp); // Вызов функции стирания
-	
-	// Будьте уверены, что размер структуры настроек кратен 2 байтам
-	// Запись всех настроек
-	for (unsigned int i = 0; i < sizeof(settings); i += 2)
-	{ 
-		statusHAL = HAL_FLASH_Program (FLASH_TYPEPROGRAM_HALFWORD, CONFIG_FLASHPAGE + i, *(data++));
-		if (statusHAL != HAL_OK) break; // Если что-то пошло не так - выскочить из цикла
-	}
-	
-	HAL_FLASH_Lock(); // Закрыть флешку от случайной записи
+	// Очищаем страницу
+	HAL_FLASHEx_Erase(&eraseInit, &statusFLASHerase);
+
+	// Записываем блок Common Register
+	writeBlockFLASH(CONFIG_FLASHPAGE, (uint64_t*) &crb, sizeof(crb)/8);
+
+	// Записываем блок Socket 0 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 64, (uint64_t*) &srb0, sizeof(srb0)/8);
+
+	// Записываем блок Socket 1 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 120, (uint64_t*) &srb1, sizeof(srb1)/8);
+
+	// Записываем блок Socket 2 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 176, (uint64_t*) &srb2, sizeof(srb2)/8);
+
+	// Записываем блок Socket 3 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 232, (uint64_t*) &srb3, sizeof(srb3)/8);
+
+	// Записываем блок Socket 3 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 288, (uint64_t*) &srb4, sizeof(srb4)/8);
+
+	// Записываем блок Socket 3 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 344, (uint64_t*) &srb5, sizeof(srb5)/8);
+
+	// Записываем блок Socket 3 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 400, (uint64_t*) &srb6, sizeof(srb6)/8);
+
+	// Записываем блок Socket 3 Register
+	writeBlockFLASH(CONFIG_FLASHPAGE + 456, (uint64_t*) &srb7, sizeof(srb7)/8);
+
+	// Закрываем доступ к FLASH, от случайной записи
+	HAL_FLASH_Lock();
+	return;
 }
 
-/*
-// Пример чтения только 4 байт настроек. Для бОльшего объема данных используйте цикл
-void ReadConfig() 
+// Запись области во FLASH, по 64бита (doubleword)
+void writeBlockFLASH(uint32_t address, uint64_t* pData64, unsigned int size)
 {
-	// Структуру настроек превращаю в указатель на массив 8-ми битных значений
-	uint8_t* setData = (uint8_t*)&settings; 
-	uint32_t tempData = FlashRead(SETTINGS_ADDRESS); // Прочесть слово из флешки
-	if (tempData != 0xffffffff) 
-	{ // Если флешка не пустая
-		setData[0] = (uint8_t)((tempData & 0xff000000) >> 24); // �?звлечь первый байт из слова
-		setData[1] = (uint8_t)((tempData & 0x00ff0000) >> 16); // �?звлечь второй байт из слова
-		setData[2] = (uint8_t)((tempData & 0x0000ff00) >> 8); // �?злечь третий байт из слова
-		setData[3] = tempData & 0xff; // �?звлечь четвертый байт из слова
-	}	
+	// Объявляем переменную для сохранения результата записи во FLASH (функции HAL_FLASH_Program())
+	HAL_StatusTypeDef statusFLASHprogram;
+
+	// Записываем нужную область памяти
+	for (unsigned int i = 0; i < size; i++)
+	{
+		statusFLASHprogram = HAL_FLASH_Program (FLASH_TYPEPROGRAM_DOUBLEWORD, address + i*8, *(pData64++));
+		if (statusFLASHprogram != HAL_OK) break; // Если что-то пошло не так - выходим из цикла
+	}
+	return;
 }
-*/
-#define FIRMWARE_PAGE_OFFSET 	0x0C00
+
+// Чтение из FLASH
+void readFLASH()
+{
+	// Читаем блок Common Register
+	readBlockFlash(CONFIG_FLASHPAGE, (uint32_t*) &crb, sizeof(crb)/4);
+
+	// Читаем блок Socket 0 Register
+	readBlockFlash(CONFIG_FLASHPAGE + 64, (uint32_t*) &srb0, sizeof(srb0)/4);
+
+	return;
+}
+
+// Чтение области из FLASH
+void readBlockFlash(uint32_t address, uint32_t* pData32, unsigned int size)
+{
+	for (unsigned int i = 0; i < size; i++)
+	{
+		*pData32 = *(volatile uint32_t*)(address+i*4);
+	}
+	return;
+}
+
+
+
+
+
 
 
 
