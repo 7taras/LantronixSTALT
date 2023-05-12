@@ -1,18 +1,14 @@
 ringBuffer.h:16:2:RingBuffer::RingBuffer()	1
-main.cpp:204:5:int main()	2
-main.cpp:292:6:void SystemClock_Config()	3
-main.cpp:332:13:void MX_SPI1_Init()	2
-main.cpp:370:13:void MX_TIM3_Init()	4
-main.cpp:415:13:void MX_TIM4_Init()	4
-main.cpp:460:13:void MX_USART1_UART_Init()	2
-main.cpp:493:13:void MX_GPIO_Init()	1
-main.cpp:547:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	2
-main.cpp:563:6:void HAL_UART_TxCpltCallback(UART_HandleTypeDef*)	2
-main.cpp:571:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	3
-main.cpp:602:6:void writeFLASH()	1
-main.cpp:652:6:void writeBlockFLASH(uint32_t, uint64_t*, unsigned int)	3
-main.cpp:667:6:void readFLASH()	1
-main.cpp:679:6:void readBlockFlash(uint32_t, uint32_t*, unsigned int)	2
-main.cpp:701:6:void Error_Handler()	1
-main.cpp:710:1:void __static_initialization_and_destruction_0(int, int)	3
-main.cpp:710:1:cpp)	1
+main.cpp:97:5:int main()	2
+main.cpp:195:6:void SystemClock_Config()	3
+main.cpp:235:13:void MX_SPI1_Init()	2
+main.cpp:273:13:void MX_TIM3_Init()	4
+main.cpp:318:13:void MX_TIM4_Init()	4
+main.cpp:363:13:void MX_USART1_UART_Init()	2
+main.cpp:396:13:void MX_GPIO_Init()	1
+main.cpp:450:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	2
+main.cpp:466:6:void HAL_UART_TxCpltCallback(UART_HandleTypeDef*)	2
+main.cpp:474:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	3
+main.cpp:506:6:void Error_Handler()	1
+main.cpp:515:1:void __static_initialization_and_destruction_0(int, int)	3
+main.cpp:515:1:cpp)	1
