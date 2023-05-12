@@ -1,0 +1,4 @@
+../Core/Src/flashRW.cpp:14:6:void writeFLASH()	32	static
+../Core/Src/flashRW.cpp:65:6:void writeBlockFLASH(uint32_t, uint64_t*, unsigned int)	32	static
+../Core/Src/flashRW.cpp:80:6:void readFLASH()	8	static
+../Core/Src/flashRW.cpp:113:6:void readBlockFlash(uint32_t, uint32_t*, unsigned int)	32	static

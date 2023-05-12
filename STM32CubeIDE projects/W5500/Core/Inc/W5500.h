@@ -3,9 +3,9 @@
 // W5500 API's.
 
 #pragma once
+#include <main.h>
 #include "W5500_Memory.h"
 #include "W5500_SPI.h"
-#include "main.h"
 
 class W5500
 {

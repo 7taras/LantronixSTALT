@@ -17,13 +17,10 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+#include <main.h>
 #include "W5500.h"
 #include "ringBuffer.h"
-#include "flash.h"
+#include "flashRW.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,122 +47,108 @@ TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-typedef struct CommonRegisterBlock
-{
-	uint8_t mr {0};			// offset 0x00
-	uint8_t gar0 {0};		// offset 0x01
-	uint8_t gar1 {0};		// offset 0x02
-	uint8_t gar2 {0};		// offset 0x03
-	uint8_t gar3 {0};		// offset 0x04
-	uint8_t subr0 {0};		// offset 0x05
-	uint8_t subr1 {0};		// offset 0x06
-	uint8_t subr2 {0};		// offset 0x07
-	uint8_t subr3 {0};		// offset 0x08
-	uint8_t shar0 {0};		// offset 0x09
-	uint8_t shar1 {0};		// offset 0x0A
-	uint8_t shar2 {0};		// offset 0x0B
-	uint8_t shar3 {0};		// offset 0x0C
-	uint8_t shar4 {0};		// offset 0x0D
-	uint8_t shar5 {0};		// offset 0x0E
-	uint8_t sipr0 {0};		// offset 0x0F
-	uint8_t sipr1 {0};		// offset 0x10
-	uint8_t sipr2 {0};		// offset 0x11
-	uint8_t sipr3 {0};		// offset 0x12
-	uint8_t intlevel0 {0};	// offset 0x13
-	uint8_t intlevel1 {0};	// offset 0x14
-	uint8_t ir {0};			// offset 0x15
-	uint8_t imr {0};		// offset 0x16
-	uint8_t sir {0};		// offset 0x17
-	uint8_t simr {0};		// offset 0x18
-	uint8_t rtr0 {0x07};	// offset 0x19
-	uint8_t rtr1 {0xD0};	// offset 0x1A
-	uint8_t rcr {0x08};		// offset 0x1B
-	uint8_t ptimer {0x28};	// offset 0x1C
-	uint8_t pmagic {0};		// offset 0x1D
-	uint8_t phar0 {0};		// offset 0x1E
-	uint8_t phar1 {0};		// offset 0x1F
-	uint8_t phar2 {0};		// offset 0x20
-	uint8_t phar3 {0};		// offset 0x21
-	uint8_t phar4 {0};		// offset 0x22
-	uint8_t phar5 {0};		// offset 0x23
-	uint8_t psid0 {0};		// offset 0x24
-	uint8_t psid1 {0};		// offset 0x25
-	uint8_t pmru0 {0xFF};	// offset 0x26
-	uint8_t pmru1 {0xFF};	// offset 0x27
-	uint8_t uipr0 {0};		// offset 0x28
-	uint8_t uipr1 {0};		// offset 0x29
-	uint8_t uipr2 {0};		// offset 0x2A
-	uint8_t uipr3 {0};		// offset 0x2B
-	uint8_t uportr0 {0};	// offset 0x2C
-	uint8_t uportr1 {0};	// offset 0x2D
-	uint8_t phycfgr {0b10111000};	// offset 0x2E
-	uint8_t reserved {0};	// offset 0x2F
-} CommonRegisterBlock;
 
+CommonRegisterBlock crb {
+	0, // uint8_t mr {0};		// offset 0x01
+	0, // uint8_t gar0 {0};		// offset 0x01
+	0, // uint8_t gar1 {0};		// offset 0x02
+	0, // uint8_t gar2 {0};		// offset 0x03
+	0, // uint8_t gar3 {0};		// offset 0x04
+	0, // uint8_t subr0 {0};		// offset 0x05
+	0, // uint8_t subr1 {0};		// offset 0x06
+	0, // uint8_t subr2 {0};		// offset 0x07
+	0, // uint8_t subr3 {0};		// offset 0x08
+	0, // uint8_t shar0 {0};		// offset 0x09
+	0, // uint8_t shar1 {0};		// offset 0x0A
+	0, // uint8_t shar2 {0};		// offset 0x0B
+	0, // uint8_t shar3 {0};		// offset 0x0C
+	0, // uint8_t shar4 {0};		// offset 0x0D
+	0, // uint8_t shar5 {0};		// offset 0x0E
+	0, // uint8_t sipr0 {0};		// offset 0x0F
+	0, // uint8_t sipr1 {0};		// offset 0x10
+	0, // uint8_t sipr2 {0};		// offset 0x11
+	0, // uint8_t sipr3 {0};		// offset 0x12
+	0, // uint8_t intlevel0 {0};	// offset 0x13
+	0, // uint8_t intlevel1 {0};	// offset 0x14
+	0, // uint8_t ir {0};			// offset 0x15
+	0, // uint8_t imr {0};		// offset 0x16
+	0, // uint8_t sir {0};		// offset 0x17
+	0, // uint8_t simr {0};		// offset 0x18
+	0x07, // uint8_t rtr0 {0x07};	// offset 0x19
+	0xD0, // uint8_t rtr1 {0xD0};	// offset 0x1A
+	0x08, // uint8_t rcr {0x08};		// offset 0x1B
+	0x28, // uint8_t ptimer {0x28};	// offset 0x1C
+	0, // uint8_t pmagic {0};		// offset 0x1D
+	0, // uint8_t phar0 {0};		// offset 0x1E
+	0, // uint8_t phar1 {0};		// offset 0x1F
+	0, // uint8_t phar2 {0};		// offset 0x20
+	0, // uint8_t phar3 {0};		// offset 0x21
+	0, // uint8_t phar4 {0};		// offset 0x22
+	0, // uint8_t phar5 {0};		// offset 0x23
+	0, // uint8_t psid0 {0};		// offset 0x24
+	0, // uint8_t psid1 {0};		// offset 0x25
+	0xFF, // uint8_t pmru0 {0xFF};	// offset 0x26
+	0xFF, // uint8_t pmru1 {0xFF};	// offset 0x27
+	0, // uint8_t uipr0 {0};		// offset 0x28
+	0, // uint8_t uipr1 {0};		// offset 0x29
+	0, // uint8_t uipr2 {0};		// offset 0x2A
+	0, // uint8_t uipr3 {0};		// offset 0x2B
+	0, // uint8_t uportr0 {0};	// offset 0x2C
+	0, // uint8_t uportr1 {0};	// offset 0x2D
+	0b10111000, // uint8_t phycfgr {0b10111000};	// offset 0x2E
+	0, // uint8_t reserved {0};	// offset 0x2F
+};
 
-// создаем регистры
-typedef struct SocketRegisterBlock
-{
-	uint8_t sNmr {0};			// offset 0x00
-	uint8_t sNcr {0};			// offset 0x01
-	uint8_t sNir {0};			// offset 0x02
-	uint8_t sNsr {0};			// offset 0x03
-	uint8_t sNport0 {0};		// offset 0x04
-	uint8_t sNport1 {0};		// offset 0x05
-	uint8_t sNdhar0 {0xFF};		// offset 0x06
-	uint8_t sNdhar1 {0xFF};		// offset 0x07
-	uint8_t sNdhar2 {0xFF};		// offset 0x08
-	uint8_t sNdhar3 {0xFF};		// offset 0x09
-	uint8_t sNdhar4 {0xFF};		// offset 0x0A
-	uint8_t sNdhar5 {0xFF};		// offset 0x0B
-	uint8_t sNdipr0 {0};		// offset 0x0C
-	uint8_t sNdipr1 {0};		// offset 0x0D
-	uint8_t sNdipr2 {0};		// offset 0x0E
-	uint8_t sNdipr3 {0};		// offset 0x0F
-	uint8_t sNdport0 {0};		// offset 0x10
-	uint8_t sNdport1 {0};		// offset 0x11
-	uint8_t sNmssr0 {0};		// offset 0x12
-	uint8_t sNmssr1 {0};		// offset 0x13
-	uint8_t reserved14 {0};		// offset 0x14
-	uint8_t sNtos {0};			// offset 0x15
-	uint8_t sNttl {0x80};		// offset 0x16
-	uint8_t reserved17 {0};		// offset 0x17
-	uint8_t reserved18 {0};		// offset 0x18
-	uint8_t reserved19 {0};		// offset 0x19
-	uint8_t reserved1A {0};		// offset 0x1A
-	uint8_t reserved1B {0};		// offset 0x1B
-	uint8_t reserved1C {0};		// offset 0x1C
-	uint8_t reserved1D {0};		// offset 0x1D
-	uint8_t sNrxbufSize {0x02};	// offset 0x1E
-	uint8_t sNtxbufSize {0x02};	// offset 0x1F
-	uint8_t sNtxFsr0 {0x08};	// offset 0x20
-	uint8_t sNtxFsr1 {0};		// offset 0x21
-	uint8_t sNtxRd0 {0};		// offset 0x22
-	uint8_t sNtxRd1 {0};		// offset 0x23
-	uint8_t sNtxWr0 {0};		// offset 0x24
-	uint8_t sNtxWr1 {0};		// offset 0x25
-	uint8_t sNrxRsr0 {0};		// offset 0x26
-	uint8_t sNrxRsr1 {0};		// offset 0x27
-	uint8_t sNrxRd0 {0};		// offset 0x28
-	uint8_t sNrxRd1 {0};		// offset 0x29
-	uint8_t sNrxWr0 {0};		// offset 0x2A
-	uint8_t sNrxWr1 {0};		// offset 0x2B
-	uint8_t sNimr {0xFF};		// offset 0x2C
-	uint8_t sNfrag0  {0x40};	// offset 0x2D
-	uint8_t sNfrag1 {0};		// offset 0x2E
-	uint8_t sNkpalvtr {0};		// offset 0x2F
-} SocketRegisterBlock;
-
-CommonRegisterBlock crb;
-SocketRegisterBlock srb0;
-SocketRegisterBlock srb1;
-SocketRegisterBlock srb2;
-SocketRegisterBlock srb3;
-SocketRegisterBlock srb4;
-SocketRegisterBlock srb5;
-SocketRegisterBlock srb6;
-SocketRegisterBlock srb7;
-
+SocketRegisterBlock srb0, srb1, srb2, srb3, srb4, srb5, srb6, srb7 {
+	0, // uint8_t sNmr {0};			// offset 0x00
+	0, // uint8_t sNcr {0};			// offset 0x01
+	0, // uint8_t sNir {0};			// offset 0x02
+	0, // uint8_t sNsr {0};			// offset 0x03
+	0, // uint8_t sNport0 {0};		// offset 0x04
+	0, // uint8_t sNport1 {0};		// offset 0x05
+	0xFF, // uint8_t sNdhar0 {0xFF};		// offset 0x06
+	0xFF, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xFF, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0xFF, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xFF, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0xFF, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	0, // uint8_t sNdipr0 {0};		// offset 0x0C
+	0, // uint8_t sNdipr1 {0};		// offset 0x0D
+	0, // uint8_t sNdipr2 {0};		// offset 0x0E
+	0, // uint8_t sNdipr3 {0};		// offset 0x0F
+	0, // uint8_t sNdport0 {0};		// offset 0x10
+	0, // uint8_t sNdport1 {0};		// offset 0x11
+	0, // uint8_t sNmssr0 {0};		// offset 0x12
+	0, // uint8_t sNmssr1 {0};		// offset 0x13
+	0, // uint8_t reserved14 {0};		// offset 0x14
+	0, // uint8_t sNtos {0};			// offset 0x15
+	0x80, // uint8_t sNttl {0x80};		// offset 0x16
+	0, // uint8_t reserved17 {0};		// offset 0x17
+	0, // uint8_t reserved18 {0};		// offset 0x18
+	0, // uint8_t reserved19 {0};		// offset 0x19
+	0, // uint8_t reserved1A {0};		// offset 0x1A
+	0, // uint8_t reserved1B {0};		// offset 0x1B
+	0, // uint8_t reserved1C {0};		// offset 0x1C
+	0, // uint8_t reserved1D {0};		// offset 0x1D
+	0x02, // uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	0x02, // uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	0x08, // uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	0, // uint8_t sNtxFsr1 {0};		// offset 0x21
+	0, // uint8_t sNtxRd0 {0};		// offset 0x22
+	0, // uint8_t sNtxRd1 {0};		// offset 0x23
+	0, // uint8_t sNtxWr0 {0};		// offset 0x24
+	0, // uint8_t sNtxWr1 {0};		// offset 0x25
+	0, // uint8_t sNrxRsr0 {0};		// offset 0x26
+	0, // uint8_t sNrxRsr1 {0};		// offset 0x27
+	0, // uint8_t sNrxRd0 {0};		// offset 0x28
+	0, // uint8_t sNrxRd1 {0};		// offset 0x29
+	0, // uint8_t sNrxWr0 {0};		// offset 0x2A
+	0, // uint8_t sNrxWr1 {0};		// offset 0x2B
+	0xFF, // uint8_t sNimr {0xFF};		// offset 0x2C
+	0x40, // uint8_t sNfrag0  {0x40};	// offset 0x2D
+	0, // uint8_t sNfrag1 {0};		// offset 0x2E
+	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
+};
 
 uint8_t rxByte {0};
 uint8_t txByte {0};
@@ -230,6 +213,7 @@ int main(void)
   //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
 
   writeFLASH();
+  /*
   crb.gar1 = 50;
   crb.gar2 = 100;
   crb.gar3 = 200;
@@ -241,6 +225,7 @@ int main(void)
   srb0.sNdipr2 = 2;
   srb1.sNdipr1 = 1;
   srb2.sNdipr2 = 2;
+  */
   readFLASH();
 
   // Cоздаем интерфейc c чипом W5500
@@ -617,6 +602,7 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
+
 
 #ifdef  USE_FULL_ASSERT
 /**
