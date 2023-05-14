@@ -17,9 +17,11 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <main.h>
+#include "main.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 #include "W5500.h"
-#include "ringBuffer.h"
 #include "flashRW.h"
 /* USER CODE END Includes */
 
@@ -157,6 +159,8 @@ uint8_t mosiBytes[10] {0, 0x19, 0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t misoBytes[10] {0};
 uint8_t rxBytes[128] {0};
 uint8_t rxCounter {0};
+uint8_t rxBytesToParse[128] {0};
+uint8_t rxCounterToParse {0};
 bool rxDataIsReadyToParse {false};
 uint8_t regSHA[6] {0};
 /* USER CODE END PV */
@@ -174,7 +178,7 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-RingBuffer buf1;
+//RingBuffer buf1;
 /* USER CODE END 0 */
 
 /**
@@ -212,7 +216,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
 
-  writeFLASH();
+  //writeFLASH();
   /*
   crb.gar1 = 50;
   crb.gar2 = 100;
@@ -226,7 +230,7 @@ int main(void)
   srb1.sNdipr1 = 1;
   srb2.sNdipr2 = 2;
   */
-  readFLASH();
+  //readFLASH();
 
   // Cоздаем интерфейc c чипом W5500
   W5500 port1(&hspi1, W5500_CS_GPIO_Port, W5500_CS_Pin, W5500_RST_GPIO_Port, W5500_RST_Pin);
@@ -237,6 +241,7 @@ int main(void)
   // Разрешаем прием по UART
   HAL_UART_Receive_IT(&huart1, &rxByte, 1);
 
+  CommonRegisterBlock test;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -245,27 +250,29 @@ int main(void)
   {
 	  if (rxDataIsReadyToParse)
 	  {
-		  if(rxBytes[0] == 'A' && rxBytes[1] == 'T')
+		  if(rxBytesToParse[0] == 'A' && rxBytesToParse[1] == 'T')
 		  {
-
+			  port1.writeSHA();
 		  }
+		  rxDataIsReadyToParse = false;
 	  }
 
-	  HAL_Delay(1000);
+	  HAL_Delay(5000);
 	  //HAL_GPIO_TogglePin(LED_TX_GPIO_Port, LED_TX_Pin);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
 	  //HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, 10, 100);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_SET);
-	  txByte = port1.readVersion();
+	  //txByte = port1.readVersion();
+	  port1.readCRB(&test.mr);
 
 	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+	  HAL_UART_Transmit_IT(&huart1, &test.mr, 48 );
 
-	  HAL_Delay(1000);
+	  //HAL_Delay(1000);
 	  //port1.writeSHA();
-	  port1.readSHA(regSHA);
-	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, regSHA, 6 );
+	  //port1.readSHA(regSHA);
+	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  //HAL_UART_Transmit_IT(&huart1, regSHA, 6 );
 
 
 	  //HAL_UART_Transmit(&huart1, rxHello, 20, 1000 );
@@ -495,7 +502,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, W5500_RST_Pin|W5500_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(W5500_RST_GPIO_Port, W5500_RST_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED_TX_Pin|LED_RX_Pin, GPIO_PIN_SET);
@@ -565,9 +575,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim->Instance == TIM3) //check if the interrupt comes from TIM4
 	{
 		HAL_TIM_Base_Stop(&htim3);
-		HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-		HAL_UART_Transmit_IT(&huart1, rxBytes, rxCounter);
+		//HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		//HAL_UART_Transmit_IT(&huart1, rxBytes, rxCounter);
+		for (int i = 0; i < rxCounter; ++i)
+		{
+			rxBytesToParse[i] = rxBytes[i];
+		}
+		rxCounterToParse = rxCounter;
+		rxDataIsReadyToParse = true;
 		rxCounter = 0;
+
 		//HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
 	}
 	if(htim->Instance == TIM4) //check if the interrupt comes from TIM4
@@ -602,7 +619,6 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
 
 #ifdef  USE_FULL_ASSERT
 /**
