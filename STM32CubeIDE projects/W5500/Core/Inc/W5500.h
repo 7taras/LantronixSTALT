@@ -24,6 +24,7 @@ public:
 	uint8_t readVersion();
 	void readSHA(uint8_t* regSHA);
 	void writeSHA();
+	void readCRB(uint8_t* regCRB);
 
 private:
 	SPI_HandleTypeDef* hspi_w;
@@ -32,6 +33,6 @@ private:
 	uint16_t W5500_CS_Pin_w;
 	uint16_t W5500_RST_Pin_w;
 
-	uint8_t mosiBytes_w[10] {0};
-	uint8_t misoBytes_w[10] {0};
+	uint8_t mosiBytes_w[64] {0};
+	uint8_t misoBytes_w[64] {0};
 };

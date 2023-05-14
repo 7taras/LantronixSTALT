@@ -42,7 +42,6 @@ uint8_t W5500::readVersion()
 	mosiBytes_w[0] = 0;
 	mosiBytes_w[1] = W5500_VERSIONR;
 	mosiBytes_w[2] = 0;
-	mosiBytes_w[4] = 0;
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
 	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
@@ -54,7 +53,6 @@ void W5500::readSHA(uint8_t* regSHA)
 	mosiBytes_w[0] = 0;
 	mosiBytes_w[1] = W5500_SHAR;
 	mosiBytes_w[2] = 0;
-	mosiBytes_w[4] = 0;
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
 	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 9, 100);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
@@ -81,5 +79,20 @@ void W5500::writeSHA()
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
 	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 9, 100);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
+void W5500::readCRB(uint8_t* regCRB)
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_MR;
+	mosiBytes_w[2] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 50, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	for(int i = 0; i < 47; ++i)
+	{
+		regCRB[i] = misoBytes_w[i+3];
+	}
 	return;
 }
