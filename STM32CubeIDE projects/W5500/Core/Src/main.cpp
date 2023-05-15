@@ -56,26 +56,26 @@ CommonRegisterBlock crb {
 	0, // uint8_t gar1 {0};		// offset 0x02
 	0, // uint8_t gar2 {0};		// offset 0x03
 	0, // uint8_t gar3 {0};		// offset 0x04
-	0, // uint8_t subr0 {0};		// offset 0x05
-	0, // uint8_t subr1 {0};		// offset 0x06
-	0, // uint8_t subr2 {0};		// offset 0x07
+	255, // uint8_t subr0 {0};		// offset 0x05
+	255, // uint8_t subr1 {0};		// offset 0x06
+	255, // uint8_t subr2 {0};		// offset 0x07
 	0, // uint8_t subr3 {0};		// offset 0x08
-	0, // uint8_t shar0 {0};		// offset 0x09
-	0, // uint8_t shar1 {0};		// offset 0x0A
-	0, // uint8_t shar2 {0};		// offset 0x0B
-	0, // uint8_t shar3 {0};		// offset 0x0C
+	0x89, // uint8_t shar0 {0};		// offset 0x09
+	0xAB, // uint8_t shar1 {0};		// offset 0x0A
+	0xCD, // uint8_t shar2 {0};		// offset 0x0B
+	0xEF, // uint8_t shar3 {0};		// offset 0x0C
 	0, // uint8_t shar4 {0};		// offset 0x0D
-	0, // uint8_t shar5 {0};		// offset 0x0E
-	0, // uint8_t sipr0 {0};		// offset 0x0F
-	0, // uint8_t sipr1 {0};		// offset 0x10
-	0, // uint8_t sipr2 {0};		// offset 0x11
-	0, // uint8_t sipr3 {0};		// offset 0x12
+	0x01, // uint8_t shar5 {0};		// offset 0x0E
+	192, // uint8_t sipr0 {0};		// offset 0x0F
+	168, // uint8_t sipr1 {0};		// offset 0x10
+	1, // uint8_t sipr2 {0};		// offset 0x11
+	15, // uint8_t sipr3 {0};		// offset 0x12
 	0, // uint8_t intlevel0 {0};	// offset 0x13
 	0, // uint8_t intlevel1 {0};	// offset 0x14
 	0, // uint8_t ir {0};			// offset 0x15
-	0, // uint8_t imr {0};		// offset 0x16
+	0b11000000, // uint8_t imr {0};		// offset 0x16
 	0, // uint8_t sir {0};		// offset 0x17
-	0, // uint8_t simr {0};		// offset 0x18
+	0x01, // uint8_t simr {0};		// offset 0x18
 	0x07, // uint8_t rtr0 {0x07};	// offset 0x19
 	0xD0, // uint8_t rtr1 {0xD0};	// offset 0x1A
 	0x08, // uint8_t rcr {0x08};		// offset 0x1B
@@ -252,7 +252,19 @@ int main(void)
 	  {
 		  if(rxBytesToParse[0] == 'A' && rxBytesToParse[1] == 'T')
 		  {
-			  port1.writeSHA();
+			  switch(rxBytesToParse[2])
+			  {
+			  case '0':
+				  port1.writeSHA();
+				  break;
+			  case '1':
+				  port1.switchOn();
+				  break;
+			  default:
+
+			  }
+
+
 		  }
 		  rxDataIsReadyToParse = false;
 	  }

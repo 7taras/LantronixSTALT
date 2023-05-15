@@ -20,18 +20,64 @@ W5500::~W5500()
 {
 }
 
+// аппаратный сброс чипа
 void W5500::reset()
 {
+	// для аппаратного сброса "тянем" вход RSTn к "0" на 1 мс
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_RESET);
 	HAL_Delay(1);
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_SET);
 }
 
+// программный сброс чипа
+void W5500::softwareReset()
+{
+	// для программного сброса устанавливаем бит RST регистра MR в "1"
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_MR;
+	mosiBytes_w[2] = 0b00000100;
+	mosiBytes_w[3] = 0b10000000;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(hspi_w, mosiBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	mosiBytes_w[2] = 0;
+	misoBytes_w[3] = 0b11111111;
+	// ждём подтверждения сброса - бит RST регистра MR должен установиться в "0"
+	while(misoBytes_w[3] & 0b10000000)
+	{
+		HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	}
+	return;
+}
+
+// программный сброс PHY
+void W5500::softwareResetPHY()
+{
+	// для программного сброса устанавливаем бит RST регистра PHYCFGR в "0"
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_PHYCFGR;
+	mosiBytes_w[2] = 0b00000100;
+	mosiBytes_w[3] = 0b00111000;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(hspi_w, mosiBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	mosiBytes_w[2] = 0;
+	misoBytes_w[3] = 0;
+	// ждём подтверждения сброса - бит RST регистра PHYCFGR должен установиться в "1"
+	while(!(misoBytes_w[3] & 0b10000000))
+	{
+		HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	}
+	return;
+}
+
+// включение чипа
 void W5500::switchOn()
 {
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_SET);
 }
 
+// выключение чипа
 void W5500::shutDown()
 {
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_RESET);

@@ -19,6 +19,8 @@ public:
 			);
 	~W5500();
 	void reset();
+	void softwareReset();
+	void softwareResetPHY();
 	void switchOn();
 	void shutDown();
 	uint8_t readVersion();

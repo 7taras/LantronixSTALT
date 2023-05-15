@@ -1,9 +1,11 @@
 ../Core/Src/W5500.cpp:4:1:W5500::W5500(SPI_HandleTypeDef*, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t)	24	static
 ../Core/Src/W5500.cpp:19:1:W5500::~W5500()	16	static
-../Core/Src/W5500.cpp:23:6:void W5500::reset()	16	static
-../Core/Src/W5500.cpp:30:6:void W5500::switchOn()	16	static
-../Core/Src/W5500.cpp:35:6:void W5500::shutDown()	16	static
-../Core/Src/W5500.cpp:40:9:uint8_t W5500::readVersion()	24	static
-../Core/Src/W5500.cpp:51:6:void W5500::readSHA(uint8_t*)	24	static
-../Core/Src/W5500.cpp:68:6:void W5500::writeSHA()	24	static
-../Core/Src/W5500.cpp:85:6:void W5500::readCRB(uint8_t*)	32	static
+../Core/Src/W5500.cpp:24:6:void W5500::reset()	16	static
+../Core/Src/W5500.cpp:33:6:void W5500::softwareReset()	24	static
+../Core/Src/W5500.cpp:54:6:void W5500::softwareResetPHY()	24	static
+../Core/Src/W5500.cpp:75:6:void W5500::switchOn()	16	static
+../Core/Src/W5500.cpp:81:6:void W5500::shutDown()	16	static
+../Core/Src/W5500.cpp:86:9:uint8_t W5500::readVersion()	24	static
+../Core/Src/W5500.cpp:97:6:void W5500::readSHA(uint8_t*)	24	static
+../Core/Src/W5500.cpp:114:6:void W5500::writeSHA()	24	static
+../Core/Src/W5500.cpp:131:6:void W5500::readCRB(uint8_t*)	32	static
