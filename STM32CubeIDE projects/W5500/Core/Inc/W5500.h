@@ -27,6 +27,7 @@ public:
 	void readSHA(uint8_t* regSHA);
 	void writeSHA();
 	void readCRB(uint8_t* regCRB);
+	void writeCRB(uint8_t* regCRB);
 
 private:
 	SPI_HandleTypeDef* hspi_w;

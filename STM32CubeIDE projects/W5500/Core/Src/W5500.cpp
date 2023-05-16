@@ -75,6 +75,7 @@ void W5500::softwareResetPHY()
 void W5500::switchOn()
 {
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_SET);
+	HAL_Delay(1);
 }
 
 // выключение чипа
@@ -140,5 +141,20 @@ void W5500::readCRB(uint8_t* regCRB)
 	{
 		regCRB[i] = misoBytes_w[i+3];
 	}
+	return;
+}
+
+void W5500::writeCRB(uint8_t* regCRB)
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_MR;
+	mosiBytes_w[2] = 0b00000100;
+	for(int i = 0; i < 47; ++i)
+	{
+		mosiBytes_w[i+3] = regCRB[i];
+	}
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 50, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
 	return;
 }
