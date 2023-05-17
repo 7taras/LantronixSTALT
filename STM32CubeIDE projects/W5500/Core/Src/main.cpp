@@ -238,6 +238,18 @@ int main(void)
   // Включаем чип W5500
   port1.switchOn();
   port1.writeCRB(&crb.mr);
+  port1.initSocket0();
+  port1.setUDPmodeSocket0();
+  HAL_Delay(10);
+  port1.openSocket0();
+  HAL_Delay(10);
+
+  txByte = port1.getStatusSocket0();
+  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+
+
+
 
   // Разрешаем прием по UART
   HAL_UART_Receive_IT(&huart1, &rxByte, 1);
@@ -270,7 +282,7 @@ int main(void)
 		  rxDataIsReadyToParse = false;
 	  }
 
-	  HAL_Delay(5000);
+	  HAL_Delay(1000);
 	  //HAL_GPIO_TogglePin(LED_TX_GPIO_Port, LED_TX_Pin);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
 	  //HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, 10, 100);
@@ -284,10 +296,13 @@ int main(void)
 
 	  //HAL_Delay(1000);
 	  //port1.writeSHA();
-	  port1.readSHA(rxHello);
-	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, rxHello, 6 );
+	  //port1.readSHA(rxHello);
+	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  //HAL_UART_Transmit_IT(&huart1, rxHello, 6 );
 
+	  txByte = port1.readRXbufferSocket0();
+	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
 
 	  //HAL_UART_Transmit(&huart1, rxHello, 20, 1000 );
 	  //HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_RESET);

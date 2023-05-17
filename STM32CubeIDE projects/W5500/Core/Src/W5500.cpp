@@ -158,3 +158,76 @@ void W5500::writeCRB(uint8_t* regCRB)
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
 	return;
 }
+
+void W5500::initSocket0()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_Sn_PORT;
+	mosiBytes_w[2] = 0b00001100;
+	mosiBytes_w[3] = 0x1D; // port 7500
+	mosiBytes_w[4] = 0x4C;
+	mosiBytes_w[5] = 0x50; // 50-EB-F6-4D-BA-12
+	mosiBytes_w[6] = 0xEB;
+	mosiBytes_w[7] = 0xF6;
+	mosiBytes_w[8] = 0x4D;
+	mosiBytes_w[9] = 0xBA;
+	mosiBytes_w[10] = 0x12;
+	mosiBytes_w[11] = 0xC0; // 192.168.1.7
+	mosiBytes_w[12] = 0xA8;
+	mosiBytes_w[13] = 0x01;
+	mosiBytes_w[14] = 0x07;
+	mosiBytes_w[15] = 0x19; // port 6500
+	mosiBytes_w[16] = 0x64;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 17, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
+void W5500::setUDPmodeSocket0()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_Sn_MR;
+	mosiBytes_w[2] = 0b00001100;
+	mosiBytes_w[3] = 0b00000010; // UDP mode
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
+void W5500::openSocket0()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_Sn_CR;
+	mosiBytes_w[2] = 0b00001100;
+	mosiBytes_w[3] = 0b00000001; // open
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
+uint8_t W5500::getStatusSocket0()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_Sn_SR;
+	mosiBytes_w[2] = 0b00001000;
+	mosiBytes_w[3] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return misoBytes_w[3];
+}
+
+uint8_t W5500::readRXbufferSocket0()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = 0;
+	mosiBytes_w[2] = 0b00010000;
+	mosiBytes_w[3] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return misoBytes_w[3];
+}

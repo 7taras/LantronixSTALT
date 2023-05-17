@@ -10,3 +10,8 @@ W5500.cpp:98:6:void W5500::readSHA(uint8_t*)	1
 W5500.cpp:115:6:void W5500::writeSHA()	1
 W5500.cpp:132:6:void W5500::readCRB(uint8_t*)	2
 W5500.cpp:147:6:void W5500::writeCRB(uint8_t*)	2
+W5500.cpp:162:6:void W5500::initSocket0()	1
+W5500.cpp:187:6:void W5500::setUDPmodeSocket0()	1
+W5500.cpp:199:6:void W5500::openSocket0()	1
+W5500.cpp:211:9:uint8_t W5500::getStatusSocket0()	1
+W5500.cpp:223:9:uint8_t W5500::readRXbufferSocket0()	1

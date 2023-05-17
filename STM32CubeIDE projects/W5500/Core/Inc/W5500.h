@@ -29,6 +29,12 @@ public:
 	void readCRB(uint8_t* regCRB);
 	void writeCRB(uint8_t* regCRB);
 
+	void initSocket0();
+	void setUDPmodeSocket0();
+	void openSocket0();
+	uint8_t getStatusSocket0();
+	uint8_t readRXbufferSocket0();
+
 private:
 	SPI_HandleTypeDef* hspi_w;
 	GPIO_TypeDef* W5500_CS_GPIO_Port_w;
