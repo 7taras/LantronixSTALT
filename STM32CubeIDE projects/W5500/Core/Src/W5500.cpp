@@ -27,6 +27,7 @@ void W5500::reset()
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_RESET);
 	HAL_Delay(1);
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_SET);
+	HAL_Delay(1);
 }
 
 // программный сброс чипа
@@ -82,6 +83,7 @@ void W5500::switchOn()
 void W5500::shutDown()
 {
 	HAL_GPIO_WritePin(W5500_RST_GPIO_Port_w, W5500_RST_Pin_w, GPIO_PIN_RESET);
+	HAL_Delay(1);
 }
 
 uint8_t W5500::readVersion()
@@ -226,6 +228,40 @@ uint8_t W5500::readRXbufferSocket0()
 	mosiBytes_w[1] = 0;
 	mosiBytes_w[2] = 0b00010000;
 	mosiBytes_w[3] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return misoBytes_w[3];
+}
+
+uint8_t W5500::readSIR()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_SIR;
+	mosiBytes_w[2] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return misoBytes_w[3];
+}
+
+void W5500::clearSIR()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_SIR;
+	mosiBytes_w[2] = 0b00000100;
+	mosiBytes_w[0] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
+uint8_t W5500::readSn_IR()
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = W5500_Sn_IR;
+	mosiBytes_w[2] = 0b00001000;;
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
 	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);

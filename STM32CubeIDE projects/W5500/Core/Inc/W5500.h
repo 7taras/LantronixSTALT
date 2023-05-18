@@ -34,6 +34,9 @@ public:
 	void openSocket0();
 	uint8_t getStatusSocket0();
 	uint8_t readRXbufferSocket0();
+	uint8_t readSIR();
+	void clearSIR();
+	uint8_t readSn_IR();
 
 private:
 	SPI_HandleTypeDef* hspi_w;

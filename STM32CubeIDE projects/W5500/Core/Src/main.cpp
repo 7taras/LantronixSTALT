@@ -161,6 +161,7 @@ uint8_t rxBytes[128] {0};
 uint8_t rxCounter {0};
 uint8_t rxBytesToParse[128] {0};
 uint8_t rxCounterToParse {0};
+uint8_t irq4[6] = "IRQ  ";
 bool rxDataIsReadyToParse {false};
 //uint8_t txByte[6] {0};
 /* USER CODE END PV */
@@ -178,6 +179,9 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+// Cоздаем интерфейc c чипом W5500
+W5500 port1(&hspi1, W5500_CS_GPIO_Port, W5500_CS_Pin, W5500_RST_GPIO_Port, W5500_RST_Pin);
 //RingBuffer buf1;
 /* USER CODE END 0 */
 
@@ -214,6 +218,9 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
+
+
   //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
 
   //writeFLASH();
@@ -232,11 +239,11 @@ int main(void)
   */
   //readFLASH();
 
-  // Cоздаем интерфейc c чипом W5500
-  W5500 port1(&hspi1, W5500_CS_GPIO_Port, W5500_CS_Pin, W5500_RST_GPIO_Port, W5500_RST_Pin);
+
 
   // Включаем чип W5500
-  port1.switchOn();
+
+  port1.reset();
   port1.writeCRB(&crb.mr);
   port1.initSocket0();
   port1.setUDPmodeSocket0();
@@ -623,7 +630,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == W5500_INT_Pin)
+	{
+		irq4[4] = port1.readSIR();
+		irq4[5] = port1.readSn_IR();
+		if(irq4[4]) port1.clearSIR();
 
+		HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		HAL_UART_Transmit_IT(&huart1, irq4, 6 );
+	}
+}
 
 
 
