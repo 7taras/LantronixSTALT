@@ -164,6 +164,7 @@ uint8_t rxCounterToParse {0};
 uint8_t irq4[6] = "IRQ  ";
 bool rxDataIsReadyToParse {false};
 //uint8_t txByte[6] {0};
+uint8_t regTXRX[12] {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -251,9 +252,7 @@ int main(void)
   port1.openSocket0();
   HAL_Delay(10);
 
-  txByte = port1.getStatusSocket0();
-  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+
 
 
 
@@ -307,9 +306,9 @@ int main(void)
 	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
 	  //HAL_UART_Transmit_IT(&huart1, rxHello, 6 );
 
-	  txByte = port1.readRXbufferSocket0();
-	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+	  //txByte = port1.readRXbufferSocket0();
+	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  //HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
 
 	  //HAL_UART_Transmit(&huart1, rxHello, 20, 1000 );
 	  //HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_RESET);
@@ -634,12 +633,40 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == W5500_INT_Pin)
 	{
-		irq4[4] = port1.readSIR();
-		irq4[5] = port1.readSn_IR();
-		if(irq4[4]) port1.clearSIR();
+		//uint8_t statusSIR = port1.readSIR();
+		// если прерывание от какого либо сокета обрабатываем здесь
+		//if(statusSIR)
+		//{
 
+		//}
+
+		regTXRX[0] = port1.readIR();
+		regTXRX[1] = port1.readSIR();
+		regTXRX[2] = port1.readSn_IR();
+		port1.clearIR();
+		regTXRX[3] = port1.readIR();
+		regTXRX[4] = port1.readSIR();
+		regTXRX[5] = port1.readSn_IR();
+		port1.clearSIR();
+		regTXRX[6] = port1.readIR();
+		regTXRX[7] = port1.readSIR();
+		regTXRX[8] = port1.readSn_IR();
+		port1.clearSn_IR();
+		regTXRX[9] = port1.readIR();
+		regTXRX[10] = port1.readSIR();
+		regTXRX[11] = port1.readSn_IR();
 		HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-		HAL_UART_Transmit_IT(&huart1, irq4, 6 );
+		HAL_UART_Transmit_IT(&huart1, regTXRX, 12);
+
+		word_y rsrTemp;
+
+
+		//irq4[4] = port1.readSIR();
+		//irq4[5] = port1.readSn_IR();
+		//if(irq4[4]) port1.clearSIR();
+
+		//port1.readSocketTXRX(regTXRX);
+
 	}
 }
 

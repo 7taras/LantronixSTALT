@@ -6,15 +6,23 @@
 ../Core/Src/W5500.cpp:76:6:void W5500::switchOn()	16	static
 ../Core/Src/W5500.cpp:83:6:void W5500::shutDown()	16	static
 ../Core/Src/W5500.cpp:89:9:uint8_t W5500::readVersion()	24	static
-../Core/Src/W5500.cpp:100:6:void W5500::readSHA(uint8_t*)	24	static
-../Core/Src/W5500.cpp:117:6:void W5500::writeSHA()	24	static
-../Core/Src/W5500.cpp:134:6:void W5500::readCRB(uint8_t*)	32	static
-../Core/Src/W5500.cpp:149:6:void W5500::writeCRB(uint8_t*)	32	static
-../Core/Src/W5500.cpp:164:6:void W5500::initSocket0()	24	static
-../Core/Src/W5500.cpp:189:6:void W5500::setUDPmodeSocket0()	24	static
-../Core/Src/W5500.cpp:201:6:void W5500::openSocket0()	24	static
-../Core/Src/W5500.cpp:213:9:uint8_t W5500::getStatusSocket0()	24	static
-../Core/Src/W5500.cpp:225:9:uint8_t W5500::readRXbufferSocket0()	24	static
-../Core/Src/W5500.cpp:237:9:uint8_t W5500::readSIR()	24	static
-../Core/Src/W5500.cpp:248:6:void W5500::clearSIR()	24	static
-../Core/Src/W5500.cpp:260:9:uint8_t W5500::readSn_IR()	24	static
+../Core/Src/W5500.cpp:101:9:uint8_t W5500::readByteFromCRB(uint8_t)	24	static
+../Core/Src/W5500.cpp:113:6:void W5500::readArrayFromCRB(uint8_t*, uint8_t, uint8_t)	48	static
+../Core/Src/W5500.cpp:129:6:void W5500::writeByteToCRB(uint8_t, uint8_t)	16	static
+../Core/Src/W5500.cpp:142:6:void W5500::writeArrayToCRB(uint8_t*, uint8_t, uint8_t)	32	static
+../Core/Src/W5500.cpp:157:6:void W5500::readSHA(uint8_t*)	24	static
+../Core/Src/W5500.cpp:174:6:void W5500::writeSHA()	24	static
+../Core/Src/W5500.cpp:191:6:void W5500::readCRB(uint8_t*)	32	static
+../Core/Src/W5500.cpp:206:6:void W5500::writeCRB(uint8_t*)	32	static
+../Core/Src/W5500.cpp:221:6:void W5500::initSocket0()	24	static
+../Core/Src/W5500.cpp:246:6:void W5500::setUDPmodeSocket0()	24	static
+../Core/Src/W5500.cpp:258:6:void W5500::openSocket0()	24	static
+../Core/Src/W5500.cpp:270:9:uint8_t W5500::getStatusSocket0()	24	static
+../Core/Src/W5500.cpp:282:9:uint8_t W5500::readRXbufferSocket0()	24	static
+../Core/Src/W5500.cpp:295:9:uint8_t W5500::readIR()	24	static
+../Core/Src/W5500.cpp:307:6:void W5500::clearIR()	24	static
+../Core/Src/W5500.cpp:321:9:uint8_t W5500::readSIR()	24	static
+../Core/Src/W5500.cpp:333:6:void W5500::clearSIR()	24	static
+../Core/Src/W5500.cpp:346:9:uint8_t W5500::readSn_IR()	24	static
+../Core/Src/W5500.cpp:357:6:void W5500::clearSn_IR()	24	static
+../Core/Src/W5500.cpp:369:6:void W5500::readSocketTXRX(uint8_t*)	32	static

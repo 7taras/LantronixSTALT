@@ -175,6 +175,24 @@ struct SocketRegisterBlock
 	uint8_t sNkpalvtr;		// offset 0x2F
 };
 
+struct word_w
+{
+	uint8_t hbyte;
+	uint8_t lbyte;
+};
+
+union word_u
+{
+	uint16_t word;
+	struct word_w;
+};
+
+union word_y
+{
+	uint16_t word;
+	uint8_t byte[2];
+};
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

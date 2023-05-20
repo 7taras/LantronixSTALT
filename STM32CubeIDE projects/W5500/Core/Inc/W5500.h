@@ -24,19 +24,31 @@ public:
 	void switchOn();
 	void shutDown();
 	uint8_t readVersion();
+
+	uint8_t readByteFromCRB(uint8_t address);
+	void readArrayFromCRB(uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress);
+	void writeByteToCRB(uint8_t value, uint8_t address);
+	void writeArrayToCRB(uint8_t* array, uint8_t sizeArray, uint8_t beginAddress);
+
 	void readSHA(uint8_t* regSHA);
 	void writeSHA();
 	void readCRB(uint8_t* regCRB);
 	void writeCRB(uint8_t* regCRB);
+
+
 
 	void initSocket0();
 	void setUDPmodeSocket0();
 	void openSocket0();
 	uint8_t getStatusSocket0();
 	uint8_t readRXbufferSocket0();
+	uint8_t readIR();
+	void clearIR();
 	uint8_t readSIR();
 	void clearSIR();
 	uint8_t readSn_IR();
+	void clearSn_IR();
+	void readSocketTXRX(uint8_t* regTXRX);
 
 private:
 	SPI_HandleTypeDef* hspi_w;
