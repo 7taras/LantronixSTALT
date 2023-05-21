@@ -71,3 +71,12 @@
 // Время на обработку сигнала SCSn до передачи, Tcss = 5 ns min;
 // Время на обработку сигнала SCSn после передачи, Tcsh = 5 ns min;
 // Время удержания сигнала SCSn в "1" по окончанию передачи, Tcs = 30 ns min;
+
+#define SOCKET0 0b00001000
+#define SOCKET1 0b00101000
+#define SOCKET2 0b01001000
+#define SOCKET3 0b01101000
+#define SOCKET4 0b10001000
+#define SOCKET5 0b10101000
+#define SOCKET6 0b11001000
+#define SOCKET7 0b11101000

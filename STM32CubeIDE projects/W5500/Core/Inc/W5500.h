@@ -18,28 +18,26 @@ public:
 			uint16_t W5500_RST_Pin_m
 			);
 	~W5500();
+
 	void reset();
 	void softwareReset();
 	void softwareResetPHY();
 	void switchOn();
 	void shutDown();
-	uint8_t readVersion();
 
 	uint8_t readByteFromCRB(uint8_t address);
 	void readArrayFromCRB(uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress);
 	void writeByteToCRB(uint8_t value, uint8_t address);
 	void writeArrayToCRB(uint8_t* array, uint8_t sizeArray, uint8_t beginAddress);
 
-	void readSHA(uint8_t* regSHA);
-	void writeSHA();
-	void readCRB(uint8_t* regCRB);
-	void writeCRB(uint8_t* regCRB);
+	uint8_t readByteFromSRB(uint8_t socket, uint8_t address);
+	void readArrayFromSRB(uint8_t socket, uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress);
+	void writeByteToSRB(uint8_t socket, uint8_t value, uint8_t address);
+	void writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, uint8_t beginAddress);
 
 
 
-	void initSocket0();
-	void setUDPmodeSocket0();
-	void openSocket0();
+
 	uint8_t getStatusSocket0();
 	uint8_t readRXbufferSocket0();
 	uint8_t readIR();
