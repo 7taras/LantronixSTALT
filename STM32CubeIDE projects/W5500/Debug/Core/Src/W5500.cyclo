@@ -6,19 +6,23 @@ W5500.cpp:55:6:void W5500::softwareResetPHY()	2
 W5500.cpp:76:6:void W5500::switchOn()	1
 W5500.cpp:83:6:void W5500::shutDown()	1
 W5500.cpp:92:9:uint8_t W5500::readByteFromCRB(uint8_t)	1
-W5500.cpp:104:6:void W5500::readArrayFromCRB(uint8_t*, uint8_t, uint8_t)	2
-W5500.cpp:120:6:void W5500::writeByteToCRB(uint8_t, uint8_t)	1
-W5500.cpp:133:6:void W5500::writeArrayToCRB(uint8_t*, uint8_t, uint8_t)	2
-W5500.cpp:149:9:uint8_t W5500::readByteFromSRB(uint8_t, uint8_t)	1
-W5500.cpp:161:6:void W5500::readArrayFromSRB(uint8_t, uint8_t*, uint8_t, uint8_t)	2
-W5500.cpp:177:6:void W5500::writeByteToSRB(uint8_t, uint8_t, uint8_t)	1
-W5500.cpp:190:6:void W5500::writeArrayToSRB(uint8_t, uint8_t*, uint8_t, uint8_t)	2
-W5500.cpp:215:9:uint8_t W5500::getStatusSocket0()	1
-W5500.cpp:227:9:uint8_t W5500::readRXbufferSocket0()	1
-W5500.cpp:240:9:uint8_t W5500::readIR()	1
-W5500.cpp:252:6:void W5500::clearIR()	1
-W5500.cpp:266:9:uint8_t W5500::readSIR()	1
-W5500.cpp:278:6:void W5500::clearSIR()	1
-W5500.cpp:291:9:uint8_t W5500::readSn_IR()	1
-W5500.cpp:302:6:void W5500::clearSn_IR()	1
-W5500.cpp:314:6:void W5500::readSocketTXRX(uint8_t*)	2
+W5500.cpp:104:10:uint16_t W5500::readWordFromCRB(uint8_t)	1
+W5500.cpp:119:6:void W5500::readArrayFromCRB(uint8_t*, uint8_t, uint8_t)	2
+W5500.cpp:135:6:void W5500::writeByteToCRB(uint8_t, uint8_t)	1
+W5500.cpp:148:6:void W5500::writeWordToCRB(uint16_t, uint8_t)	1
+W5500.cpp:164:6:void W5500::writeArrayToCRB(uint8_t*, uint8_t, uint8_t)	2
+W5500.cpp:180:9:uint8_t W5500::readByteFromSRB(uint8_t, uint8_t)	1
+W5500.cpp:192:10:uint16_t W5500::readWordFromSRB(uint8_t, uint8_t)	1
+W5500.cpp:207:6:void W5500::readArrayFromSRB(uint8_t, uint8_t*, uint8_t, uint8_t)	2
+W5500.cpp:223:6:void W5500::writeByteToSRB(uint8_t, uint8_t, uint8_t)	1
+W5500.cpp:236:6:void W5500::writeWordToSRB(uint8_t, uint16_t, uint8_t)	1
+W5500.cpp:252:6:void W5500::writeArrayToSRB(uint8_t, uint8_t*, uint8_t, uint8_t)	2
+W5500.cpp:279:9:uint8_t W5500::getStatusSocket0()	1
+W5500.cpp:291:9:uint8_t W5500::readRXbufferSocket0()	1
+W5500.cpp:304:9:uint8_t W5500::readIR()	1
+W5500.cpp:316:6:void W5500::clearIR()	1
+W5500.cpp:330:9:uint8_t W5500::readSIR()	1
+W5500.cpp:342:6:void W5500::clearSIR()	1
+W5500.cpp:355:9:uint8_t W5500::readSn_IR()	1
+W5500.cpp:366:6:void W5500::clearSn_IR()	1
+W5500.cpp:378:6:void W5500::readSocketTXRX(uint8_t*)	2

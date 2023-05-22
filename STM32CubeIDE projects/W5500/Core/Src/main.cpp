@@ -203,7 +203,8 @@ SocketRegisterBlock srb1, srb2, srb3, srb4, srb5, srb6, srb7 {
 	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
 };
 
-
+uint16_t misoSize {0};
+bool misoReady {false};
 
 uint8_t rxByte {0};
 uint8_t txByte {0};
@@ -325,10 +326,10 @@ int main(void)
 
 
 
-  word_y valueTEST;
-  ethernetA1.readArrayFromSRB(SOCKET0, &valueTEST.byte[0], 2, W5500_Sn_TX_FSR);
-  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-  HAL_UART_Transmit_IT(&huart1, &valueTEST.byte[0], 2);
+  //word_y valueTEST;
+  //valueTEST.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_TX_FSR);
+  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+  //HAL_UART_Transmit_IT(&huart1, &valueTEST.byte[0], 2);
 
 
 
@@ -363,7 +364,7 @@ int main(void)
 		  rxDataIsReadyToParse = false;
 	  }
 
-	  HAL_Delay(1000);
+	  //HAL_Delay(1000);
 	  //HAL_GPIO_TogglePin(LED_TX_GPIO_Port, LED_TX_Pin);
 	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
 	  //HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, 10, 100);
@@ -391,11 +392,20 @@ int main(void)
 	  */
 
 
-	  HAL_Delay(5000);
-	  //port1.writeByteToSRB(SOCKET0, 0x77, W5500_Sn_DHAR);
-	  ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, 0x00);
-	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, rxBytes, 48 );
+	  //HAL_Delay(5000);
+	  ////port1.writeByteToSRB(SOCKET0, 0x77, W5500_Sn_DHAR);
+	  //ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, 0x00);
+	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  //HAL_UART_Transmit_IT(&huart1, rxBytes, 48 );
+
+	  if(misoReady)
+	  {
+		  HAL_Delay(1000);
+		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		  HAL_UART_Transmit_IT(&huart1, misoBytes, misoSize);
+		  misoReady = false;
+	  }
+
 
 
 
@@ -731,16 +741,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			if (valueSn_IR == 0x04) // получен пакет
 			{
 				word_y valueRSR, valueRSRretry, valueRD;
-				ethernetA1.readArrayFromSRB(SOCKET0, &valueRSR.byte[0], 2, W5500_Sn_RX_RSR);
-				ethernetA1.readArrayFromSRB(SOCKET0, &valueRSRretry.byte[0], 2, W5500_Sn_RX_RSR);
+				valueRSR.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RSR);
+				valueRSRretry.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RSR);
 				while (valueRSR.word != valueRSRretry.word)
 				{
 					valueRSR.word = valueRSRretry.word;
-					ethernetA1.readArrayFromSRB(SOCKET0, &valueRSRretry.byte[0], 2, W5500_Sn_RX_RSR);
+					valueRSRretry.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RSR);
 				}
-				ethernetA1.readArrayFromSRB(SOCKET0, &valueRD.byte[0], 2, W5500_Sn_RX_RD);
+				valueRD.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RD);
 
-				mosiBytes[0] = valueRD.byte[0];
+				mosiBytes[0] = valueRD.byte[1];
 				mosiBytes[1] = valueRD.byte[0];
 				mosiBytes[2] = 0b00011000;
 				HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
@@ -748,10 +758,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_SET);
 
 				valueRD.word += valueRSR.word;
-				ethernetA1.writeArrayToSRB(SOCKET0, &valueRD.byte[0], 2, W5500_Sn_RX_RD);
+				ethernetA1.writeWordToSRB(SOCKET0, valueRD.word, W5500_Sn_RX_RD);
 
-				HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-				HAL_UART_Transmit_IT(&huart1, misoBytes, valueRSR.word);
+				misoSize = valueRSR.word;
+				misoReady = true;
+
+
 			}
 		}
 

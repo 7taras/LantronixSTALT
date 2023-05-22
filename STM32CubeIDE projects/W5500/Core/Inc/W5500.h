@@ -7,6 +7,12 @@
 #include "W5500_Memory.h"
 #include "W5500_SPI.h"
 
+union word_w5500
+{
+	uint16_t word;
+	uint8_t byte[2];
+};
+
 class W5500
 {
 public:
@@ -26,14 +32,20 @@ public:
 	void shutDown();
 
 	uint8_t readByteFromCRB(uint8_t address);
+	uint16_t readWordFromCRB(uint8_t address);
 	void readArrayFromCRB(uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress);
 	void writeByteToCRB(uint8_t value, uint8_t address);
+	void writeWordToCRB(uint16_t value, uint8_t address);
 	void writeArrayToCRB(uint8_t* array, uint8_t sizeArray, uint8_t beginAddress);
 
 	uint8_t readByteFromSRB(uint8_t socket, uint8_t address);
+	uint16_t readWordFromSRB(uint8_t socket, uint8_t address);
 	void readArrayFromSRB(uint8_t socket, uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress);
 	void writeByteToSRB(uint8_t socket, uint8_t value, uint8_t address);
+	void writeWordToSRB(uint8_t socket, uint16_t value, uint8_t address);
 	void writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, uint8_t beginAddress);
+
+
 
 
 

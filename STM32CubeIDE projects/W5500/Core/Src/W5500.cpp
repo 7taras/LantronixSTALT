@@ -100,6 +100,21 @@ uint8_t W5500::readByteFromCRB(uint8_t address)
 	return misoBytes_w[3];
 }
 
+// читаем слово (2 байта) из регистров блока CRB
+uint16_t W5500::readWordFromCRB(uint8_t address)
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = address;
+	mosiBytes_w[2] = 0;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 5, 1000);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	word_w5500 temp;
+	temp.byte[0] = misoBytes_w[4];
+	temp.byte[1] = misoBytes_w[3];
+	return temp.word;
+}
+
 // читаем массив байт из регистров блока CRB
 void W5500::readArrayFromCRB(uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress)
 {
@@ -125,6 +140,22 @@ void W5500::writeByteToCRB(uint8_t value, uint8_t address)
 	mosiBytes_w[3] = value;
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
 	HAL_SPI_Transmit(hspi_w, mosiBytes_w, 4, 1000);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
+// записываем слово (2 байта) в регистры блока CRB
+void W5500::writeWordToCRB(uint16_t value, uint8_t address)
+{
+	word_w5500 temp;
+	temp.word = value;
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = address;
+	mosiBytes_w[2] = 0b00000100;
+	mosiBytes_w[3] = temp.byte[1];
+	mosiBytes_w[4] = temp.byte[0];
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(hspi_w, mosiBytes_w, 5, 1000);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
 	return;
 }
@@ -157,6 +188,21 @@ uint8_t W5500::readByteFromSRB(uint8_t socket, uint8_t address)
 	return misoBytes_w[3];
 }
 
+// читаем слово (2 байта) из регистров блока SRB
+uint16_t W5500::readWordFromSRB(uint8_t socket, uint8_t address)
+{
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = address;
+	mosiBytes_w[2] = socket;
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 5, 1000);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	word_w5500 temp;
+	temp.byte[0] = misoBytes_w[4];
+	temp.byte[1] = misoBytes_w[3];
+	return temp.word;
+}
+
 // читаем массив байт из регистров блока SRB
 void W5500::readArrayFromSRB(uint8_t socket, uint8_t* destinationArray, uint8_t sizeArray, uint8_t beginAddress)
 {
@@ -186,6 +232,22 @@ void W5500::writeByteToSRB(uint8_t socket, uint8_t value, uint8_t address)
 	return;
 }
 
+// записываем слово (2 байта) в регистры блока SRB
+void W5500::writeWordToSRB(uint8_t socket, uint16_t value, uint8_t address)
+{
+	word_w5500 temp;
+	temp.word = value;
+	mosiBytes_w[0] = 0;
+	mosiBytes_w[1] = address;
+	mosiBytes_w[2] = (socket | 0b00000100);
+	mosiBytes_w[3] = temp.byte[1];
+	mosiBytes_w[4] = temp.byte[0];
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(hspi_w, mosiBytes_w, 5, 1000);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
+
 // записываем массив байт в регистры блока SRB
 void W5500::writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, uint8_t beginAddress)
 {
@@ -203,6 +265,8 @@ void W5500::writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, u
 }
 
 //---------------------------------------------------------------------------
+
+
 
 
 
