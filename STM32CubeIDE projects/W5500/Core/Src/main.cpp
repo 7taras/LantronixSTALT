@@ -205,7 +205,7 @@ SocketRegisterBlock srb1, srb2, srb3, srb4, srb5, srb6, srb7 {
 
 uint16_t misoSize {0};
 bool misoReady {false};
-uint8_t destIPandPort[6] {192, 168, 1, 7, 0x19, 0x64};
+uint8_t destIPandPort[14] {0x19, 0x64, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 192, 168, 1, 7, 0x19, 0x64};
 
 uint8_t rxByte {0};
 uint8_t txByte {0};
@@ -323,14 +323,6 @@ int main(void)
 
 
 
-
-
-
-
-  //word_y valueTEST;
-  //valueTEST.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_TX_FSR);
-  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-  //HAL_UART_Transmit_IT(&huart1, &valueTEST.byte[0], 2);
 
 
 
