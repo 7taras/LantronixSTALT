@@ -205,6 +205,7 @@ SocketRegisterBlock srb1, srb2, srb3, srb4, srb5, srb6, srb7 {
 
 uint16_t misoSize {0};
 bool misoReady {false};
+uint8_t destIPandPort[6] {192, 168, 1, 7, 0x19, 0x64};
 
 uint8_t rxByte {0};
 uint8_t txByte {0};
@@ -384,12 +385,13 @@ int main(void)
 
 	  //txByte = port1.readRXbufferSocket0();
 
-/*
-	  txByte = port1.readByteFromSRB(0b00001000, 0x16);
-	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
-	  HAL_Delay(1000);
-	  */
+
+	  //txByte = port1.readByteFromSRB(0b00001000, 0x16);
+	  //txByte = 0x41;
+	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  //HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+	  //HAL_Delay(1000);
+
 
 
 	  //HAL_Delay(5000);
@@ -402,8 +404,24 @@ int main(void)
 	  {
 		  HAL_Delay(1000);
 		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-		  HAL_UART_Transmit_IT(&huart1, misoBytes, misoSize);
+		  HAL_UART_Transmit_IT(&huart1, &misoBytes[3], misoSize);
 		  misoReady = false;
+
+		  ethernetA1.writeArrayToSRB(SOCKET0, destIPandPort, 6, W5500_Sn_DIPR);
+		  HAL_Delay(100);
+		  txByte = '\n';
+		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+
+		  HAL_Delay(100);
+		  ////port1.writeByteToSRB(SOCKET0, 0x77, W5500_Sn_DHAR);
+		  ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, 0x00);
+		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		  HAL_UART_Transmit_IT(&huart1, rxBytes, 48 );
+
+		  HAL_Delay(1000);
+		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+		  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
 	  }
 
 
@@ -759,6 +777,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				valueRD.word += valueRSR.word;
 				ethernetA1.writeWordToSRB(SOCKET0, valueRD.word, W5500_Sn_RX_RD);
+
+				// завершаем процесс чтения из буфера RX
+				ethernetA1.writeByteToSRB(SOCKET0, W5500_RECV, W5500_Sn_CR);
 
 				misoSize = valueRSR.word;
 				misoReady = true;
