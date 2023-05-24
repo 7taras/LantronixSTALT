@@ -267,7 +267,7 @@ void W5500::writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, u
 //---------------------------------------------------------------------------
 
 // читаем массив байт в буфер TX
-void W5500::readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uint8_t sizeArray, word_y beginAddress)
+void W5500::readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uint16_t sizeArray, word_y beginAddress)
 {
 	mosiBytes_w[0] = beginAddress.byte[1];
 	mosiBytes_w[1] = beginAddress.byte[0];
@@ -284,7 +284,7 @@ void W5500::readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uin
 
 
 // записываем массив байт в буфер TX
-void W5500::writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint8_t sizeArray, word_y beginAddress)
+void W5500::writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint16_t sizeArray, word_y beginAddress)
 {
 	mosiBytes_w[0] = beginAddress.byte[1];
 	mosiBytes_w[1] = beginAddress.byte[0];
@@ -307,29 +307,7 @@ void W5500::writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint8_t sizeArr
 
 
 
-uint8_t W5500::getStatusSocket0()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_Sn_SR;
-	mosiBytes_w[2] = 0b00001000;
-	mosiBytes_w[3] = 0;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return misoBytes_w[3];
-}
 
-uint8_t W5500::readRXbufferSocket0()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = 0;
-	mosiBytes_w[2] = 0b00010000;
-	mosiBytes_w[3] = 0;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 100);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return misoBytes_w[3];
-}
 
 // читаем флаги прерываний, общих для чипа
 uint8_t W5500::readIR()
@@ -406,35 +384,63 @@ void W5500::clearSn_IR()
 	return;
 }
 
-void W5500::readSocketTXRX(uint8_t* regTXRX)
+
+// получаем данные по протоколу UDP
+void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t sizeArray)
 {
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_Sn_TX_FSR;
-	mosiBytes_w[2] = 0b00001000;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 15, 100);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	for(int i = 0; i < 12; ++i)
+	// временные переменные для хранения значений регистров RX_RSR и RX_RD
+	word_y valueRSR, valueRSRretry, valueRD;
+
+	// читаем регистр RX_RSR (разница между значениями RX_WR и RX_RD)
+	valueRSR.word = readWordFromSRB(socket, W5500_Sn_RX_RSR);
+	// считываем еще раз
+	valueRSRretry.word = readWordFromSRB(socket, W5500_Sn_RX_RSR);
+	// сравниваем, тем самым исключая изменения в нём в момент считывания
+	while (valueRSR.word != valueRSRretry.word)
 	{
-		regTXRX[i] = misoBytes_w[i+3];
+		valueRSR.word = valueRSRretry.word;
+		valueRSRretry.word = readWordFromSRB(socket, W5500_Sn_RX_RSR);
 	}
+
+	// читаем регистр RX_RD (указатель на начало полученных данных)
+	valueRD.word = readWordFromSRB(socket, W5500_Sn_RX_RD);
+
+	// читаем буфер RX
+	readArrayFromRXbuffer(socket, dataForReceive, valueRSR.word, valueRD);
+
+	// увеличиваем значение указателя на полученные данные на число считанных байт
+	valueRD.word += valueRSR.word;
+	writeWordToSRB(socket, valueRD.word, W5500_Sn_RX_RD);
+
+	// завершаем процесс чтения из буфера RX
+	writeByteToSRB(socket, W5500_RECV, W5500_Sn_CR);
 	return;
 }
 
-void W5500::sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint8_t sizeArray)
+// отправляем данные по протоколу UDP
+void W5500::sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray)
 {
+	// временные переменные для хранения значений регистров TX_FSR и TX_WR
 	word_y valueFSR, valueWR;
+
+	// читаем регистр TX_FSR (хранит значение свободного места в буфере TX
 	valueFSR.word = readWordFromSRB(socket, W5500_Sn_TX_FSR);
+
+	// проверяем, что размер данных для отправки не превышает количества свободного места в буфере
 	if((uint16_t)sizeArray > valueFSR.word) return;
 
+	// читаем регистр TX_WR (указатель на начало свободного места буфера)
 	valueWR.word = readWordFromSRB(socket, W5500_Sn_TX_WR);
 
+	// записываем данные для отправки в буфер TX
 	writeArrayToTXbuffer(socket, dataForSend, sizeArray, valueWR);
 
+	// увеличиваем значение указателя на начало свободного места
 	valueWR.word += sizeArray;
 	writeWordToSRB(socket, valueWR.word, W5500_Sn_TX_WR);
 
 	// отправляем данные
 	writeByteToSRB(socket, W5500_SEND, W5500_Sn_CR);
+	return;
 }
 

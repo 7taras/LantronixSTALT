@@ -279,22 +279,8 @@ int main(void)
 
 
 
-  //HAL_UART_Transmit_IT(&huart1, rxHello, 20 );
-
   //writeFLASH();
-  /*
-  crb.gar1 = 50;
-  crb.gar2 = 100;
-  crb.gar3 = 200;
-  crb.subr0 = 1;
-  crb.subr1 = 2;
-  crb.subr2 = 3;
-  crb.subr3 = 4;
-  srb0.sNdipr1 = 1;
-  srb0.sNdipr2 = 2;
-  srb1.sNdipr1 = 1;
-  srb2.sNdipr2 = 2;
-  */
+
   //readFLASH();
 
 
@@ -758,31 +744,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			uint8_t valueSn_IR = ethernetA1.readByteFromSRB(SOCKET0, W5500_Sn_IR);
 			if (valueSn_IR == 0x04) // получен пакет
 			{
-				word_y valueRSR, valueRSRretry, valueRD;
-				valueRSR.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RSR);
-				valueRSRretry.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RSR);
-				while (valueRSR.word != valueRSRretry.word)
-				{
-					valueRSR.word = valueRSRretry.word;
-					valueRSRretry.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RSR);
-				}
-				valueRD.word = ethernetA1.readWordFromSRB(SOCKET0, W5500_Sn_RX_RD);
 
-				mosiBytes[0] = valueRD.byte[1];
-				mosiBytes[1] = valueRD.byte[0];
-				mosiBytes[2] = 0b00011000;
-				HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
-				HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, (valueRSR.word + 3), 1000);
-				HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_SET);
 
-				valueRD.word += valueRSR.word;
-				ethernetA1.writeWordToSRB(SOCKET0, valueRD.word, W5500_Sn_RX_RD);
-
-				// завершаем процесс чтения из буфера RX
-				ethernetA1.writeByteToSRB(SOCKET0, W5500_RECV, W5500_Sn_CR);
-
-				misoSize = valueRSR.word;
-				misoReady = true;
+				//misoSize = valueRSR.word;
+				//misoReady = true;
 
 
 			}
