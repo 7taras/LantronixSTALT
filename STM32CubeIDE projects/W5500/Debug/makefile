@@ -78,8 +78,8 @@ all: main-build
 main-build: W5500.elf secondary-outputs
 
 # Tool invocations
-W5500.elf W5500.map: $(OBJS) $(USER_OBJS) C:\7t\git\w55\LantronixSTALT\STM32CubeIDE\ projects\W5500\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "W5500.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\7t\git\w55\LantronixSTALT\STM32CubeIDE projects\W5500\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="W5500.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+W5500.elf W5500.map: $(OBJS) $(USER_OBJS) C:\Users\85tar\STM32CubeIDE\workspace_1.12.1\LantronixSTALT\STM32CubeIDE\ projects\W5500\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "W5500.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\85tar\STM32CubeIDE\workspace_1.12.1\LantronixSTALT\STM32CubeIDE projects\W5500\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="W5500.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

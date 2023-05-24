@@ -207,6 +207,8 @@ uint16_t misoSize {0};
 bool misoReady {false};
 uint8_t destIPandPort[14] {0x19, 0x64, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 192, 168, 1, 7, 0x19, 0x64};
 
+uint8_t txPacket[9] {0xC0, 0xA8, 0, 7, 0xD6, 0xD8, 0, 1 , 0x41};
+
 uint8_t rxByte {0};
 uint8_t txByte {0};
 uint8_t rxHello[20] = "\nHello everyone!!!!";
@@ -301,12 +303,18 @@ int main(void)
   ethernetA1.reset();
   // Записываем "настройки" в блок регистров CRB
   ethernetA1.writeArrayToCRB(&crb.mr, 47, W5500_MR);
+
+
+  HAL_Delay(10);
+  // Устанавливаем режим UDP для сокета 0
+  ethernetA1.writeByteToSRB(SOCKET0, 0b10000010, W5500_Sn_MR);  // 0b00000010 = UDP mode
+
+  HAL_Delay(10);
+
   // Записываем порты, MAC, IP в блок регистров SRB сокета 0
   // однако на практике запись порта, MAC, IP пира не сохраняется
   ethernetA1.writeArrayToSRB(SOCKET0, &srb0.sNport0, 14, W5500_Sn_PORT);
 
-  // Устанавливаем режим UDP для сокета 0
-  ethernetA1.writeByteToSRB(SOCKET0, 0b00000010, W5500_Sn_MR);  // 0b00000010 = UDP mode
   HAL_Delay(10);
 
   // Открываем сокет 0
@@ -320,8 +328,8 @@ int main(void)
   // Разрешаем прием по UART
   HAL_UART_Receive_IT(&huart1, &rxByte, 1);
 
-
-
+  HAL_Delay(5000);
+  ethernetA1.sendDataUDP(SOCKET0, txPacket, 9);
 
 
 
