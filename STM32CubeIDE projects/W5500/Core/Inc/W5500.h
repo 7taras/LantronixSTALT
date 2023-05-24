@@ -45,7 +45,8 @@ public:
 	void writeWordToSRB(uint8_t socket, uint16_t value, uint8_t address);
 	void writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, uint8_t beginAddress);
 
-
+	void readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uint8_t sizeArray, word_y beginAddress);
+	void writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint8_t sizeArray, word_y beginAddress);
 
 
 
@@ -59,6 +60,9 @@ public:
 	uint8_t readSn_IR();
 	void clearSn_IR();
 	void readSocketTXRX(uint8_t* regTXRX);
+
+
+	void sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint8_t sizeArray);
 
 private:
 	SPI_HandleTypeDef* hspi_w;

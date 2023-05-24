@@ -266,7 +266,38 @@ void W5500::writeArrayToSRB(uint8_t socket, uint8_t* array, uint8_t sizeArray, u
 
 //---------------------------------------------------------------------------
 
+// читаем массив байт в буфер TX
+void W5500::readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uint8_t sizeArray, word_y beginAddress)
+{
+	mosiBytes_w[0] = beginAddress.byte[1];
+	mosiBytes_w[1] = beginAddress.byte[0];
+	mosiBytes_w[2] = ((socket+2) | 0b00000100);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, (sizeArray + 3), 1000);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	for(int i = 0; i < sizeArray; ++i)
+	{
+		destinationArray[i] = misoBytes_w[i+3];
+	}
+	return;
+}
 
+
+// записываем массив байт в буфер TX
+void W5500::writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint8_t sizeArray, word_y beginAddress)
+{
+	mosiBytes_w[0] = beginAddress.byte[1];
+	mosiBytes_w[1] = beginAddress.byte[0];
+	mosiBytes_w[2] = (++socket | 0b00000100);
+	for(int i = 0; i < sizeArray; ++i)
+	{
+		mosiBytes_w[i+3] = array[i];
+	}
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
+	HAL_SPI_Transmit(hspi_w, mosiBytes_w, (sizeArray + 3), 1000);
+	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
+	return;
+}
 
 
 
@@ -389,3 +420,21 @@ void W5500::readSocketTXRX(uint8_t* regTXRX)
 	}
 	return;
 }
+
+void W5500::sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint8_t sizeArray)
+{
+	word_y valueFSR, valueWR;
+	valueFSR.word = readWordFromSRB(SOCKET0, W5500_Sn_TX_FSR);
+	if((uint16_t)sizeArray > valueFSR.word) return;
+
+	valueWR.word = readWordFromSRB(socket, W5500_Sn_TX_WR);
+
+	writeArrayToTXbuffer(socket, dataForSend, sizeArray, valueWR);
+
+	valueWR.word += sizeArray;
+	writeWordToSRB(socket, valueWR.word, W5500_Sn_TX_WR);
+
+	// отправляем данные
+	writeByteToSRB(socket, W5500_SEND, W5500_Sn_CR);
+}
+

@@ -17,12 +17,15 @@ W5500.cpp:207:6:void W5500::readArrayFromSRB(uint8_t, uint8_t*, uint8_t, uint8_t
 W5500.cpp:223:6:void W5500::writeByteToSRB(uint8_t, uint8_t, uint8_t)	1
 W5500.cpp:236:6:void W5500::writeWordToSRB(uint8_t, uint16_t, uint8_t)	1
 W5500.cpp:252:6:void W5500::writeArrayToSRB(uint8_t, uint8_t*, uint8_t, uint8_t)	2
-W5500.cpp:279:9:uint8_t W5500::getStatusSocket0()	1
-W5500.cpp:291:9:uint8_t W5500::readRXbufferSocket0()	1
-W5500.cpp:304:9:uint8_t W5500::readIR()	1
-W5500.cpp:316:6:void W5500::clearIR()	1
-W5500.cpp:330:9:uint8_t W5500::readSIR()	1
-W5500.cpp:342:6:void W5500::clearSIR()	1
-W5500.cpp:355:9:uint8_t W5500::readSn_IR()	1
-W5500.cpp:366:6:void W5500::clearSn_IR()	1
-W5500.cpp:378:6:void W5500::readSocketTXRX(uint8_t*)	2
+W5500.cpp:270:6:void W5500::readArrayFromRXbuffer(uint8_t, uint8_t*, uint8_t, word_y)	2
+W5500.cpp:287:6:void W5500::writeArrayToTXbuffer(uint8_t, uint8_t*, uint8_t, word_y)	2
+W5500.cpp:310:9:uint8_t W5500::getStatusSocket0()	1
+W5500.cpp:322:9:uint8_t W5500::readRXbufferSocket0()	1
+W5500.cpp:335:9:uint8_t W5500::readIR()	1
+W5500.cpp:347:6:void W5500::clearIR()	1
+W5500.cpp:361:9:uint8_t W5500::readSIR()	1
+W5500.cpp:373:6:void W5500::clearSIR()	1
+W5500.cpp:386:9:uint8_t W5500::readSn_IR()	1
+W5500.cpp:397:6:void W5500::clearSn_IR()	1
+W5500.cpp:409:6:void W5500::readSocketTXRX(uint8_t*)	2
+W5500.cpp:424:6:void W5500::sendDataUDP(uint8_t, uint8_t*, uint8_t)	2

@@ -289,6 +289,14 @@
 // Sn_MR configures the option or protocol type of Socket n. 
 
 #define W5500_Sn_CR 0x0001
+#define W5500_OPEN 0x01
+#define W5500_LISTEN 0x02
+#define W5500_CONNECT 0x04
+#define W5500_DISCON 0x08
+#define W5500_CLOSE 0x10
+#define W5500_SEND 0x20
+#define W5500_SEND_MAC 0x21
+#define W5500_SEND_KEEP 0x22
 #define W5500_RECV 0x40
 // Sn_CR (Socket n Command Register) [R/W] [0x0001] [0x00] 
 // This is used to set the command for Socket n such as OPEN, CLOSE, CONNECT, LISTEN, SEND, and RECEIVE. 
