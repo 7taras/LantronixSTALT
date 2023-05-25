@@ -25,5 +25,5 @@ W5500.cpp:339:9:uint8_t W5500::readSIR()	1
 W5500.cpp:351:6:void W5500::clearSIR()	1
 W5500.cpp:364:9:uint8_t W5500::readSn_IR()	1
 W5500.cpp:375:6:void W5500::clearSn_IR()	1
-W5500.cpp:389:6:void W5500::receiveDataUDP(uint8_t, uint8_t*, uint16_t)	2
-W5500.cpp:421:6:void W5500::sendDataUDP(uint8_t, uint8_t*, uint16_t)	2
+W5500.cpp:389:6:void W5500::receiveDataUDP(uint8_t, uint8_t*, uint16_t*)	2
+W5500.cpp:424:6:void W5500::sendDataUDP(uint8_t, uint8_t*, uint16_t)	2

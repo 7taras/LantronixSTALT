@@ -60,7 +60,7 @@ public:
 	void clearSn_IR();
 
 
-	void receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t sizeArray);
+	void receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray);
 	void sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray);
 
 private:

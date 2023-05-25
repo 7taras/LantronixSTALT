@@ -106,8 +106,8 @@ SocketRegisterBlock srb0 {
 	0, // uint8_t sNcr {0};			// offset 0x01
 	0, // uint8_t sNir {0};			// offset 0x02
 	0, // uint8_t sNsr {0};			// offset 0x03
-	0x1D, // uint8_t sNport0 {0};		// offset 0x04		// port 7500
-	0x4C, // uint8_t sNport1 {0};		// offset 0x05
+	0x19, // uint8_t sNport0 {0};		// offset 0x04		// port 6500
+	0x64, // uint8_t sNport1 {0};		// offset 0x05
 	0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
 	0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
 	0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
@@ -118,8 +118,8 @@ SocketRegisterBlock srb0 {
 	0xA8, // uint8_t sNdipr1 {0};		// offset 0x0D
 	0x01, // uint8_t sNdipr2 {0};		// offset 0x0E
 	0x07, // uint8_t sNdipr3 {0};		// offset 0x0F
-	0x19, // uint8_t sNdport0 {0};		// offset 0x10		// port 6500
-	0x64, // uint8_t sNdport1 {0};		// offset 0x11
+	0x1D, // uint8_t sNdport0 {0};		// offset 0x10		// port 7500
+	0x4C, // uint8_t sNdport1 {0};		// offset 0x11
 	0, // uint8_t sNmssr0 {0};		// offset 0x12
 	0, // uint8_t sNmssr1 {0};		// offset 0x13
 	0, // uint8_t reserved14 {0};		// offset 0x14
@@ -205,9 +205,13 @@ SocketRegisterBlock srb1, srb2, srb3, srb4, srb5, srb6, srb7 {
 
 uint16_t misoSize {0};
 bool misoReady {false};
-uint8_t destIPandPort[14] {0x19, 0x64, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 192, 168, 1, 7, 0x19, 0x64};
+uint8_t destIPandPort[14] {0x19, 0x64, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 192, 168, 1, 7, 0x1D, 0x4C};
 
 uint8_t txPacket[9] {0xC0, 0xA8, 0, 7, 0xD6, 0xD8, 0, 1 , 0x41};
+uint8_t receiveData[256];
+uint16_t SizeOfReceiveData {0};
+uint8_t sendData[256];
+uint16_t SizeOfSendData {0};
 
 uint8_t rxByte {0};
 uint8_t txByte {0};
@@ -314,8 +318,8 @@ int main(void)
   // Разрешаем прием по UART
   HAL_UART_Receive_IT(&huart1, &rxByte, 1);
 
-  HAL_Delay(5000);
-  ethernetA1.sendDataUDP(SOCKET0, txPacket, 9);
+  //HAL_Delay(5000);
+  //ethernetA1.sendDataUDP(SOCKET0, txPacket, 9);
 
 
 
@@ -330,8 +334,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 	  if (rxDataIsReadyToParse)
 	  {
+		  /*
 		  if(rxBytesToParse[0] == 'A' && rxBytesToParse[1] == 'T')
 		  {
 			  switch(rxBytesToParse[2])
@@ -345,9 +351,10 @@ int main(void)
 			  default:
 				  break;
 			  }
-
-
 		  }
+		  */
+		  ethernetA1.sendDataUDP(SOCKET0, rxBytesToParse, rxCounterToParse);
+
 		  rxDataIsReadyToParse = false;
 	  }
 
@@ -388,11 +395,12 @@ int main(void)
 
 	  if(misoReady)
 	  {
-		  HAL_Delay(1000);
+		  //HAL_Delay(1000);
 		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-		  HAL_UART_Transmit_IT(&huart1, &misoBytes[3], misoSize);
+		  HAL_UART_Transmit_IT(&huart1, &receiveData[8], (SizeOfReceiveData - 8) );
 		  misoReady = false;
 
+		  /*
 		  ethernetA1.writeArrayToSRB(SOCKET0, destIPandPort, 6, W5500_Sn_DIPR);
 		  HAL_Delay(100);
 		  txByte = '\n';
@@ -408,6 +416,7 @@ int main(void)
 		  HAL_Delay(1000);
 		  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
 		  HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
+		  */
 	  }
 
 
@@ -744,10 +753,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			uint8_t valueSn_IR = ethernetA1.readByteFromSRB(SOCKET0, W5500_Sn_IR);
 			if (valueSn_IR == 0x04) // получен пакет
 			{
-
-
-				//misoSize = valueRSR.word;
-				//misoReady = true;
+				ethernetA1.receiveDataUDP(SOCKET0, receiveData, &SizeOfReceiveData);
+				misoReady = true;
 
 
 			}

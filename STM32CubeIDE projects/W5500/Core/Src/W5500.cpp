@@ -271,7 +271,7 @@ void W5500::readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uin
 {
 	mosiBytes_w[0] = beginAddress.byte[1];
 	mosiBytes_w[1] = beginAddress.byte[0];
-	mosiBytes_w[2] = ((socket + 8) | 0b00000100);
+	mosiBytes_w[2] = (socket + 16);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
 	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, (sizeArray + 3), 1000);
 	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
@@ -386,7 +386,7 @@ void W5500::clearSn_IR()
 
 
 // получаем данные по протоколу UDP
-void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t sizeArray)
+void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray)
 {
 	// временные переменные для хранения значений регистров RX_RSR и RX_RD
 	word_y valueRSR, valueRSRretry, valueRD;
@@ -414,6 +414,9 @@ void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t siz
 
 	// завершаем процесс чтения из буфера RX
 	writeByteToSRB(socket, W5500_RECV, W5500_Sn_CR);
+
+	// записываем значение полученных байт
+	*sizeArray = valueRSR.word;
 	return;
 }
 
