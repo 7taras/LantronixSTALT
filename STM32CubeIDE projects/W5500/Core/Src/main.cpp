@@ -297,7 +297,10 @@ int main(void)
 
   HAL_Delay(10);
   // Устанавливаем режим UDP для сокета 0
-  ethernetA1.writeByteToSRB(SOCKET0, 0b10000010, W5500_Sn_MR);  // 0b00000010 = UDP mode
+  ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_MR_UDP | W5500_Sn_MR_MULTI_MFEN, W5500_Sn_MR);
+
+  // Отключаем прерывания при отправке
+  ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IMR_SEND_OK_OFF, W5500_Sn_IMR);
 
   HAL_Delay(10);
 
@@ -308,7 +311,7 @@ int main(void)
   HAL_Delay(10);
 
   // Открываем сокет 0
-  ethernetA1.writeByteToSRB(SOCKET0, 0b00000001, W5500_Sn_CR);  // 0b00000001 = OPEN
+  ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_CR_OPEN, W5500_Sn_CR);
   HAL_Delay(10);
 
   //ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, W5500_Sn_MR);
@@ -747,22 +750,43 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		// читаем флаги прерываний от сокетов
 		uint8_t valueSIR = ethernetA1.readByteFromCRB(W5500_SIR);
-		if (valueSIR == 0x01)
+		if (valueSIR)
 		{
-			// читаем флаги прерываний сокета 0
-			uint8_t valueSn_IR = ethernetA1.readByteFromSRB(SOCKET0, W5500_Sn_IR);
-			if (valueSn_IR == 0x04) // получен пакет
+			if (valueSIR & W5500_S0_INT)
 			{
-				ethernetA1.receiveDataUDP(SOCKET0, receiveData, &SizeOfReceiveData);
-				misoReady = true;
+				// читаем флаги прерываний сокета 0
+				uint8_t valueSn_IR = ethernetA1.readByteFromSRB(SOCKET0, W5500_Sn_IR);
 
+				if (valueSn_IR & W5500_Sn_IR_RECV) // получен пакет
+				{
+					ethernetA1.receiveDataUDP(SOCKET0, receiveData, &SizeOfReceiveData);
+					misoReady = true;
+					ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IR_RECV, W5500_Sn_IR);
+				}
 
+				if (valueSn_IR & W5500_Sn_IR_SEND_OK) // команда SEND выполнена
+				{
+
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_CON) // соединение с пиром успешно установлено
+				{
+
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_DISCON) // от пира получен пакет FIN или FIN/ACK
+				{
+
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_TIMEOUT) // произошло ARPto или TCPto
+				{
+
+				}
+				// сбрасываем флаг прерывания в чипе W5500
+				//ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IR_ALL, W5500_Sn_IR);
 			}
 		}
-
-		// сбрасываем флаг прерывания в чипе W5500
-		ethernetA1.writeByteToSRB(SOCKET0, 0xFF, W5500_Sn_IR);
-
 	}
 }
 

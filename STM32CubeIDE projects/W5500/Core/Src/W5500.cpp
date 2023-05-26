@@ -413,7 +413,7 @@ void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t* si
 	writeWordToSRB(socket, valueRD.word, W5500_Sn_RX_RD);
 
 	// завершаем процесс чтения из буфера RX
-	writeByteToSRB(socket, W5500_RECV, W5500_Sn_CR);
+	writeByteToSRB(socket, W5500_Sn_CR_RECV, W5500_Sn_CR);
 
 	// записываем значение полученных байт
 	*sizeArray = valueRSR.word;
@@ -443,7 +443,7 @@ void W5500::sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray
 	writeWordToSRB(socket, valueWR.word, W5500_Sn_TX_WR);
 
 	// отправляем данные
-	writeByteToSRB(socket, W5500_SEND, W5500_Sn_CR);
+	writeByteToSRB(socket, W5500_Sn_CR_SEND, W5500_Sn_CR);
 	return;
 }
 
