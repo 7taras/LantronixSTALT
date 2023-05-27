@@ -299,94 +299,10 @@ void W5500::writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint16_t sizeAr
 	return;
 }
 
-
-
-
-
-
-
-
-
-
-
-// читаем флаги прерываний, общих для чипа
-uint8_t W5500::readIR()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_IR;
-	mosiBytes_w[2] = 0;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 1000);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return misoBytes_w[3];
-}
-
-// сбрасываем флаги прерываний, общих для чипа
-void W5500::clearIR()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_SIR;
-	mosiBytes_w[2] = 0b00000100;
-	mosiBytes_w[3] = 0xFF;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	//HAL_SPI_Transmit(hspi_w, mosiBytes_w, 4, 1000);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 1000);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return;
-}
-
-// читаем флаги прерываний от сокетов
-uint8_t W5500::readSIR()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_SIR;
-	mosiBytes_w[2] = 0;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 1000);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return misoBytes_w[3];
-}
-
-// сбрасываем флаги прерываний от сокетов
-void W5500::clearSIR()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_SIR;
-	mosiBytes_w[2] = 0b00000100;
-	mosiBytes_w[3] = 0;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	//HAL_SPI_Transmit(hspi_w, mosiBytes_w, 4, 1000);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 1000);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return;
-}
-
-uint8_t W5500::readSn_IR()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_Sn_IR;
-	mosiBytes_w[2] = 0b00001000;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 1000);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return misoBytes_w[3];
-}
-
-void W5500::clearSn_IR()
-{
-	mosiBytes_w[0] = 0;
-	mosiBytes_w[1] = W5500_Sn_IR;
-	mosiBytes_w[2] = 0b00001100;
-	mosiBytes_w[3] = 0xFF;
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_RESET);
-	HAL_SPI_TransmitReceive(hspi_w, mosiBytes_w, misoBytes_w, 4, 1000);
-	HAL_GPIO_WritePin(W5500_CS_GPIO_Port_w, W5500_CS_Pin_w, GPIO_PIN_SET);
-	return;
-}
-
+//---------------------------------------------------------------------------
 
 // получаем данные по протоколу UDP
-void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray)
+void W5500::receivePacket(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray)
 {
 	// временные переменные для хранения значений регистров RX_RSR и RX_RD
 	word_y valueRSR, valueRSRretry, valueRD;
@@ -421,7 +337,7 @@ void W5500::receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t* si
 }
 
 // отправляем данные по протоколу UDP
-void W5500::sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray)
+void W5500::sendPacket(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray)
 {
 	// временные переменные для хранения значений регистров TX_FSR и TX_WR
 	word_y valueFSR, valueWR;
@@ -446,4 +362,3 @@ void W5500::sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray
 	writeByteToSRB(socket, W5500_Sn_CR_SEND, W5500_Sn_CR);
 	return;
 }
-

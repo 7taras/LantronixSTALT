@@ -152,7 +152,58 @@ SocketRegisterBlock srb0 {
 	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
 };
 
-SocketRegisterBlock srb1, srb2, srb3, srb4, srb5, srb6, srb7 {
+SocketRegisterBlock srb1 {
+	0, // uint8_t sNmr {0};			// offset 0x00
+	0, // uint8_t sNcr {0};			// offset 0x01
+	0, // uint8_t sNir {0};			// offset 0x02
+	0, // uint8_t sNsr {0};			// offset 0x03
+	0x19, //0x15, // uint8_t sNport0 {0};		// offset 0x04		// port 5500
+	0x64, //0x7C, // uint8_t sNport1 {0};		// offset 0x05
+	0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
+	0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0x4D, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xBA, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0x12, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	0xC0, // uint8_t sNdipr0 {0};		// offset 0x0C		// 192.168.1.7
+	0xA8, // uint8_t sNdipr1 {0};		// offset 0x0D
+	0x01, // uint8_t sNdipr2 {0};		// offset 0x0E
+	0x07, // uint8_t sNdipr3 {0};		// offset 0x0F
+	0x1D, // uint8_t sNdport0 {0};		// offset 0x10		// port 7500
+	0x4C, // uint8_t sNdport1 {0};		// offset 0x11
+	0, // uint8_t sNmssr0 {0};		// offset 0x12
+	0, // uint8_t sNmssr1 {0};		// offset 0x13
+	0, // uint8_t reserved14 {0};		// offset 0x14
+	0, // uint8_t sNtos {0};			// offset 0x15
+	0x80, // uint8_t sNttl {0x80};		// offset 0x16
+	0, // uint8_t reserved17 {0};		// offset 0x17
+	0, // uint8_t reserved18 {0};		// offset 0x18
+	0, // uint8_t reserved19 {0};		// offset 0x19
+	0, // uint8_t reserved1A {0};		// offset 0x1A
+	0, // uint8_t reserved1B {0};		// offset 0x1B
+	0, // uint8_t reserved1C {0};		// offset 0x1C
+	0, // uint8_t reserved1D {0};		// offset 0x1D
+	0x02, // uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	0x02, // uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	0x08, // uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	0, // uint8_t sNtxFsr1 {0};		// offset 0x21
+	0, // uint8_t sNtxRd0 {0};		// offset 0x22
+	0, // uint8_t sNtxRd1 {0};		// offset 0x23
+	0, // uint8_t sNtxWr0 {0};		// offset 0x24
+	0, // uint8_t sNtxWr1 {0};		// offset 0x25
+	0, // uint8_t sNrxRsr0 {0};		// offset 0x26
+	0, // uint8_t sNrxRsr1 {0};		// offset 0x27
+	0, // uint8_t sNrxRd0 {0};		// offset 0x28
+	0, // uint8_t sNrxRd1 {0};		// offset 0x29
+	0, // uint8_t sNrxWr0 {0};		// offset 0x2A
+	0, // uint8_t sNrxWr1 {0};		// offset 0x2B
+	0xFF, // uint8_t sNimr {0xFF};		// offset 0x2C
+	0x40, // uint8_t sNfrag0  {0x40};	// offset 0x2D
+	0, // uint8_t sNfrag1 {0};		// offset 0x2E
+	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
+};
+
+SocketRegisterBlock srb2, srb3, srb4, srb5, srb6, srb7 {
 	0, // uint8_t sNmr {0};			// offset 0x00
 	0, // uint8_t sNcr {0};			// offset 0x01
 	0, // uint8_t sNir {0};			// offset 0x02
@@ -207,7 +258,7 @@ uint16_t misoSize {0};
 bool misoReady {false};
 uint8_t destIPandPort[14] {0x19, 0x64, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 192, 168, 1, 7, 0x1D, 0x4C};
 
-uint8_t txPacket[9] {0xC0, 0xA8, 0, 7, 0xD6, 0xD8, 0, 1 , 0x41};
+uint8_t txPacket[9] {'H', 'E', 'L', 'L', 'O', 0xD8, 0, 1 , 0x41};
 uint8_t receiveData[256];
 uint16_t SizeOfReceiveData {0};
 uint8_t sendData[256];
@@ -215,17 +266,19 @@ uint16_t SizeOfSendData {0};
 
 uint8_t rxByte {0};
 uint8_t txByte {0};
-uint8_t rxHello[20] = "\nHello everyone!!!!";
+
 uint8_t mosiBytes[256] {0};
 uint8_t misoBytes[256] {0};
 uint8_t rxBytes[128] {0};
 uint8_t rxCounter {0};
 uint8_t rxBytesToParse[128] {0};
 uint8_t rxCounterToParse {0};
-uint8_t irq4[6] = "IRQ  ";
-bool rxDataIsReadyToParse {false};
-//uint8_t txByte[6] {0};
-uint8_t regTXRX[12] {0};
+
+// флаг о получении пакета по UART
+bool rxPacketIsReady {false};
+
+uint8_t rxTCPpacket[256] {0};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -291,28 +344,49 @@ int main(void)
 
   // Включаем чип W5500 через сброс
   ethernetA1.reset();
+
   // Записываем "настройки" в блок регистров CRB
   ethernetA1.writeArrayToCRB(&crb.mr, 47, W5500_MR);
 
-
   HAL_Delay(10);
+
   // Устанавливаем режим UDP для сокета 0
   ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_MR_UDP | W5500_Sn_MR_MULTI_MFEN, W5500_Sn_MR);
 
-  // Отключаем прерывания при отправке
+  // Устанавливаем режим TCP для сокета 1
+  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_MR_TCP | W5500_Sn_MR_MULTI_MFEN, W5500_Sn_MR);
+
+  // Отключаем прерывания при отправке для сокета 0
   ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IMR_SEND_OK_OFF, W5500_Sn_IMR);
+
+  // Отключаем прерывания при отправке, соединении и разрыве для сокета 1
+  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_IMR_SEND_OK_OFF & W5500_Sn_IMR_DISCON_OFF & W5500_Sn_IMR_CON_OFF, W5500_Sn_IMR);
 
   HAL_Delay(10);
 
   // Записываем порты, MAC, IP в блок регистров SRB сокета 0
-  // однако на практике запись порта, MAC, IP пира не сохраняется
   ethernetA1.writeArrayToSRB(SOCKET0, &srb0.sNport0, 14, W5500_Sn_PORT);
+
+  // Записываем порты, MAC, IP в блок регистров SRB сокета 1
+  ethernetA1.writeArrayToSRB(SOCKET1, &srb0.sNport0, 14, W5500_Sn_PORT);
 
   HAL_Delay(10);
 
   // Открываем сокет 0
   ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_CR_OPEN, W5500_Sn_CR);
-  HAL_Delay(10);
+
+  // Открываем сокет 1
+  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_CR_OPEN, W5500_Sn_CR);
+
+  HAL_Delay(1);
+
+  // проверяем что сокет 1 проиницилизирован и запускаем режим сервера
+  if (ethernetA1.readByteFromSRB(SOCKET1, W5500_Sn_SR) == W5500_Sn_SR_SOCK_INIT)
+  {
+	  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_CR_LISTEN, W5500_Sn_CR);
+  }
+
+  HAL_Delay(1);
 
   //ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, W5500_Sn_MR);
   //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
@@ -324,6 +398,9 @@ int main(void)
   //HAL_Delay(5000);
   //ethernetA1.sendDataUDP(SOCKET0, txPacket, 9);
 
+
+  CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
+  CLEAR_BIT(TIM4->SR, TIM_SR_UIF);
 
 
 
@@ -337,8 +414,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  HAL_Delay(5000);
+	  if (ethernetA1.readByteFromSRB(SOCKET1, W5500_Sn_SR) == W5500_Sn_SR_SOCK_ESTABLISHED)
+	  {
+		  ethernetA1.sendPacket(SOCKET1, txPacket, 9);
+	  }
 
-	  if (rxDataIsReadyToParse)
+	  if (rxPacketIsReady)
 	  {
 		  /*
 		  if(rxBytesToParse[0] == 'A' && rxBytesToParse[1] == 'T')
@@ -356,45 +438,16 @@ int main(void)
 			  }
 		  }
 		  */
-		  ethernetA1.sendDataUDP(SOCKET0, rxBytesToParse, rxCounterToParse);
 
-		  rxDataIsReadyToParse = false;
+		  // отправляем данные, принятые по UART, по UDP
+		  ethernetA1.sendPacket(SOCKET0, rxBytesToParse, rxCounterToParse);
+
+
+		  // сбрасываем флаг
+		  rxPacketIsReady = false;
 	  }
 
-	  //HAL_Delay(1000);
-	  //HAL_GPIO_TogglePin(LED_TX_GPIO_Port, LED_TX_Pin);
-	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_RESET);
-	  //HAL_SPI_TransmitReceive(&hspi1, mosiBytes, misoBytes, 10, 100);
-	  //HAL_GPIO_WritePin(W5500_CS_GPIO_Port, W5500_CS_Pin, GPIO_PIN_SET);
-	  //txByte = port1.readVersion();
-	  //HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
-	  //port1.readCRB(&test.mr);
 
-	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  //HAL_UART_Transmit_IT(&huart1, &test.mr, 48 );
-
-	  //HAL_Delay(1000);
-	  //port1.writeSHA();
-	  //port1.readSHA(rxHello);
-	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  //HAL_UART_Transmit_IT(&huart1, rxHello, 6 );
-
-	  //txByte = port1.readRXbufferSocket0();
-
-
-	  //txByte = port1.readByteFromSRB(0b00001000, 0x16);
-	  //txByte = 0x41;
-	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  //HAL_UART_Transmit_IT(&huart1, &txByte, 1 );
-	  //HAL_Delay(1000);
-
-
-
-	  //HAL_Delay(5000);
-	  ////port1.writeByteToSRB(SOCKET0, 0x77, W5500_Sn_DHAR);
-	  //ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, 0x00);
-	  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-	  //HAL_UART_Transmit_IT(&huart1, rxBytes, 48 );
 
 	  if(misoReady)
 	  {
@@ -530,9 +583,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 11;
+  htim3.Init.Prescaler = 1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 20000;
+  htim3.Init.Period = 48000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -700,14 +753,29 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   if (huart == &huart1)
   {
+	  // включаем cветодиод "RX"
 	  HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_RESET);
+
+	  // запускаем таймер TIM4, отсчитываем время свечения cветодиода "RX"
 	  HAL_TIM_Base_Start_IT(&htim4);
+
 	  //HAL_TIM_Base_Stop(&htim3);
+
+	  // обнуляем счетчик таймера TIM3
 	  __HAL_TIM_SET_COUNTER(&htim3, 0);
+
+	  // запускаем таймер TIM3, отсчитываем время до следующего пакета по RX
 	  HAL_TIM_Base_Start_IT(&htim3);
+
+	  // сохраняем полученный байт в буфер
 	  rxBytes[rxCounter] = rxByte;
+
 	  //buf1.put(rxByte);
+
+	  // инкрементируем счетчик полученных байт
 	  rxCounter++;
+
+	  // снова ждем приема байта по UART1
 	  HAL_UART_Receive_IT(&huart1, &rxByte, 1);
   }
 }
@@ -722,7 +790,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim->Instance == TIM3) //check if the interrupt comes from TIM4
+	if(htim->Instance == TIM3) //check if the interrupt comes from TIM3
 	{
 		HAL_TIM_Base_Stop(&htim3);
 		//HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
@@ -732,7 +800,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			rxBytesToParse[i] = rxBytes[i];
 		}
 		rxCounterToParse = rxCounter;
-		rxDataIsReadyToParse = true;
+
+		// устанавливаем флаг о готовности пакета, принятого по UART
+		rxPacketIsReady = true;
+
 		rxCounter = 0;
 
 		//HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
@@ -740,6 +811,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim->Instance == TIM4) //check if the interrupt comes from TIM4
 	{
 		HAL_TIM_Base_Stop(&htim4);
+		// гаcим cветодиод "RX"
 		HAL_GPIO_WritePin(LED_RX_GPIO_Port, LED_RX_Pin, GPIO_PIN_SET);
 	}
 }
@@ -750,18 +822,58 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		// читаем флаги прерываний от сокетов
 		uint8_t valueSIR = ethernetA1.readByteFromCRB(W5500_SIR);
+		uint8_t valueSn_IR {0};
 		if (valueSIR)
 		{
 			if (valueSIR & W5500_S0_INT)
 			{
 				// читаем флаги прерываний сокета 0
-				uint8_t valueSn_IR = ethernetA1.readByteFromSRB(SOCKET0, W5500_Sn_IR);
+				valueSn_IR = ethernetA1.readByteFromSRB(SOCKET0, W5500_Sn_IR);
 
 				if (valueSn_IR & W5500_Sn_IR_RECV) // получен пакет
 				{
-					ethernetA1.receiveDataUDP(SOCKET0, receiveData, &SizeOfReceiveData);
+					ethernetA1.receivePacket(SOCKET0, receiveData, &SizeOfReceiveData);
 					misoReady = true;
+
+					// сбрасываем флаг прерывания RECV в регистре S0_IR
 					ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IR_RECV, W5500_Sn_IR);
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_SEND_OK) // команда SEND выполнена
+				{
+
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_CON) // соединение с пиром успешно установлено
+				{
+
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_DISCON) // от пира получен пакет FIN или FIN/ACK
+				{
+
+				}
+
+				if (valueSn_IR & W5500_Sn_IR_TIMEOUT) // произошло ARPto или TCPto
+				{
+
+				}
+				// сбрасываем флаг прерывания в чипе W5500
+				//ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IR_ALL, W5500_Sn_IR);
+			}
+
+			if (valueSIR & W5500_S1_INT)
+			{
+				// читаем флаги прерываний сокета 1
+				valueSn_IR = ethernetA1.readByteFromSRB(SOCKET1, W5500_Sn_IR);
+
+				if (valueSn_IR & W5500_Sn_IR_RECV) // получен пакет
+				{
+					ethernetA1.receivePacket(SOCKET1, receiveData, &SizeOfReceiveData);
+					misoReady = true;
+
+					// сбрасываем флаг прерывания RECV в регистре S1_IR
+					ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_IR_RECV, W5500_Sn_IR);
 				}
 
 				if (valueSn_IR & W5500_Sn_IR_SEND_OK) // команда SEND выполнена

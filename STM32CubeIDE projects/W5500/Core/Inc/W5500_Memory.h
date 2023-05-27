@@ -62,11 +62,12 @@
 // ------------------------------------------------------------------------
 
 #define W5500_MR 0x0000
-#define W5500_RST 7
-#define W5500_WOL 5
-#define W5500_PB 4
-#define W5500_PPPoE 3
-#define W5500_FARP 1
+
+#define W5500_RST	7
+#define W5500_WOL	5
+#define W5500_PB	4
+#define W5500_PPPoE	3
+#define W5500_FARP	1
 // MR (Mode Register) [R/W] [0x0000] [0x00]
 // MR is used for S/W reset, ping block mode and PPPoE mode
 // 7 RST	If this bit is ‘1’, All internal registers will be initialized. 
@@ -116,10 +117,11 @@
 // When the next interrupt occurs, Interrupt PIN (INTn ) will assert to low after INTLEVEL time. 
 
 #define W5500_IR 0x0015
-#define W5500_CONFLICT 7
-#define W5500_UNREACH 6
-#define W5500_IR_PPPoE 5
-#define W5500_MP 4
+
+#define W5500_CONFLICT	7
+#define W5500_UNREACH	6
+#define W5500_IR_PPPoE	5
+#define W5500_MP		4
 // IR (Interrupt Register) [R/W] [0x0015] [0x00] 
 // IR indicates the interrupt status. 
 // Each bit of IR can be cleared when the host writes ‘1’ value to each bit. 
@@ -134,6 +136,7 @@
 // 3-0 Reserved
 
 #define W5500_IMR 0x0016
+
 #define W5500_IM_IR7 7
 #define W5500_IM_IR6 6
 #define W5500_IM_IR5 5
@@ -251,14 +254,14 @@
 
 #define W5500_PHYCFGR 0x002E
 
-#define W5500_PHYCFGR_RST 7
-#define W5500_OPMD 6
-#define W5500_OPMDC2 5
-#define W5500_OPMDC1 4
-#define W5500_OPMDC0 3
-#define W5500_DPX 2
-#define W5500_SPD 1
-#define W5500_LNK 0
+#define W5500_PHYCFGR_RST	7
+#define W5500_OPMD			6
+#define W5500_OPMDC2		5
+#define W5500_OPMDC1		4
+#define W5500_OPMDC0		3
+#define W5500_DPX			2
+#define W5500_SPD			1
+#define W5500_LNK			0
 // PHYCFGR (W5500 PHY Configuration Register) [R/W] [0x002E] [0b10111XXX] 
 // PHYCFGR configures PHY operation mode and resets PHY. 
 // In addition, PHYCFGR indicates the status of PHY such as duplex, Speed, Link. 
@@ -289,28 +292,28 @@
 
 #define W5500_Sn_MR 0x0000
 
-#define W5500_Sn_MR_CLOSED 0x00
-#define W5500_Sn_MR_TCP 0x01
-#define W5500_Sn_MR_UDP 0x02
-#define W5500_Sn_MR_MACRAW 0x04
-#define W5500_Sn_MR_UCASTB_MIP6B 0x40
-#define W5500_Sn_MR_ND_MC_MMB 0x20
-#define W5500_Sn_MR_BCASTB 0x40
-#define W5500_Sn_MR_MULTI_MFEN 0x80
+#define W5500_Sn_MR_CLOSED			0x00
+#define W5500_Sn_MR_TCP				0x01
+#define W5500_Sn_MR_UDP				0x02
+#define W5500_Sn_MR_MACRAW			0x04
+#define W5500_Sn_MR_UCASTB_MIP6B	0x40
+#define W5500_Sn_MR_ND_MC_MMB		0x20
+#define W5500_Sn_MR_BCASTB			0x40
+#define W5500_Sn_MR_MULTI_MFEN		0x80
 // Sn_MR (Socket n Mode Register) [R/W] [0x0000] [0x00] 
 // Sn_MR configures the option or protocol type of Socket n. 
 
 #define W5500_Sn_CR 0x0001
 
-#define W5500_Sn_CR_OPEN 0x01
-#define W5500_Sn_CR_LISTEN 0x02
-#define W5500_Sn_CR_CONNECT 0x04
-#define W5500_Sn_CR_DISCON 0x08
-#define W5500_Sn_CR_CLOSE 0x10
-#define W5500_Sn_CR_SEND 0x20
-#define W5500_Sn_CR_SEND_MAC 0x21
-#define W5500_Sn_CR_SEND_KEEP 0x22
-#define W5500_Sn_CR_RECV 0x40
+#define W5500_Sn_CR_OPEN		0x01
+#define W5500_Sn_CR_LISTEN		0x02
+#define W5500_Sn_CR_CONNECT		0x04
+#define W5500_Sn_CR_DISCON		0x08
+#define W5500_Sn_CR_CLOSE		0x10
+#define W5500_Sn_CR_SEND		0x20
+#define W5500_Sn_CR_SEND_MAC	0x21
+#define W5500_Sn_CR_SEND_KEEP	0x22
+#define W5500_Sn_CR_RECV		0x40
 // Sn_CR (Socket n Command Register) [R/W] [0x0001] [0x00] 
 // This is used to set the command for Socket n such as OPEN, CLOSE, CONNECT, LISTEN, SEND, and RECEIVE. 
 // After W5500 accepts the command, the Sn_CR register is automatically cleared to 0x00. 
@@ -325,13 +328,26 @@
 #define W5500_Sn_IR_TIMEOUT 0b00001000
 #define W5500_Sn_IR_SEND_OK 0b00010000
 #define W5500_Sn_IR_ALL 	0xFF
-
 // Sn_IR (Socket n Interrupt Register) [RCW1] [0x0002] [0x00] 
 // Sn_IR indicates the status of Socket Interrupt such as establishment, termination, receiving data, timeout). 
 // When an interrupt occurs and the corresponding bit of Sn_IMR is ‘1’, the corresponding bit of Sn_IR becomes ‘1’. 
 // In order to clear the Sn_IR bit, the host should write the bit to ‘1’.
 
 #define W5500_Sn_SR 0x0003
+
+#define W5500_Sn_SR_SOCK_CLOSED			0x00
+#define W5500_Sn_SR_SOCK_INIT			0x13
+#define W5500_Sn_SR_SOCK_LISTEN			0x14
+#define W5500_Sn_SR_SOCK_ESTABLISHED	0x17
+#define W5500_Sn_SR_SOCK_CLOSE_WAIT		0x1C
+#define W5500_Sn_SR_SOCK_UDP			0x22
+#define W5500_Sn_SR_SOCK_SOCK_MACRAW	0x42
+#define W5500_Sn_SR_SOCK_SYNSENT		0x15
+#define W5500_Sn_SR_SOCK_SYNRECV		0x16
+#define W5500_Sn_SR_SOCK_FIN_WAIT		0x18
+#define W5500_Sn_SR_SOCK_CLOSING		0x1A
+#define W5500_Sn_SR_SOCK_TIME_WAIT		0x1B
+#define W5500_Sn_SR_SOCK_LAST_ACK		0x1D
 // Sn_SR (Socket n Status Register) [R] [0x0003] [0x00]  
 // Sn_SR indicates the status of Socket n. 
 // The status of Socket n is changed by Sn_CR or some special control packet as SYN, FIN packet in TCP. 
@@ -510,9 +526,9 @@
 
 #define W5500_Sn_IMR_SEND_OK_OFF	0b11101111
 #define W5500_Sn_IMR_TIMEOUT_OF		0b11110111
-#define W5500_Sn_IMR_RECV_OFF		0b11110111
-#define W5500_Sn_IMR_DISCON_OFF		0b11111011
-#define W5500_Sn_IMR_CON_OFF		0b11111101
+#define W5500_Sn_IMR_RECV_OFF		0b11111011
+#define W5500_Sn_IMR_DISCON_OFF		0b11111101
+#define W5500_Sn_IMR_CON_OFF		0b11111110
 
 #define W5500_Sn_IMR_SEND_OK_ON		0b00010000
 #define W5500_Sn_IMR_TIMEOUT_ON		0b00001000

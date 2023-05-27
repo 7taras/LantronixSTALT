@@ -48,20 +48,8 @@ public:
 	void readArrayFromRXbuffer(uint8_t socket, uint8_t* destinationArray, uint16_t sizeArray, word_y beginAddress);
 	void writeArrayToTXbuffer(uint8_t socket, uint8_t* array, uint16_t sizeArray, word_y beginAddress);
 
-
-
-
-
-	uint8_t readIR();
-	void clearIR();
-	uint8_t readSIR();
-	void clearSIR();
-	uint8_t readSn_IR();
-	void clearSn_IR();
-
-
-	void receiveDataUDP(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray);
-	void sendDataUDP(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray);
+	void receivePacket(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray);
+	void sendPacket(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray);
 
 private:
 	SPI_HandleTypeDef* hspi_w;
@@ -70,6 +58,6 @@ private:
 	uint16_t W5500_CS_Pin_w;
 	uint16_t W5500_RST_Pin_w;
 
-	uint8_t mosiBytes_w[64] {0};
-	uint8_t misoBytes_w[64] {0};
+	uint8_t mosiBytes_w[256] {0};
+	uint8_t misoBytes_w[256] {0};
 };

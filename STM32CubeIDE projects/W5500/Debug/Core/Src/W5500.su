@@ -19,11 +19,5 @@
 ../Core/Src/W5500.cpp:252:6:void W5500::writeArrayToSRB(uint8_t, uint8_t*, uint8_t, uint8_t)	32	static
 ../Core/Src/W5500.cpp:270:6:void W5500::readArrayFromRXbuffer(uint8_t, uint8_t*, uint16_t, word_y)	48	static
 ../Core/Src/W5500.cpp:287:6:void W5500::writeArrayToTXbuffer(uint8_t, uint8_t*, uint16_t, word_y)	32	static
-../Core/Src/W5500.cpp:313:9:uint8_t W5500::readIR()	24	static
-../Core/Src/W5500.cpp:325:6:void W5500::clearIR()	24	static
-../Core/Src/W5500.cpp:339:9:uint8_t W5500::readSIR()	24	static
-../Core/Src/W5500.cpp:351:6:void W5500::clearSIR()	24	static
-../Core/Src/W5500.cpp:364:9:uint8_t W5500::readSn_IR()	24	static
-../Core/Src/W5500.cpp:375:6:void W5500::clearSn_IR()	24	static
-../Core/Src/W5500.cpp:389:6:void W5500::receiveDataUDP(uint8_t, uint8_t*, uint16_t*)	48	static
-../Core/Src/W5500.cpp:424:6:void W5500::sendDataUDP(uint8_t, uint8_t*, uint16_t)	40	static
+../Core/Src/W5500.cpp:305:6:void W5500::receivePacket(uint8_t, uint8_t*, uint16_t*)	48	static
+../Core/Src/W5500.cpp:340:6:void W5500::sendPacket(uint8_t, uint8_t*, uint16_t)	40	static
