@@ -75,7 +75,7 @@ CommonRegisterBlock crb {
 	0, // uint8_t ir {0};			// offset 0x15
 	0b11000000, // uint8_t imr {0};		// offset 0x16
 	0, // uint8_t sir {0};		// offset 0x17
-	0x01, // uint8_t simr {0};		// offset 0x18
+	0b00000011, // uint8_t simr {0};		// offset 0x18
 	0x07, // uint8_t rtr0 {0x07};	// offset 0x19
 	0xD0, // uint8_t rtr1 {0xD0};	// offset 0x1A
 	0x08, // uint8_t rcr {0x08};		// offset 0x1B
@@ -157,8 +157,8 @@ SocketRegisterBlock srb1 {
 	0, // uint8_t sNcr {0};			// offset 0x01
 	0, // uint8_t sNir {0};			// offset 0x02
 	0, // uint8_t sNsr {0};			// offset 0x03
-	0x19, //0x15, // uint8_t sNport0 {0};		// offset 0x04		// port 5500
-	0x64, //0x7C, // uint8_t sNport1 {0};		// offset 0x05
+	0x15, // uint8_t sNport0 {0};		// offset 0x04		// port 5500
+	0x7C, // uint8_t sNport1 {0};		// offset 0x05
 	0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
 	0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
 	0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
@@ -277,7 +277,16 @@ uint8_t rxCounterToParse {0};
 // флаг о получении пакета по UART
 bool rxPacketIsReady {false};
 
+bool socket1dataReady {false};
+uint8_t receiveSocket1data[2054];
+uint16_t sizeOfReceiveSocket1data;
+
+bool tcpReady {false};
+
 uint8_t rxTCPpacket[256] {0};
+
+
+uint8_t tempdata[256];
 
 /* USER CODE END PV */
 
@@ -345,6 +354,12 @@ int main(void)
   // Включаем чип W5500 через сброс
   ethernetA1.reset();
 
+  HAL_Delay(100);
+  ethernetA1.softwareResetPHY();
+  HAL_Delay(100);
+  ethernetA1.softwareReset();
+  HAL_Delay(100);
+
   // Записываем "настройки" в блок регистров CRB
   ethernetA1.writeArrayToCRB(&crb.mr, 47, W5500_MR);
 
@@ -368,7 +383,7 @@ int main(void)
   ethernetA1.writeArrayToSRB(SOCKET0, &srb0.sNport0, 14, W5500_Sn_PORT);
 
   // Записываем порты, MAC, IP в блок регистров SRB сокета 1
-  ethernetA1.writeArrayToSRB(SOCKET1, &srb0.sNport0, 14, W5500_Sn_PORT);
+  ethernetA1.writeArrayToSRB(SOCKET1, &srb1.sNport0, 14, W5500_Sn_PORT);
 
   HAL_Delay(10);
 
@@ -414,11 +429,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_Delay(5000);
-	  if (ethernetA1.readByteFromSRB(SOCKET1, W5500_Sn_SR) == W5500_Sn_SR_SOCK_ESTABLISHED)
+	  HAL_Delay(4000);
+
+	  ethernetA1.readArrayFromCRB(tempdata, 48, W5500_MR);
+	  ethernetA1.readArrayFromSRB(SOCKET0, &tempdata[48], 48, W5500_Sn_MR);
+	  ethernetA1.readArrayFromSRB(SOCKET1, &tempdata[96], 48, W5500_Sn_MR);
+	  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+	  HAL_UART_Transmit_IT(&huart1, tempdata, 144);
+
+
+	  //if (ethernetA1.readByteFromSRB(SOCKET1, W5500_Sn_SR) == W5500_Sn_SR_SOCK_ESTABLISHED)
+	  //{
+	//	  ethernetA1.sendPacket(SOCKET1, txPacket, 9);
+	  //}
+
+
+	  if (socket1dataReady)
 	  {
-		  ethernetA1.sendPacket(SOCKET1, txPacket, 9);
+		  if(HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY)
+		  {
+			  HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
+			  HAL_UART_Transmit_IT(&huart1, receiveSocket1data, sizeOfReceiveSocket1data);
+
+			  socket1dataReady = false;
+		  }
 	  }
+
 
 	  if (rxPacketIsReady)
 	  {
@@ -869,8 +905,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				if (valueSn_IR & W5500_Sn_IR_RECV) // получен пакет
 				{
-					ethernetA1.receivePacket(SOCKET1, receiveData, &SizeOfReceiveData);
-					misoReady = true;
+					ethernetA1.receivePacket(SOCKET1, receiveSocket1data, &sizeOfReceiveSocket1data);
+					socket1dataReady = true;
+
+
 
 					// сбрасываем флаг прерывания RECV в регистре S1_IR
 					ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_IR_RECV, W5500_Sn_IR);

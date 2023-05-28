@@ -5,7 +5,6 @@
 #pragma once
 #include <main.h>
 #include "W5500_Memory.h"
-#include "W5500_SPI.h"
 
 union word_w5500
 {
