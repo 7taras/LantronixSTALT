@@ -1,15 +1,15 @@
-main.cpp:315:5:int main()	13
-main.cpp:480:6:void SystemClock_Config()	3
-main.cpp:520:13:void MX_SPI1_Init()	2
-main.cpp:558:13:void MX_TIM3_Init()	4
-main.cpp:603:13:void MX_TIM4_Init()	4
-main.cpp:648:13:void MX_USART1_UART_Init()	2
-main.cpp:681:13:void MX_GPIO_Init()	1
-main.cpp:738:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	2
-main.cpp:769:6:void HAL_UART_TxCpltCallback(UART_HandleTypeDef*)	2
-main.cpp:777:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	4
-main.cpp:805:6:void HAL_GPIO_EXTI_Callback(uint16_t)	7
-main.cpp:897:6:void Error_Handler()	1
-main.cpp:906:1:void __static_initialization_and_destruction_0(int, int)	5
-main.cpp:906:1:cpp)	1
-main.cpp:906:1:cpp)	1
+main.cpp:317:5:int main()	15
+main.cpp:500:6:void SystemClock_Config()	3
+main.cpp:540:13:void MX_SPI1_Init()	2
+main.cpp:578:13:void MX_TIM3_Init()	4
+main.cpp:623:13:void MX_TIM4_Init()	4
+main.cpp:668:13:void MX_USART1_UART_Init()	2
+main.cpp:701:13:void MX_GPIO_Init()	1
+main.cpp:758:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	2
+main.cpp:789:6:void HAL_UART_TxCpltCallback(UART_HandleTypeDef*)	2
+main.cpp:797:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	4
+main.cpp:825:6:void HAL_GPIO_EXTI_Callback(uint16_t)	8
+main.cpp:922:6:void Error_Handler()	1
+main.cpp:931:1:void __static_initialization_and_destruction_0(int, int)	5
+main.cpp:931:1:cpp)	1
+main.cpp:931:1:cpp)	1

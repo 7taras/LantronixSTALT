@@ -60,16 +60,16 @@ CommonRegisterBlock crb {
 	255, // uint8_t subr1 {0};		// offset 0x06
 	255, // uint8_t subr2 {0};		// offset 0x07
 	0, // uint8_t subr3 {0};		// offset 0x08
-	0x89, // uint8_t shar0 {0};		// offset 0x09
-	0xAB, // uint8_t shar1 {0};		// offset 0x0A
-	0xCD, // uint8_t shar2 {0};		// offset 0x0B
-	0xEF, // uint8_t shar3 {0};		// offset 0x0C
-	0, // uint8_t shar4 {0};		// offset 0x0D
-	0x02, // uint8_t shar5 {0};		// offset 0x0E
+	0x00, //0x89, // uint8_t shar0 {0};		// offset 0x09
+	0x20, //0xAB, // uint8_t shar1 {0};		// offset 0x0A
+	0x4A, //0xCD, // uint8_t shar2 {0};		// offset 0x0B
+	0xEB, //0xEF, // uint8_t shar3 {0};		// offset 0x0C
+	0x07, //0, // uint8_t shar4 {0};		// offset 0x0D
+	0x38, //0x02, // uint8_t shar5 {0};		// offset 0x0E
 	10, // uint8_t sipr0 {0};		// offset 0x0F
 	15, // uint8_t sipr1 {0};		// offset 0x10
 	33, // uint8_t sipr2 {0};		// offset 0x11
-	102, // uint8_t sipr3 {0};		// offset 0x12
+	107, // uint8_t sipr3 {0};		// offset 0x12
 	0, // uint8_t intlevel0 {0};	// offset 0x13
 	0, // uint8_t intlevel1 {0};	// offset 0x14
 	0, // uint8_t ir {0};			// offset 0x15
@@ -108,12 +108,12 @@ SocketRegisterBlock srb0 {
 	0, // uint8_t sNsr {0};			// offset 0x03
 	0x19, // uint8_t sNport0 {0};		// offset 0x04		// port 6500
 	0x64, // uint8_t sNport1 {0};		// offset 0x05
-	0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
-	0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
-	0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
-	0x4D, // uint8_t sNdhar3 {0xFF};		// offset 0x09
-	0xBA, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
-	0x12, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	0xFF, //0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
+	0xFF, //0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xFF, //0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0xFF, //0x4D, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xFF, //0xBA, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0xFF, //0x12, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
 	10, // uint8_t sNdipr0 {0};		// offset 0x0C
 	15, // uint8_t sNdipr1 {0};		// offset 0x0D
 	33, // uint8_t sNdipr2 {0};		// offset 0x0E
@@ -272,6 +272,8 @@ uint8_t copiedReceivedBytesUARTCounter {0};
 bool needsTransmitUDP {false};
 // флаг о том что полученый пакет по UART необходимо отправить по TCP
 bool needsTransmitTCP {false};
+// флаг о том что сокет TCP закрыт и необходимо его открыть
+bool needsOpenTCP {false};
 
 // флаг о получении пакета по TCP
 bool socket0dataReady {false};
@@ -357,7 +359,8 @@ int main(void)
   HAL_Delay(10);
 
   // Устанавливаем режим UDP для сокета 0
-  ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_MR_UDP | W5500_Sn_MR_MULTI_MFEN, W5500_Sn_MR);
+  //ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_MR_UDP | W5500_Sn_MR_MULTI_MFEN, W5500_Sn_MR);
+  ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_MR_UDP, W5500_Sn_MR);
 
   // Устанавливаем режим TCP для сокета 1
   ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_MR_TCP | W5500_Sn_MR_MULTI_MFEN, W5500_Sn_MR);
@@ -365,8 +368,8 @@ int main(void)
   // Отключаем прерывания при отправке для сокета 0
   ethernetA1.writeByteToSRB(SOCKET0, W5500_Sn_IMR_SEND_OK_OFF, W5500_Sn_IMR);
 
-  // Отключаем прерывания при отправке, соединении и разрыве для сокета 1
-  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_IMR_SEND_OK_OFF & W5500_Sn_IMR_DISCON_OFF & W5500_Sn_IMR_CON_OFF, W5500_Sn_IMR);
+  // Отключаем прерывания при отправке, соединении для сокета 1
+  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_IMR_SEND_OK_OFF & W5500_Sn_IMR_CON_OFF, W5500_Sn_IMR);
 
   HAL_Delay(10);
 
@@ -445,7 +448,7 @@ int main(void)
 
 	  if (receivedPacketUARTisReady)
 	  {
-		  if(needsTransmitUDP)
+		  if (needsTransmitUDP)
 		  {
 			  // отправляем данные, принятые по UART, по UDP
 			  ethernetA1.sendPacket(SOCKET0, copiedReceivedPacketUART, copiedReceivedBytesUARTCounter);
@@ -455,7 +458,7 @@ int main(void)
 			  needsTransmitUDP = false;
 		  }
 
-		  if(needsTransmitTCP)
+		  if (needsTransmitTCP)
 		  {
 			  // отправляем данные, принятые по UART, по UDP
 			  ethernetA1.sendPacket(SOCKET1, copiedReceivedPacketUART, copiedReceivedBytesUARTCounter);
@@ -465,6 +468,23 @@ int main(void)
 			  needsTransmitTCP = false;
 		  }
 	  }
+
+	  if (needsOpenTCP)
+	  {
+		  // Открываем сокет 1
+		  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_CR_OPEN, W5500_Sn_CR);
+
+		  HAL_Delay(1);
+
+		  // проверяем что сокет 1 проиницилизирован и запускаем режим сервера
+		  if (ethernetA1.readByteFromSRB(SOCKET1, W5500_Sn_SR) == W5500_Sn_SR_SOCK_INIT)
+		  {
+			  ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_CR_LISTEN, W5500_Sn_CR);
+		  }
+
+		  needsOpenTCP = false;
+	  }
+
 
     /* USER CODE END WHILE */
 
@@ -876,7 +896,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				if (valueSn_IR & W5500_Sn_IR_DISCON) // от пира получен пакет FIN или FIN/ACK
 				{
-
+					// отправляем команду DISCONNECT
+					ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_CR_DISCON, W5500_Sn_CR);
+					// устанавливаем флаг
+					needsOpenTCP = true;
+					// сбрасываем флаг прерывания RECV в регистре S1_IR
+					ethernetA1.writeByteToSRB(SOCKET1, W5500_Sn_IR_DISCON, W5500_Sn_IR);
 				}
 
 				if (valueSn_IR & W5500_Sn_IR_TIMEOUT) // произошло ARPto или TCPto
