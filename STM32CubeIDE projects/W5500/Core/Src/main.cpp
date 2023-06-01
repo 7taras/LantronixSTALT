@@ -397,25 +397,12 @@ int main(void)
 
   HAL_Delay(1);
 
-  //ethernetA1.readArrayFromSRB(SOCKET0, rxBytes, 48, W5500_Sn_MR);
-  //HAL_GPIO_WritePin(LED_TX_GPIO_Port, LED_TX_Pin, GPIO_PIN_RESET);
-  //HAL_UART_Transmit_IT(&huart1, rxBytes, 48);
-
   // Разрешаем прием по UART
   HAL_UART_Receive_IT(&huart1, &receivedByteUART, 1);
 
-  //HAL_Delay(5000);
-  //ethernetA1.sendDataUDP(SOCKET0, txPacket, 9);
-
-
+  // очищаем флаги прерываний
   CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
   CLEAR_BIT(TIM4->SR, TIM_SR_UIF);
-
-
-
-
-
-
 
   /* USER CODE END 2 */
 
@@ -423,7 +410,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+	  // проверяем есть ли данные по UDP
 	  if (socket0dataReady)
 	  {
 		  if((HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY) || (HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX))
@@ -435,6 +422,7 @@ int main(void)
 		  }
 	  }
 
+	  // проверяем есть ли данные по TCP
 	  if (socket1dataReady)
 	  {
 		  if((HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY) || (HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX))
@@ -446,6 +434,7 @@ int main(void)
 		  }
 	  }
 
+	  // проверяем есть ли данные по UART
 	  if (receivedPacketUARTisReady)
 	  {
 		  if (needsTransmitUDP)
@@ -469,6 +458,7 @@ int main(void)
 		  }
 	  }
 
+	  // если соединение по TCP было закрыто, нужно снова проинициализировать сокет и перейти в режим прослушки (сервера)
 	  if (needsOpenTCP)
 	  {
 		  // Открываем сокет 1
@@ -484,7 +474,6 @@ int main(void)
 
 		  needsOpenTCP = false;
 	  }
-
 
     /* USER CODE END WHILE */
 
