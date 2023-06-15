@@ -129,39 +129,39 @@ DocumentPath=Project Outputs for W5500-2\W5500-2_V1.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for W5500-2\W5500-2_V1.LDP
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GBL
 DItemRevisionGUID=
 
 [GeneratedDocument5]
-DocumentPath=Project Outputs for W5500-2\W5500-2_V1.REP
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GBO
 DItemRevisionGUID=
 
 [GeneratedDocument6]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GBL
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GBS
 DItemRevisionGUID=
 
 [GeneratedDocument7]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GBO
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GM4
 DItemRevisionGUID=
 
 [GeneratedDocument8]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GBS
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument9]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GM4
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GTO
 DItemRevisionGUID=
 
 [GeneratedDocument10]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GTL
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.GTS
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GTO
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for W5500-2\W5500_V1.GTS
+DocumentPath=Project Outputs for W5500-2\W5500-2_V1.REP
 DItemRevisionGUID=
 
 [Configuration1]
@@ -543,7 +543,7 @@ OutputDefault12=0
 Configuration12_Name1=ForceUpdateSettings
 Configuration12_Item1=False
 Configuration12_Name2=OutputConfigurationParameter1
-Configuration12_Item2=AddToAllLayerClasses.Set= |AddToAllPlots.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|BoardID=MYBMVQTD|CentrePlots=False|DrillDrawingSymbol=GraphicsSymbol|DrillDrawingSymbolSize=200000|EmbeddedApertures=True|FilmBorderSize=10000000|FilmXSize=200000000|FilmYSize=160000000|FlashAllFills=False|FlashPadShapes=True|G54OnApertureChange=False|GenerateDRCRulesFile=False|GenerateDRCRulesFile=False|GenerateReliefShapes=True|GenerateReports=True|GerberUnit=Metric|GerberUnit=Metric|IncludeUnconnectedMidLayerPads=True|LayerClassesMirror.Set= |LayerClassesPlot.Set= |LeadingAndTrailingZeroesMode=SuppressLeadingZeroes|MaxApertureSize=2500000|MergePadAndRegion=False|MinusApertureTolerance=39|MinusApertureTolerance=39|Mirror.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|MirrorDrillDrawingPlots=False|MirrorDrillGuidePlots=False|NoRegularPolygons=False|NumberOfDecimals=4|NumberOfDecimals=4|OptimizeChangeLocationCommands=True|OptimizeChangeLocationCommands=True|OriginPosition=Relative|Panelize=False|Plot.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray,16973830~1,16973834~1,16777217~1,16842751~1,16973835~1,16973831~1,16908292~1|PlotBoardProfile=False|PlotBoardProfileFileName=W5500-2_V1.GM|PlotPositivePlaneLayers=False|PlotUsedDrillDrawingLayerPairs=False|PlotUsedDrillGuideLayerPairs=False|PlusApertureTolerance=39|PlusApertureTolerance=39|Record=GerberView|SoftwareArcs=False|Sorted=False|Sorted=False|UncheckPlotDrillDrawingLayerPair0_Backdrill=False|UncheckPlotDrillDrawingLayerPair0_Checked=False|UncheckPlotDrillDrawingLayerPair0_DrillType=Regular|UncheckPlotDrillDrawingLayerPair0_FileName=W5500-2_V1.GD1|UncheckPlotDrillDrawingLayerPair0_HighLayer=Bottom Layer|UncheckPlotDrillDrawingLayerPair0_LowLayer=Top Layer|UncheckPlotDrillGuideLayerPair0_Backdrill=False|UncheckPlotDrillGuideLayerPair0_Checked=False|UncheckPlotDrillGuideLayerPair0_DrillType=Regular|UncheckPlotDrillGuideLayerPair0_FileName=W5500-2_V1.GG1|UncheckPlotDrillGuideLayerPair0_HighLayer=Bottom Layer|UncheckPlotDrillGuideLayerPair0_LowLayer=Top Layer|UserLayerName.Caption0=W5500_V1.GBP|UserLayerName.Caption1=W5500_V1.GTP|UserLayerName.Caption10=W5500_V1.GM16|UserLayerName.Caption11=W5500_V1.GBL|UserLayerName.Caption12=W5500_V1.GM15|UserLayerName.Caption13=W5500_V1.GM14|UserLayerName.Caption14=W5500_V1.GM17|UserLayerName.Caption15=W5500_V1.GTL|UserLayerName.Caption16=W5500_V1.GM18|UserLayerName.Caption17=W5500_V1.GBO|UserLayerName.Caption18=W5500_V1.GPT|UserLayerName.Caption19=W5500_V1.GM13|UserLayerName.Caption2=W5500_V1.GTO|UserLayerName.Caption20=W5500_V1.GM21|UserLayerName.Caption21=W5500_V1.GM11|UserLayerName.Caption22=W5500_V1.GM1|UserLayerName.Caption23=W5500_V1.GM3|UserLayerName.Caption24=W5500_V1.GM20|UserLayerName.Caption25=W5500_V1.GM22|UserLayerName.Caption26=W5500_V1.GKO|UserLayerName.Caption3=W5500_V1.GTS|UserLayerName.Caption4=W5500_V1.GM4|UserLayerName.Caption5=W5500_V1.GM2|UserLayerName.Caption6=W5500_V1.GM12|UserLayerName.Caption7=W5500_V1.GPB|UserLayerName.Caption8=W5500_V1.GM19|UserLayerName.Caption9=W5500_V1.GBS|UserLayerName.Count=27|UserLayerName.Layer0=16973833|UserLayerName.Layer1=16973832|UserLayerName.Layer10=16908304|UserLayerName.Layer11=16842751|UserLayerName.Layer12=16908303|UserLayerName.Layer13=16908302|UserLayerName.Layer14=16908305|UserLayerName.Layer15=16777217|UserLayerName.Layer16=16908306|UserLayerName.Layer17=16973831|UserLayerName.Layer18=16973848|UserLayerName.Layer19=16908301|UserLayerName.Layer2=16973830|UserLayerName.Layer20=16908309|UserLayerName.Layer21=16908299|UserLayerName.Layer22=16908289|UserLayerName.Layer23=16908291|UserLayerName.Layer24=16908308|UserLayerName.Layer25=16908310|UserLayerName.Layer26=16973837|UserLayerName.Layer3=16973834|UserLayerName.Layer4=16908292|UserLayerName.Layer5=16908290|UserLayerName.Layer6=16908300|UserLayerName.Layer7=16973849|UserLayerName.Layer8=16908307|UserLayerName.Layer9=16973835|DocumentPath=C:\Users\85tar\source\repos\LantronixSTALT\Project2\W5500-2_V1.PcbDoc
+Configuration12_Item2=AddToAllLayerClasses.Set= |AddToAllPlots.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|BoardID=MYBMVQTD|CentrePlots=False|DrillDrawingSymbol=GraphicsSymbol|DrillDrawingSymbolSize=200000|EmbeddedApertures=True|FilmBorderSize=10000000|FilmXSize=200000000|FilmYSize=160000000|FlashAllFills=False|FlashPadShapes=True|G54OnApertureChange=False|GenerateDRCRulesFile=False|GenerateDRCRulesFile=False|GenerateReliefShapes=True|GenerateReports=True|GerberUnit=Metric|GerberUnit=Metric|IncludeUnconnectedMidLayerPads=True|LayerClassesMirror.Set= |LayerClassesPlot.Set= |LeadingAndTrailingZeroesMode=SuppressLeadingZeroes|MaxApertureSize=2500000|MergePadAndRegion=False|MinusApertureTolerance=39|MinusApertureTolerance=39|Mirror.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|MirrorDrillDrawingPlots=False|MirrorDrillGuidePlots=False|NoRegularPolygons=False|NumberOfDecimals=4|NumberOfDecimals=4|OptimizeChangeLocationCommands=True|OptimizeChangeLocationCommands=True|OriginPosition=Relative|Panelize=False|Plot.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray,16973830~1,16973834~1,16777217~1,16842751~1,16973835~1,16973831~1,16908292~1|PlotBoardProfile=False|PlotBoardProfileFileName=W5500-2_V1.GM|PlotPositivePlaneLayers=False|PlotUsedDrillDrawingLayerPairs=False|PlotUsedDrillGuideLayerPairs=False|PlusApertureTolerance=39|PlusApertureTolerance=39|Record=GerberView|SoftwareArcs=False|Sorted=False|Sorted=False|UncheckPlotDrillDrawingLayerPair0_Backdrill=False|UncheckPlotDrillDrawingLayerPair0_Checked=False|UncheckPlotDrillDrawingLayerPair0_DrillType=Regular|UncheckPlotDrillDrawingLayerPair0_FileName=W5500-2_V1.GD1|UncheckPlotDrillDrawingLayerPair0_HighLayer=Bottom Layer|UncheckPlotDrillDrawingLayerPair0_LowLayer=Top Layer|UncheckPlotDrillGuideLayerPair0_Backdrill=False|UncheckPlotDrillGuideLayerPair0_Checked=False|UncheckPlotDrillGuideLayerPair0_DrillType=Regular|UncheckPlotDrillGuideLayerPair0_FileName=W5500-2_V1.GG1|UncheckPlotDrillGuideLayerPair0_HighLayer=Bottom Layer|UncheckPlotDrillGuideLayerPair0_LowLayer=Top Layer|UserLayerName.Caption0=W5500_V1.GBP|UserLayerName.Caption1=W5500_V1.GTP|UserLayerName.Caption10=W5500_V1.GM16|UserLayerName.Caption11=W5500-2_V1.GBL|UserLayerName.Caption12=W5500_V1.GM15|UserLayerName.Caption13=W5500_V1.GM14|UserLayerName.Caption14=W5500_V1.GM17|UserLayerName.Caption15=W5500-2_V1.GTL|UserLayerName.Caption16=W5500_V1.GM18|UserLayerName.Caption17=W5500-2_V1.GBO|UserLayerName.Caption18=W5500_V1.GPT|UserLayerName.Caption19=W5500_V1.GM13|UserLayerName.Caption2=W5500-2_V1.GTO|UserLayerName.Caption20=W5500_V1.GM21|UserLayerName.Caption21=W5500-2_V1.GM11|UserLayerName.Caption22=W5500_V1.GM1|UserLayerName.Caption23=W5500_V1.GM3|UserLayerName.Caption24=W5500_V1.GM20|UserLayerName.Caption25=W5500_V1.GM22|UserLayerName.Caption26=W5500_V1.GKO|UserLayerName.Caption3=W5500-2_V1.GTS|UserLayerName.Caption4=W5500-2_V1.GM4|UserLayerName.Caption5=W5500_V1.GM2|UserLayerName.Caption6=W5500_V1.GM12|UserLayerName.Caption7=W5500_V1.GPB|UserLayerName.Caption8=W5500_V1.GM19|UserLayerName.Caption9=W5500-2_V1.GBS|UserLayerName.Count=27|UserLayerName.Layer0=16973833|UserLayerName.Layer1=16973832|UserLayerName.Layer10=16908304|UserLayerName.Layer11=16842751|UserLayerName.Layer12=16908303|UserLayerName.Layer13=16908302|UserLayerName.Layer14=16908305|UserLayerName.Layer15=16777217|UserLayerName.Layer16=16908306|UserLayerName.Layer17=16973831|UserLayerName.Layer18=16973848|UserLayerName.Layer19=16908301|UserLayerName.Layer2=16973830|UserLayerName.Layer20=16908309|UserLayerName.Layer21=16908299|UserLayerName.Layer22=16908289|UserLayerName.Layer23=16908291|UserLayerName.Layer24=16908308|UserLayerName.Layer25=16908310|UserLayerName.Layer26=16973837|UserLayerName.Layer3=16973834|UserLayerName.Layer4=16908292|UserLayerName.Layer5=16908290|UserLayerName.Layer6=16908300|UserLayerName.Layer7=16973849|UserLayerName.Layer8=16908307|UserLayerName.Layer9=16973835|DocumentPath=C:\Users\85tar\source\repos\LantronixSTALT\Project2\W5500-2_V1.PcbDoc
 
 [OutputGroup6]
 Name=Report Outputs

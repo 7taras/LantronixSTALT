@@ -1,0 +1,18 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [W5500.PrjPcb]
+   Generated File[W5500_V2.GTO]
+   Generated File[W5500_V2.GTS]
+   Generated File[W5500_V2.GTL]
+   Generated File[W5500_V2.GBL]
+   Generated File[W5500_V2.GBS]
+   Generated File[W5500_V2.GBO]
+   Generated File[W5500_V2.GM4]
+   Generated File[W5500_V2.EXTREP]
+   Generated File[W5500_V2.REP]
+
+
+Files Generated   : 9
+Documents Printed : 0
+
+Finished Output Generation At 10:30:44 AM On 6/15/2023
