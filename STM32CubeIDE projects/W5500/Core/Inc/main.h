@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define RSTBUTTON_Pin GPIO_PIN_15
+#define RSTBUTTON_GPIO_Port GPIOC
 #define W5500_INT_Pin GPIO_PIN_4
 #define W5500_INT_GPIO_Port GPIOA
 #define W5500_INT_EXTI_IRQn EXTI4_IRQn
