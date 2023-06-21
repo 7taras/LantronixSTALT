@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
 #include "W5500.h"
 #include "flashRW.h"
 /* USER CODE END Includes */
@@ -351,18 +352,29 @@ uint8_t receiveSocket2data[2054];
 uint16_t sizeOfReceiveSocket2data;
 
 
-uint8_t text1[] {"Setting ACTA.468353.020\n"};
-uint8_t text2[] {"\nSet IP address (1st bit): "};
-uint8_t text3[] {"\nSet IP address (2nd bit): "};
-uint8_t text4[] {"\nSet IP address (3rd bit): "};
-uint8_t text5[] {"\nSet IP address (4th bit): "};
+uint8_t text1[] {"Setting ACTA.468353.020\n\rType IP address (1st bit): "};
+
+
+uint8_t text222[] {"Set IP address (1st bit): "};
+uint8_t text2[] {"Set IP address (2nd bit): "};
+uint8_t text3[] {"Type IP address (3rd bit): "};
+uint8_t text4[] {"Set IP address (4th bit): "};
+uint8_t text5[] {"Type subnet mask address (4th bit): "};
+uint8_t* arrText[] {text2, text3, text4, text5};
 uint8_t textError[] {"\nERROR"};
 
-uint8_t bufferTelnet[255];
-uint8_t* ptrReadBufferTelnet = bufferTelnet;
-uint8_t* ptrWriteBufferTelnet = bufferTelnet;
-uint8_t* ptrEndBufferTelnet = &bufferTelnet[256];
-uint8_t telnetMessageCounter {0};
+
+char bufferTelnet[256];
+char* ptrReadBufferTelnet = bufferTelnet;
+char* ptrWriteBufferTelnet = bufferTelnet;
+char* ptrEndBufferTelnet = &bufferTelnet[256];
+uint8_t typedValueCounter {0};
+
+uint32_t temp32;
+uint32_t buff32[8];
+uint8_t counter32 {0};
+
+
 
 /* USER CODE END PV */
 
@@ -544,8 +556,19 @@ int main(void)
 		  }
 		  //ptrReadBufferTelnet
 
+		  if( *(ptrWriteBufferTelnet - 1) == '\n')
+		  {
+			  buff32[counter32] = atoi(ptrReadBufferTelnet);
+			  ++counter32;
+			  ptrReadBufferTelnet = ptrWriteBufferTelnet;
+
+			  ethernetA1.sendPacket(SOCKET2, arrText[typedValueCounter], sizeof(arrText[typedValueCounter]));
+			  ++typedValueCounter;
+		  }
 		  socket2dataReady = false;
 	  }
+
+
 
 	  // провер�?ем е�?ть ли данные по UART
 	  if (receivedPacketUARTisReady)
