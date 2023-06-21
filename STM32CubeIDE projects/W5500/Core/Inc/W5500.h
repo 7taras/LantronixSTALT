@@ -5,6 +5,7 @@
 #pragma once
 #include <main.h>
 #include "W5500_Memory.h"
+#include <string.h>
 
 union word_w5500
 {
@@ -49,6 +50,7 @@ public:
 
 	void receivePacket(uint8_t socket, uint8_t* dataForReceive, uint16_t* sizeArray);
 	void sendPacket(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray);
+	void sendString(uint8_t socket, char* stringForSend);
 
 private:
 	SPI_HandleTypeDef* hspi_w;

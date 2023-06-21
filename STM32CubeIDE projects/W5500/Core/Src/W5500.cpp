@@ -362,3 +362,33 @@ void W5500::sendPacket(uint8_t socket, uint8_t* dataForSend, uint16_t sizeArray)
 	writeByteToSRB(socket, W5500_Sn_CR_SEND, W5500_Sn_CR);
 	return;
 }
+
+// отправляем строку
+void W5500::sendString(uint8_t socket, char* stringForSend)
+{
+	// вычисляем размер передаваемой строки
+	uint16_t sizeArray = strlen(stringForSend);
+
+	// временные переменные для хранения значений регистров TX_FSR и TX_WR
+	word_y valueFSR, valueWR;
+
+	// читаем регистр TX_FSR (хранит значение свободного места в буфере TX
+	valueFSR.word = readWordFromSRB(socket, W5500_Sn_TX_FSR);
+
+	// проверяем, что размер данных для отправки не превышает количества свободного места в буфере
+	if((uint16_t)sizeArray > valueFSR.word) return;
+
+	// читаем регистр TX_WR (указатель на начало свободного места буфера)
+	valueWR.word = readWordFromSRB(socket, W5500_Sn_TX_WR);
+
+	// записываем данные для отправки в буфер TX
+	writeArrayToTXbuffer(socket, (uint8_t*)stringForSend, sizeArray, valueWR);
+
+	// увеличиваем значение указателя на начало свободного места
+	valueWR.word += sizeArray;
+	writeWordToSRB(socket, valueWR.word, W5500_Sn_TX_WR);
+
+	// отправляем данные
+	writeByteToSRB(socket, W5500_Sn_CR_SEND, W5500_Sn_CR);
+	return;
+}

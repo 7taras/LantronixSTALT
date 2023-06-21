@@ -13,6 +13,7 @@ C_SRCS += \
 
 CPP_SRCS += \
 ../Core/Src/W5500.cpp \
+../Core/Src/dataProcessing.cpp \
 ../Core/Src/flashRW.cpp \
 ../Core/Src/main.cpp 
 
@@ -25,6 +26,7 @@ C_DEPS += \
 
 OBJS += \
 ./Core/Src/W5500.o \
+./Core/Src/dataProcessing.o \
 ./Core/Src/flashRW.o \
 ./Core/Src/main.o \
 ./Core/Src/stm32f1xx_hal_msp.o \
@@ -35,6 +37,7 @@ OBJS += \
 
 CPP_DEPS += \
 ./Core/Src/W5500.d \
+./Core/Src/dataProcessing.d \
 ./Core/Src/flashRW.d \
 ./Core/Src/main.d 
 
@@ -48,7 +51,7 @@ Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/W5500.cyclo ./Core/Src/W5500.d ./Core/Src/W5500.o ./Core/Src/W5500.su ./Core/Src/flashRW.cyclo ./Core/Src/flashRW.d ./Core/Src/flashRW.o ./Core/Src/flashRW.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/stm32f1xx_hal_msp.cyclo ./Core/Src/stm32f1xx_hal_msp.d ./Core/Src/stm32f1xx_hal_msp.o ./Core/Src/stm32f1xx_hal_msp.su ./Core/Src/stm32f1xx_it.cyclo ./Core/Src/stm32f1xx_it.d ./Core/Src/stm32f1xx_it.o ./Core/Src/stm32f1xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f1xx.cyclo ./Core/Src/system_stm32f1xx.d ./Core/Src/system_stm32f1xx.o ./Core/Src/system_stm32f1xx.su
+	-$(RM) ./Core/Src/W5500.cyclo ./Core/Src/W5500.d ./Core/Src/W5500.o ./Core/Src/W5500.su ./Core/Src/dataProcessing.cyclo ./Core/Src/dataProcessing.d ./Core/Src/dataProcessing.o ./Core/Src/dataProcessing.su ./Core/Src/flashRW.cyclo ./Core/Src/flashRW.d ./Core/Src/flashRW.o ./Core/Src/flashRW.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/stm32f1xx_hal_msp.cyclo ./Core/Src/stm32f1xx_hal_msp.d ./Core/Src/stm32f1xx_hal_msp.o ./Core/Src/stm32f1xx_hal_msp.su ./Core/Src/stm32f1xx_it.cyclo ./Core/Src/stm32f1xx_it.d ./Core/Src/stm32f1xx_it.o ./Core/Src/stm32f1xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f1xx.cyclo ./Core/Src/system_stm32f1xx.d ./Core/Src/system_stm32f1xx.o ./Core/Src/system_stm32f1xx.su
 
 .PHONY: clean-Core-2f-Src
 

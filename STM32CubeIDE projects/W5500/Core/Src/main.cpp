@@ -22,8 +22,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
+#include <string.h>
 #include "W5500.h"
 #include "flashRW.h"
+#include "dataProcessing.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -352,16 +354,23 @@ uint8_t receiveSocket2data[2054];
 uint16_t sizeOfReceiveSocket2data;
 
 
-uint8_t text1[] {"Setting ACTA.468353.020\n\rType IP address (1st bit): "};
-
-
-uint8_t text222[] {"Set IP address (1st bit): "};
-uint8_t text2[] {"Set IP address (2nd bit): "};
-uint8_t text3[] {"Type IP address (3rd bit): "};
-uint8_t text4[] {"Set IP address (4th bit): "};
-uint8_t text5[] {"Type subnet mask address (4th bit): "};
-uint8_t* arrText[] {text2, text3, text4, text5};
-uint8_t textError[] {"\nERROR"};
+char textConnected[] {"Setting ACTA.468353.020\n\n\rType IP address (1st bit) [   ]: "};
+char text0[] {"Type IP Address (2nd bit) [   ]: "};
+char text1[] {"Type IP Address (3rd bit) [   ]: "};
+char text2[] {"Type IP Address (4th bit) [   ]: "};
+char text3[] {"Type Subnet Mask Address (1st bit) [   ]: "};
+char text4[] {"Type Subnet Mask Address (2nd bit) [   ]: "};
+char text5[] {"Type Subnet Mask Address (3rd bit) [   ]: "};
+char text6[] {"Type Subnet Mask Address (4th bit) [   ]: "};
+char text7[] {"Type MAC Address (1st octet) [  ]: "};
+char text8[] {"Type MAC Address (2nd octet) [  ]: "};
+char text9[] {"Type MAC Address (3rd octet) [  ]: "};
+char text10[] {"Type MAC Address (4th octet) [  ]: "};
+char text11[] {"Type MAC Address (5th octet) [  ]: "};
+char text12[] {"Type MAC Address (6th octet) [  ]: "};
+char text13[] {"\n\rSo, your setting is:\n\rIP Address xxx.xxx.xxx.xxx\n\rSubnet Mask Address: xxx.xxx.xxx.xxx\n\rMAC Address xx:xx:xx:xx:xx:xx\n\rDo you want to save setting[y/n]: "};
+char* arrText[] {text0, text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11, text12, text13};
+char textError[] {"ERROR"};
 
 
 char bufferTelnet[256];
@@ -370,8 +379,8 @@ char* ptrWriteBufferTelnet = bufferTelnet;
 char* ptrEndBufferTelnet = &bufferTelnet[256];
 uint8_t typedValueCounter {0};
 
-uint32_t temp32;
-uint32_t buff32[8];
+//uint32_t temp32;
+uint32_t receivedDataTelnet[16];
 uint8_t counter32 {0};
 
 
@@ -438,6 +447,11 @@ int main(void)
 
   //readFLASH();
 
+  //char temp[4];
+  //utoa(crb.sipr0, temp, 4);
+  //text0[23] = temp[0];
+
+  writeText();
 
   // Включаем чип W5500 через �?бро�?
   ethernetA1.reset();
@@ -558,11 +572,11 @@ int main(void)
 
 		  if( *(ptrWriteBufferTelnet - 1) == '\n')
 		  {
-			  buff32[counter32] = atoi(ptrReadBufferTelnet);
+			  receivedDataTelnet[counter32] = atoi(ptrReadBufferTelnet);
 			  ++counter32;
 			  ptrReadBufferTelnet = ptrWriteBufferTelnet;
 
-			  ethernetA1.sendPacket(SOCKET2, arrText[typedValueCounter], sizeof(arrText[typedValueCounter]));
+			  ethernetA1.sendString(SOCKET2, arrText[typedValueCounter]);
 			  ++typedValueCounter;
 		  }
 		  socket2dataReady = false;
@@ -1154,7 +1168,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				if (valueSn_IR & W5500_Sn_IR_CON) // �?оединение �? пиром у�?пешно у�?тановлено
 				{
-					ethernetA1.sendPacket(SOCKET2, text1, sizeof(text1));
+					ethernetA1.sendString(SOCKET2, textConnected);
 					// �?бра�?ываем флаг прерывани�? CON в реги�?тре S1_IR
 					ethernetA1.writeByteToSRB(SOCKET2, W5500_Sn_IR_CON, W5500_Sn_IR);
 				}

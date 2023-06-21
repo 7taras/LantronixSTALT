@@ -1,0 +1,2 @@
+dataProcessing.cpp:26:6:void int2letter(char&)	2
+dataProcessing.cpp:33:6:void writeText()	1
