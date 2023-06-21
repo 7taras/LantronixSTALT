@@ -13,6 +13,8 @@
 extern struct CommonRegisterBlock crb;
 extern struct SocketRegisterBlock srb0, srb1, srb2, srb3, srb4, srb5, srb6, srb7;
 
-void writeText(void);
+
+void fillText(void);
+void fillText13();
 
 #endif /* INC_DATAPROCESSING_H_ */

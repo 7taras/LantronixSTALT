@@ -451,7 +451,7 @@ int main(void)
   //utoa(crb.sipr0, temp, 4);
   //text0[23] = temp[0];
 
-  writeText();
+  fillText();
 
   // Включаем чип W5500 через �?бро�?
   ethernetA1.reset();

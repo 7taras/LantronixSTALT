@@ -1,2 +1,3 @@
-../Core/Src/dataProcessing.cpp:26:6:void int2letter(char&)	16	static
-../Core/Src/dataProcessing.cpp:33:6:void writeText()	8	static
+../Core/Src/dataProcessing.cpp:30:6:void int2letter(char&)	16	static
+../Core/Src/dataProcessing.cpp:37:6:void fillText()	8	static
+../Core/Src/dataProcessing.cpp:97:6:void fillText13()	4	static
