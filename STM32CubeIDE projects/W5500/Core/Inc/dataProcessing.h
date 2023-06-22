@@ -16,5 +16,6 @@ extern struct SocketRegisterBlock srb0, srb1, srb2, srb3, srb4, srb5, srb6, srb7
 
 void fillText(void);
 void fillText13();
+void saveSettings();
 
 #endif /* INC_DATAPROCESSING_H_ */

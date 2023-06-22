@@ -368,7 +368,7 @@ char text9[] {"Type MAC Address (3rd octet) [  ]: "};
 char text10[] {"Type MAC Address (4th octet) [  ]: "};
 char text11[] {"Type MAC Address (5th octet) [  ]: "};
 char text12[] {"Type MAC Address (6th octet) [  ]: "};
-char text13[] {"\n\rSo, your setting is:\n\rIP Address xxx.xxx.xxx.xxx\n\rSubnet Mask Address: xxx.xxx.xxx.xxx\n\rMAC Address xx:xx:xx:xx:xx:xx\n\rDo you want to save setting[y/n]: "};
+char text13[] {"\n\rSo, your setting is:\n\rIP Address xxx.xxx.xxx.xxx\n\rSubnet Mask Address: xxx.xxx.xxx.xxx\n\rMAC Address xx:xx:xx:xx:xx:xx\n\n\rDo you want to save setting?[y/n]: "};
 char* arrText[] {text0, text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11, text12, text13};
 char textError[] {"ERROR"};
 
@@ -381,6 +381,7 @@ uint8_t typedValueCounter {0};
 
 //uint32_t temp32;
 uint32_t receivedDataTelnet[16];
+char receivedMACTelnet[12];
 uint8_t counter32 {0};
 
 
@@ -568,20 +569,64 @@ int main(void)
 				  ++ptrWriteBufferTelnet;
 			  }
 		  }
-		  //ptrReadBufferTelnet
 
 		  if( *(ptrWriteBufferTelnet - 1) == '\n')
 		  {
-			  receivedDataTelnet[counter32] = atoi(ptrReadBufferTelnet);
-			  ++counter32;
-			  ptrReadBufferTelnet = ptrWriteBufferTelnet;
+			  if (counter32 < 8)
+			  {
+				  receivedDataTelnet[counter32] = atoi(ptrReadBufferTelnet);
+				  ++counter32;
+				  ptrReadBufferTelnet = ptrWriteBufferTelnet;
+			  }
+			  else if (counter32 < 14)
+			  {
+				  uint8_t tCounter { 0 };
+				  while (ptrReadBufferTelnet != ptrWriteBufferTelnet)
+				  {
+					  if (tCounter < 2)
+					  {
+						  if (*ptrReadBufferTelnet >= '0' && *ptrReadBufferTelnet <= '9')
+						  {
+							  receivedMACTelnet[(counter32 - 8) * 2 + tCounter] = *ptrReadBufferTelnet;
+							  ++tCounter;
+						  }
+						  else if (*ptrReadBufferTelnet >= 'A' && *ptrReadBufferTelnet <= 'F')
+						  {
+							  receivedMACTelnet[(counter32 - 8) * 2 + tCounter] = *ptrReadBufferTelnet;
+							  ++tCounter;
+						  }
+						  else if (*ptrReadBufferTelnet >= 'a' && *ptrReadBufferTelnet <= 'f')
+						  {
+							  receivedMACTelnet[(counter32 - 8) * 2 + tCounter] = (*ptrReadBufferTelnet - 32);
+							  ++tCounter;
+						  }
+					  }
+					  ++ptrReadBufferTelnet;
+				  }
+				  ++counter32;
+			  }
 
+			  else if (counter32 == 14)
+			  {
+				  if (*ptrReadBufferTelnet == 'Y' || *ptrReadBufferTelnet == 'y')
+				  {
+					  saveSettings();
+				  }
+				  else
+				  {
+
+				  }
+			  }
+
+			  if(typedValueCounter == 13)
+			  {
+				  fillText13();
+			  }
 			  ethernetA1.sendString(SOCKET2, arrText[typedValueCounter]);
 			  ++typedValueCounter;
 		  }
 		  socket2dataReady = false;
 	  }
-
 
 
 	  // провер�?ем е�?ть ли данные по UART

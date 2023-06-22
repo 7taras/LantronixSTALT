@@ -1,3 +1,4 @@
-dataProcessing.cpp:30:6:void int2letter(char&)	2
-dataProcessing.cpp:37:6:void fillText()	1
-dataProcessing.cpp:97:6:void fillText13()	17
+dataProcessing.cpp:31:6:void int2letter(char&)	2
+dataProcessing.cpp:38:6:void fillText()	1
+dataProcessing.cpp:98:6:void fillText13()	65
+dataProcessing.cpp:328:6:void saveSettings()	1

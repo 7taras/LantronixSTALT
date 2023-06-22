@@ -26,6 +26,7 @@ extern char text12[];
 extern char text13[];
 
 extern uint32_t receivedDataTelnet[];
+extern char receivedMACTelnet[];
 
 void int2letter(char& digit)
 {
@@ -207,4 +208,126 @@ void fillText13()
 		text13[87] = '0';
 		receivedDataTelnet[7] = 0;
 	}
+
+	if ((receivedMACTelnet[0] >= '0' && receivedMACTelnet[0] <= '9') || (receivedMACTelnet[0] >= 'A' && receivedMACTelnet[0] <= 'F'))
+	{
+		text13[102] = receivedMACTelnet[0];
+	}
+	else
+	{
+		text13[102] = '0';
+		receivedMACTelnet[0] = '0';
+	}
+	if ((receivedMACTelnet[1] >= '0' && receivedMACTelnet[1] <= '9') || (receivedMACTelnet[1] >= 'A' && receivedMACTelnet[1] <= 'F'))
+	{
+		text13[103] = receivedMACTelnet[1];
+	}
+	else
+	{
+		text13[103] = '0';
+		receivedMACTelnet[1] = '0';
+	}
+
+	if ((receivedMACTelnet[2] >= '0' && receivedMACTelnet[2] <= '9') || (receivedMACTelnet[2] >= 'A' && receivedMACTelnet[2] <= 'F'))
+	{
+		text13[105] = receivedMACTelnet[2];
+	}
+	else
+	{
+		text13[105] = '0';
+		receivedMACTelnet[2] = '0';
+	}
+	if ((receivedMACTelnet[3] >= '0' && receivedMACTelnet[3] <= '9') || (receivedMACTelnet[3] >= 'A' && receivedMACTelnet[3] <= 'F'))
+	{
+		text13[106] = receivedMACTelnet[3];
+	}
+	else
+	{
+		text13[106] = '0';
+		receivedMACTelnet[3] = '0';
+	}
+
+	if ((receivedMACTelnet[4] >= '0' && receivedMACTelnet[4] <= '9') || (receivedMACTelnet[4] >= 'A' && receivedMACTelnet[4] <= 'F'))
+	{
+		text13[108] = receivedMACTelnet[4];
+	}
+	else
+	{
+		text13[108] = '0';
+		receivedMACTelnet[4] = '0';
+	}
+	if ((receivedMACTelnet[5] >= '0' && receivedMACTelnet[5] <= '9') || (receivedMACTelnet[5] >= 'A' && receivedMACTelnet[5] <= 'F'))
+	{
+		text13[109] = receivedMACTelnet[5];
+	}
+	else
+	{
+		text13[109] = '0';
+		receivedMACTelnet[5] = '0';
+	}
+
+	if ((receivedMACTelnet[6] >= '0' && receivedMACTelnet[6] <= '9') || (receivedMACTelnet[6] >= 'A' && receivedMACTelnet[6] <= 'F'))
+	{
+		text13[111] = receivedMACTelnet[6];
+	}
+	else
+	{
+		text13[111] = '0';
+		receivedMACTelnet[6] = '0';
+	}
+	if ((receivedMACTelnet[7] >= '0' && receivedMACTelnet[7] <= '9') || (receivedMACTelnet[7] >= 'A' && receivedMACTelnet[7] <= 'F'))
+	{
+		text13[112] = receivedMACTelnet[7];
+	}
+	else
+	{
+		text13[112] = '0';
+		receivedMACTelnet[7] = '0';
+	}
+
+	if ((receivedMACTelnet[8] >= '0' && receivedMACTelnet[8] <= '9') || (receivedMACTelnet[8] >= 'A' && receivedMACTelnet[8] <= 'F'))
+	{
+		text13[114] = receivedMACTelnet[8];
+	}
+	else
+	{
+		text13[114] = '0';
+		receivedMACTelnet[8] = '0';
+	}
+	if ((receivedMACTelnet[9] >= '0' && receivedMACTelnet[9] <= '9') || (receivedMACTelnet[9] >= 'A' && receivedMACTelnet[9] <= 'F'))
+	{
+		text13[115] = receivedMACTelnet[9];
+	}
+	else
+	{
+		text13[115] = '0';
+		receivedMACTelnet[9] = '0';
+	}
+
+	if ((receivedMACTelnet[10] >= '0' && receivedMACTelnet[10] <= '9') || (receivedMACTelnet[10] >= 'A' && receivedMACTelnet[10] <= 'F'))
+	{
+		text13[117] = receivedMACTelnet[10];
+	}
+	else
+	{
+		text13[117] = '0';
+		receivedMACTelnet[10] = '0';
+	}
+	if ((receivedMACTelnet[11] >= '0' && receivedMACTelnet[11] <= '9') || (receivedMACTelnet[11] >= 'A' && receivedMACTelnet[11] <= 'F'))
+	{
+		text13[118] = receivedMACTelnet[11];
+	}
+	else
+	{
+		text13[118] = '0';
+		receivedMACTelnet[11] = '0';
+	}
+	return;
+}
+
+void saveSettings()
+{
+
+
+	return;
 }
