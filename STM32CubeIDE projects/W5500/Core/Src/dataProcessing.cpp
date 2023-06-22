@@ -35,6 +35,23 @@ void int2letter(char& digit)
 	  return;
 }
 
+uint8_t letter2int(const char& digit)
+{
+	if (digit >= '0' && digit <= '9')
+	{
+		return digit - 48;
+	}
+	else if (digit >= 'A' && digit <= 'F')
+	{
+		return digit - 55;
+	}
+	else if (digit >= 'a' && digit <= 'f')
+	{
+		return digit - 87;
+	}
+	else return 0;
+}
+
 void fillText()
 {
 	  textConnected[53] = crb.sipr0/100 + 48;
@@ -327,7 +344,19 @@ void fillText13()
 
 void saveSettings()
 {
-
-
+	crb.sipr0 = receivedDataTelnet[0];
+	crb.sipr1 = receivedDataTelnet[1];
+	crb.sipr2 = receivedDataTelnet[2];
+	crb.sipr3 = receivedDataTelnet[3];
+	crb.subr0 = receivedDataTelnet[4];
+	crb.subr1 = receivedDataTelnet[5];
+	crb.subr2 = receivedDataTelnet[6];
+	crb.subr3 = receivedDataTelnet[7];
+	crb.shar0 = letter2int(receivedMACTelnet[0])*16 + letter2int(receivedMACTelnet[1]);
+	crb.shar1 = letter2int(receivedMACTelnet[2])*16 + letter2int(receivedMACTelnet[3]);
+	crb.shar2 = letter2int(receivedMACTelnet[4])*16 + letter2int(receivedMACTelnet[5]);
+	crb.shar3 = letter2int(receivedMACTelnet[6])*16 + letter2int(receivedMACTelnet[7]);
+	crb.shar4 = letter2int(receivedMACTelnet[8])*16 + letter2int(receivedMACTelnet[9]);
+	crb.shar5 = letter2int(receivedMACTelnet[10])*16 + letter2int(receivedMACTelnet[11]);
 	return;
 }
