@@ -1,0 +1,13 @@
+core_cm3.h:1762:34:void __NVIC_SystemReset()	1
+dataProcessing.cpp:51:6:void hex2char(char&)	2
+dataProcessing.cpp:58:6:void hex2letter(char&)	2
+dataProcessing.cpp:66:6:void adr_int2string(const uint8_t*, char*)	6
+dataProcessing.cpp:100:6:void mac_int2string(const uint8_t*, char*)	3
+dataProcessing.cpp:125:6:void byte_int2string(const uint8_t&, char*)	4
+dataProcessing.cpp:151:6:void macOctet2string(const uint8_t&, char*)	1
+dataProcessing.cpp:161:6:void concatenate3strings(char*, const char*, const char*)	4
+dataProcessing.cpp:186:6:void concatenate7strings(char*, char**)	3
+dataProcessing.cpp:205:9:uint8_t letter2int(const char&)	7
+dataProcessing.cpp:222:6:void fillText()	1
+dataProcessing.cpp:258:6:void fillFinalText()	1
+dataProcessing.cpp:267:6:void saveSettings()	0

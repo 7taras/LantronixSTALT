@@ -11,9 +11,9 @@
 extern struct CommonRegisterBlock crb;
 extern struct SocketRegisterBlock srb0, srb1, srb2, srb3, srb4, srb5, srb6, srb7;
 
-extern uint32_t receivedDataTelnet[];
-extern char receivedMACTelnet[];
-
+extern uint8_t receivedIPAddress[4];
+extern uint8_t receivedSubnetMask[4];
+extern uint8_t receivedMACAddress[6];
 
 char text0[] {"Setting ACTA.468353.020\n\n\rType IP address (1st bit) [\0      "};
 char textValue [4] {0};
@@ -45,7 +45,8 @@ char textFinal[256] {0};
 char* arrText[] {text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11, text12, text13, textFinal};
 char* arrFinalText[] {text14, text15, text16, text17, text18, text19, text20};
 char textError[] {"ERROR"};
-
+char textApply[] {"Your setting will be saved and device will be reboot"};
+char textNotApply[] {"Your setting is NOT saved"};
 
 void hex2char(char& digit)
 {
@@ -256,29 +257,29 @@ void fillText()
 
 void fillFinalText()
 {
-	adr_int2string(receivedDataTelnet, text16);
-	adr_int2string(&receivedDataTelnet[4], text18);
-	mac_int2string(receivedMACTelnet, text20);
+	adr_int2string(receivedIPAddress, text16);
+	adr_int2string(receivedSubnetMask, text18);
+	mac_int2string(receivedMACAddress, text20);
 	concatenate7strings(textFinal, arrFinalText);
 	return;
 }
 
 void saveSettings()
 {
-	crb.sipr0 = receivedDataTelnet[0];
-	crb.sipr1 = receivedDataTelnet[1];
-	crb.sipr2 = receivedDataTelnet[2];
-	crb.sipr3 = receivedDataTelnet[3];
-	crb.subr0 = receivedDataTelnet[4];
-	crb.subr1 = receivedDataTelnet[5];
-	crb.subr2 = receivedDataTelnet[6];
-	crb.subr3 = receivedDataTelnet[7];
-	crb.shar0 = letter2int(receivedMACTelnet[0])*16 + letter2int(receivedMACTelnet[1]);
-	crb.shar1 = letter2int(receivedMACTelnet[2])*16 + letter2int(receivedMACTelnet[3]);
-	crb.shar2 = letter2int(receivedMACTelnet[4])*16 + letter2int(receivedMACTelnet[5]);
-	crb.shar3 = letter2int(receivedMACTelnet[6])*16 + letter2int(receivedMACTelnet[7]);
-	crb.shar4 = letter2int(receivedMACTelnet[8])*16 + letter2int(receivedMACTelnet[9]);
-	crb.shar5 = letter2int(receivedMACTelnet[10])*16 + letter2int(receivedMACTelnet[11]);
+	crb.sipr0 = receivedIPAddress[0];
+	crb.sipr1 = receivedIPAddress[1];
+	crb.sipr2 = receivedIPAddress[2];
+	crb.sipr3 = receivedIPAddress[3];
+	crb.subr0 = receivedSubnetMask[0];
+	crb.subr1 = receivedSubnetMask[1];
+	crb.subr2 = receivedSubnetMask[2];
+	crb.subr3 = receivedSubnetMask[3];
+	crb.shar0 = receivedMACAddress[0];
+	crb.shar1 = receivedMACAddress[1];
+	crb.shar2 = receivedMACAddress[2];
+	crb.shar3 = receivedMACAddress[3];
+	crb.shar4 = receivedMACAddress[4];
+	crb.shar5 = receivedMACAddress[5];
 
 	writeFLASH();
 

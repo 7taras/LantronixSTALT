@@ -618,12 +618,18 @@ char* ptrWriteBufferTelnet = bufferTelnet;
 char* ptrEndBufferTelnet = &bufferTelnet[256];
 uint8_t typedValueCounter {0};
 
-//uint32_t temp32;
-uint32_t receivedDataTelnet[16];
-char receivedMACTelnet[12];
-uint8_t counter32 {0};
+uint32_t temp32;
 
+uint8_t receivedIPAddress[4];
+uint8_t receivedSubnetMask[4];
+uint8_t receivedMACAddress[6];
+//char receivedMACTelnet[12];
+uint8_t counterMessages {0};
 
+extern char* arrText[];
+extern char text0[];
+extern char textNotApply[];
+extern char textApply[];
 
 /* USER CODE END PV */
 
@@ -811,56 +817,85 @@ int main(void)
 
 		  if( *(ptrWriteBufferTelnet - 1) == '\n')
 		  {
-			  if (counter32 < 8)
+			  if (counterMessages < 4)
 			  {
-				  receivedDataTelnet[counter32] = atoi(ptrReadBufferTelnet);
-				  ++counter32;
+				  temp32 = atoi(ptrReadBufferTelnet);
+				  if (temp32 > 0 && temp32 < 256) receivedIPAddress[counterMessages] = (uint8_t)temp32;
+				  else receivedIPAddress[counterMessages] = 0;
+				  ++counterMessages;
 				  ptrReadBufferTelnet = ptrWriteBufferTelnet;
 			  }
-			  else if (counter32 < 14)
+			  else if (counterMessages < 8)
 			  {
-				  uint8_t tCounter { 0 };
+				  temp32 = atoi(ptrReadBufferTelnet);
+				  if (temp32 > 0 && temp32 < 256) receivedSubnetMask[counterMessages] = (uint8_t)temp32;
+				  else receivedSubnetMask[counterMessages] = 0;
+				  ++counterMessages;
+				  ptrReadBufferTelnet = ptrWriteBufferTelnet;
+			  }
+			  else if (counterMessages < 14)
+			  {
+				  uint8_t tempCounter { 0 };
 				  while (ptrReadBufferTelnet != ptrWriteBufferTelnet)
 				  {
-					  if (tCounter < 2)
+					  if (tempCounter == 0)
 					  {
 						  if (*ptrReadBufferTelnet >= '0' && *ptrReadBufferTelnet <= '9')
 						  {
-							  receivedMACTelnet[(counter32 - 8) * 2 + tCounter] = *ptrReadBufferTelnet;
-							  ++tCounter;
+							  receivedMACAddress[counterMessages - 8] = (*ptrReadBufferTelnet - 48)*16;
+							  ++tempCounter;
 						  }
 						  else if (*ptrReadBufferTelnet >= 'A' && *ptrReadBufferTelnet <= 'F')
 						  {
-							  receivedMACTelnet[(counter32 - 8) * 2 + tCounter] = *ptrReadBufferTelnet;
-							  ++tCounter;
+							  receivedMACAddress[counterMessages - 8] = (*ptrReadBufferTelnet - 55)*16;
+							  ++tempCounter;
 						  }
 						  else if (*ptrReadBufferTelnet >= 'a' && *ptrReadBufferTelnet <= 'f')
 						  {
-							  receivedMACTelnet[(counter32 - 8) * 2 + tCounter] = (*ptrReadBufferTelnet - 32);
-							  ++tCounter;
+							  receivedMACAddress[counterMessages - 8] = (*ptrReadBufferTelnet - 87)*16;
+							  ++tempCounter;
+						  }
+					  }
+					  else if (tempCounter == 1)
+					  {
+						  if (*ptrReadBufferTelnet >= '0' && *ptrReadBufferTelnet <= '9')
+						  {
+							  receivedMACAddress[counterMessages - 8] += (*ptrReadBufferTelnet - 48);
+							  ++tempCounter;
+						  }
+						  else if (*ptrReadBufferTelnet >= 'A' && *ptrReadBufferTelnet <= 'F')
+						  {
+							  receivedMACAddress[counterMessages - 8] += (*ptrReadBufferTelnet - 55);
+							  ++tempCounter;
+						  }
+						  else if (*ptrReadBufferTelnet >= 'a' && *ptrReadBufferTelnet <= 'f')
+						  {
+							  receivedMACAddress[counterMessages - 8] += (*ptrReadBufferTelnet - 87);
+							  ++tempCounter;
 						  }
 					  }
 					  ++ptrReadBufferTelnet;
 				  }
-				  ++counter32;
+				  ++counterMessages;
 			  }
-
-			  else if (counter32 == 14)
+			  else if (counterMessages == 14)
 			  {
 				  if (*ptrReadBufferTelnet == 'Y' || *ptrReadBufferTelnet == 'y')
 				  {
+					  ethernetA1.sendString(SOCKET2, textApply);
 					  saveSettings();
 				  }
 				  else
 				  {
-
+					  ethernetA1.sendString(SOCKET2, textNotApply);
 				  }
 			  }
 
 			  if(typedValueCounter == 13)
 			  {
-				  fillText13();
+				  fillFinalText();
 			  }
+
 			  ethernetA1.sendString(SOCKET2, arrText[typedValueCounter]);
 			  ++typedValueCounter;
 		  }
