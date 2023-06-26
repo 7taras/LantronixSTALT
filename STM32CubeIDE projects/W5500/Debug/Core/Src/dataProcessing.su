@@ -1,5 +1,0 @@
-../Core/Src/dataProcessing.cpp:31:6:void int2letter(char&)	16	static
-../Core/Src/dataProcessing.cpp:38:9:uint8_t letter2int(const char&)	16	static
-../Core/Src/dataProcessing.cpp:55:6:void fillText()	8	static
-../Core/Src/dataProcessing.cpp:115:6:void fillText13()	4	static
-../Core/Src/dataProcessing.cpp:345:6:void saveSettings()	16	static

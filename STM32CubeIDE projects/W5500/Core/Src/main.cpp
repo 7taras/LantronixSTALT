@@ -105,7 +105,109 @@ CommonRegisterBlock crb {
 	0, // uint8_t reserved {0};	// offset 0x2F
 };
 
+CommonRegisterBlock crbDefault {
+	0, // uint8_t mr {0};		// offset 0x01
+	0, // uint8_t gar0 {0};		// offset 0x01
+	0, // uint8_t gar1 {0};		// offset 0x02
+	0, // uint8_t gar2 {0};		// offset 0x03
+	0, // uint8_t gar3 {0};		// offset 0x04
+	255, // uint8_t subr0 {0};		// offset 0x05
+	255, // uint8_t subr1 {0};		// offset 0x06
+	255, // uint8_t subr2 {0};		// offset 0x07
+	0, // uint8_t subr3 {0};		// offset 0x08
+	0x00, //0x89, // uint8_t shar0 {0};		// offset 0x09
+	0x20, //0xAB, // uint8_t shar1 {0};		// offset 0x0A
+	0x4A, //0xCD, // uint8_t shar2 {0};		// offset 0x0B
+	0xEB, //0xEF, // uint8_t shar3 {0};		// offset 0x0C
+	0x03, //0, // uint8_t shar4 {0};		// offset 0x0D
+	0x38, //0x02, // uint8_t shar5 {0};		// offset 0x0E
+	10, // uint8_t sipr0 {0};		// offset 0x0F
+	15, // uint8_t sipr1 {0};		// offset 0x10
+	33, // uint8_t sipr2 {0};		// offset 0x11
+	103, // uint8_t sipr3 {0};		// offset 0x12
+	0, // uint8_t intlevel0 {0};	// offset 0x13
+	0, // uint8_t intlevel1 {0};	// offset 0x14
+	0, // uint8_t ir {0};			// offset 0x15
+	0b11000000, // uint8_t imr {0};		// offset 0x16
+	0, // uint8_t sir {0};		// offset 0x17
+	0b00000111, // uint8_t simr {0};		// offset 0x18
+	0x07, // uint8_t rtr0 {0x07};	// offset 0x19
+	0xD0, // uint8_t rtr1 {0xD0};	// offset 0x1A
+	0x08, // uint8_t rcr {0x08};		// offset 0x1B
+	0x28, // uint8_t ptimer {0x28};	// offset 0x1C
+	0, // uint8_t pmagic {0};		// offset 0x1D
+	0, // uint8_t phar0 {0};		// offset 0x1E
+	0, // uint8_t phar1 {0};		// offset 0x1F
+	0, // uint8_t phar2 {0};		// offset 0x20
+	0, // uint8_t phar3 {0};		// offset 0x21
+	0, // uint8_t phar4 {0};		// offset 0x22
+	0, // uint8_t phar5 {0};		// offset 0x23
+	0, // uint8_t psid0 {0};		// offset 0x24
+	0, // uint8_t psid1 {0};		// offset 0x25
+	0xFF, // uint8_t pmru0 {0xFF};	// offset 0x26
+	0xFF, // uint8_t pmru1 {0xFF};	// offset 0x27
+	0, // uint8_t uipr0 {0};		// offset 0x28
+	0, // uint8_t uipr1 {0};		// offset 0x29
+	0, // uint8_t uipr2 {0};		// offset 0x2A
+	0, // uint8_t uipr3 {0};		// offset 0x2B
+	0, // uint8_t uportr0 {0};	// offset 0x2C
+	0, // uint8_t uportr1 {0};	// offset 0x2D
+	0b10111000, // uint8_t phycfgr {0b10111000};	// offset 0x2E
+	0, // uint8_t reserved {0};	// offset 0x2F
+};
+
 SocketRegisterBlock srb0 {
+	0, // uint8_t sNmr {0};			// offset 0x00
+	0, // uint8_t sNcr {0};			// offset 0x01
+	0, // uint8_t sNir {0};			// offset 0x02
+	0, // uint8_t sNsr {0};			// offset 0x03
+	0x19, // uint8_t sNport0 {0};		// offset 0x04		// port 6500
+	0x64, // uint8_t sNport1 {0};		// offset 0x05
+	0xFF, //0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
+	0xFF, //0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xFF, //0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0xFF, //0x4D, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xFF, //0xBA, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0xFF, //0x12, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	10, // uint8_t sNdipr0 {0};		// offset 0x0C
+	15, // uint8_t sNdipr1 {0};		// offset 0x0D
+	33, // uint8_t sNdipr2 {0};		// offset 0x0E
+	1, // uint8_t sNdipr3 {0};		// offset 0x0F
+	0x1D, // uint8_t sNdport0 {0};		// offset 0x10		// port 7500
+	0x4C, // uint8_t sNdport1 {0};		// offset 0x11
+	0, // uint8_t sNmssr0 {0};		// offset 0x12
+	0, // uint8_t sNmssr1 {0};		// offset 0x13
+	0, // uint8_t reserved14 {0};		// offset 0x14
+	0, // uint8_t sNtos {0};			// offset 0x15
+	0x80, // uint8_t sNttl {0x80};		// offset 0x16
+	0, // uint8_t reserved17 {0};		// offset 0x17
+	0, // uint8_t reserved18 {0};		// offset 0x18
+	0, // uint8_t reserved19 {0};		// offset 0x19
+	0, // uint8_t reserved1A {0};		// offset 0x1A
+	0, // uint8_t reserved1B {0};		// offset 0x1B
+	0, // uint8_t reserved1C {0};		// offset 0x1C
+	0, // uint8_t reserved1D {0};		// offset 0x1D
+	0x02, // uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	0x02, // uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	0x08, // uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	0, // uint8_t sNtxFsr1 {0};		// offset 0x21
+	0, // uint8_t sNtxRd0 {0};		// offset 0x22
+	0, // uint8_t sNtxRd1 {0};		// offset 0x23
+	0, // uint8_t sNtxWr0 {0};		// offset 0x24
+	0, // uint8_t sNtxWr1 {0};		// offset 0x25
+	0, // uint8_t sNrxRsr0 {0};		// offset 0x26
+	0, // uint8_t sNrxRsr1 {0};		// offset 0x27
+	0, // uint8_t sNrxRd0 {0};		// offset 0x28
+	0, // uint8_t sNrxRd1 {0};		// offset 0x29
+	0, // uint8_t sNrxWr0 {0};		// offset 0x2A
+	0, // uint8_t sNrxWr1 {0};		// offset 0x2B
+	0xFF, // uint8_t sNimr {0xFF};		// offset 0x2C
+	0x40, // uint8_t sNfrag0  {0x40};	// offset 0x2D
+	0, // uint8_t sNfrag1 {0};		// offset 0x2E
+	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
+};
+
+SocketRegisterBlock srb0Default {
 	0, // uint8_t sNmr {0};			// offset 0x00
 	0, // uint8_t sNcr {0};			// offset 0x01
 	0, // uint8_t sNir {0};			// offset 0x02
@@ -207,7 +309,109 @@ SocketRegisterBlock srb1 {
 	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
 };
 
+SocketRegisterBlock srb1Default {
+	0, // uint8_t sNmr {0};			// offset 0x00
+	0, // uint8_t sNcr {0};			// offset 0x01
+	0, // uint8_t sNir {0};			// offset 0x02
+	0, // uint8_t sNsr {0};			// offset 0x03
+	0x19, // uint8_t sNport0 {0};		// offset 0x04		// port 6501
+	0x65, // uint8_t sNport1 {0};		// offset 0x05
+	0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
+	0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0x4D, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xBA, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0x12, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	10, // uint8_t sNdipr0 {0};		// offset 0x0C
+	15, // uint8_t sNdipr1 {0};		// offset 0x0D
+	33, // uint8_t sNdipr2 {0};		// offset 0x0E
+	1, // uint8_t sNdipr3 {0};		// offset 0x0F
+	0x1D, // uint8_t sNdport0 {0};		// offset 0x10		// port 7500
+	0x4C, // uint8_t sNdport1 {0};		// offset 0x11
+	0, // uint8_t sNmssr0 {0};		// offset 0x12
+	0, // uint8_t sNmssr1 {0};		// offset 0x13
+	0, // uint8_t reserved14 {0};		// offset 0x14
+	0, // uint8_t sNtos {0};			// offset 0x15
+	0x80, // uint8_t sNttl {0x80};		// offset 0x16
+	0, // uint8_t reserved17 {0};		// offset 0x17
+	0, // uint8_t reserved18 {0};		// offset 0x18
+	0, // uint8_t reserved19 {0};		// offset 0x19
+	0, // uint8_t reserved1A {0};		// offset 0x1A
+	0, // uint8_t reserved1B {0};		// offset 0x1B
+	0, // uint8_t reserved1C {0};		// offset 0x1C
+	0, // uint8_t reserved1D {0};		// offset 0x1D
+	0x02, // uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	0x02, // uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	0x08, // uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	0, // uint8_t sNtxFsr1 {0};		// offset 0x21
+	0, // uint8_t sNtxRd0 {0};		// offset 0x22
+	0, // uint8_t sNtxRd1 {0};		// offset 0x23
+	0, // uint8_t sNtxWr0 {0};		// offset 0x24
+	0, // uint8_t sNtxWr1 {0};		// offset 0x25
+	0, // uint8_t sNrxRsr0 {0};		// offset 0x26
+	0, // uint8_t sNrxRsr1 {0};		// offset 0x27
+	0, // uint8_t sNrxRd0 {0};		// offset 0x28
+	0, // uint8_t sNrxRd1 {0};		// offset 0x29
+	0, // uint8_t sNrxWr0 {0};		// offset 0x2A
+	0, // uint8_t sNrxWr1 {0};		// offset 0x2B
+	0xFF, // uint8_t sNimr {0xFF};		// offset 0x2C
+	0x40, // uint8_t sNfrag0  {0x40};	// offset 0x2D
+	0, // uint8_t sNfrag1 {0};		// offset 0x2E
+	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
+};
+
 SocketRegisterBlock srb2 {
+	0, // uint8_t sNmr {0};			// offset 0x00
+	0, // uint8_t sNcr {0};			// offset 0x01
+	0, // uint8_t sNir {0};			// offset 0x02
+	0, // uint8_t sNsr {0};			// offset 0x03
+	0x1E, // uint8_t sNport0 {0};		// offset 0x04		// port 7777
+	0x61, // uint8_t sNport1 {0};		// offset 0x05
+	0x50, // uint8_t sNdhar0 {0xFF};		// offset 0x06	// 50-EB-F6-4D-BA-12
+	0xEB, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xF6, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0x4D, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xBA, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0x12, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	10, // uint8_t sNdipr0 {0};		// offset 0x0C
+	15, // uint8_t sNdipr1 {0};		// offset 0x0D
+	33, // uint8_t sNdipr2 {0};		// offset 0x0E
+	1, // uint8_t sNdipr3 {0};		// offset 0x0F
+	0, // uint8_t sNdport0 {0};		// offset 0x10		// port 23
+	23, // uint8_t sNdport1 {0};		// offset 0x11
+	0, // uint8_t sNmssr0 {0};		// offset 0x12
+	0, // uint8_t sNmssr1 {0};		// offset 0x13
+	0, // uint8_t reserved14 {0};		// offset 0x14
+	0, // uint8_t sNtos {0};			// offset 0x15
+	0x80, // uint8_t sNttl {0x80};		// offset 0x16
+	0, // uint8_t reserved17 {0};		// offset 0x17
+	0, // uint8_t reserved18 {0};		// offset 0x18
+	0, // uint8_t reserved19 {0};		// offset 0x19
+	0, // uint8_t reserved1A {0};		// offset 0x1A
+	0, // uint8_t reserved1B {0};		// offset 0x1B
+	0, // uint8_t reserved1C {0};		// offset 0x1C
+	0, // uint8_t reserved1D {0};		// offset 0x1D
+	0x02, // uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	0x02, // uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	0x08, // uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	0, // uint8_t sNtxFsr1 {0};		// offset 0x21
+	0, // uint8_t sNtxRd0 {0};		// offset 0x22
+	0, // uint8_t sNtxRd1 {0};		// offset 0x23
+	0, // uint8_t sNtxWr0 {0};		// offset 0x24
+	0, // uint8_t sNtxWr1 {0};		// offset 0x25
+	0, // uint8_t sNrxRsr0 {0};		// offset 0x26
+	0, // uint8_t sNrxRsr1 {0};		// offset 0x27
+	0, // uint8_t sNrxRd0 {0};		// offset 0x28
+	0, // uint8_t sNrxRd1 {0};		// offset 0x29
+	0, // uint8_t sNrxWr0 {0};		// offset 0x2A
+	0, // uint8_t sNrxWr1 {0};		// offset 0x2B
+	0xFF, // uint8_t sNimr {0xFF};		// offset 0x2C
+	0x40, // uint8_t sNfrag0  {0x40};	// offset 0x2D
+	0, // uint8_t sNfrag1 {0};		// offset 0x2E
+	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
+};
+
+SocketRegisterBlock srb2Default {
 	0, // uint8_t sNmr {0};			// offset 0x00
 	0, // uint8_t sNcr {0};			// offset 0x01
 	0, // uint8_t sNir {0};			// offset 0x02
@@ -309,6 +513,57 @@ SocketRegisterBlock srb3, srb4, srb5, srb6, srb7 {
 	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
 };
 
+SocketRegisterBlock srb3_7Default {
+	0, // uint8_t sNmr {0};			// offset 0x00
+	0, // uint8_t sNcr {0};			// offset 0x01
+	0, // uint8_t sNir {0};			// offset 0x02
+	0, // uint8_t sNsr {0};			// offset 0x03
+	0, // uint8_t sNport0 {0};		// offset 0x04
+	0, // uint8_t sNport1 {0};		// offset 0x05
+	0xFF, // uint8_t sNdhar0 {0xFF};		// offset 0x06
+	0xFF, // uint8_t sNdhar1 {0xFF};		// offset 0x07
+	0xFF, // uint8_t sNdhar2 {0xFF};		// offset 0x08
+	0xFF, // uint8_t sNdhar3 {0xFF};		// offset 0x09
+	0xFF, // uint8_t sNdhar4 {0xFF};		// offset 0x0A
+	0xFF, // uint8_t sNdhar5 {0xFF};		// offset 0x0B
+	0, // uint8_t sNdipr0 {0};		// offset 0x0C
+	0, // uint8_t sNdipr1 {0};		// offset 0x0D
+	0, // uint8_t sNdipr2 {0};		// offset 0x0E
+	0, // uint8_t sNdipr3 {0};		// offset 0x0F
+	0, // uint8_t sNdport0 {0};		// offset 0x10
+	0, // uint8_t sNdport1 {0};		// offset 0x11
+	0, // uint8_t sNmssr0 {0};		// offset 0x12
+	0, // uint8_t sNmssr1 {0};		// offset 0x13
+	0, // uint8_t reserved14 {0};		// offset 0x14
+	0, // uint8_t sNtos {0};			// offset 0x15
+	0x80, // uint8_t sNttl {0x80};		// offset 0x16
+	0, // uint8_t reserved17 {0};		// offset 0x17
+	0, // uint8_t reserved18 {0};		// offset 0x18
+	0, // uint8_t reserved19 {0};		// offset 0x19
+	0, // uint8_t reserved1A {0};		// offset 0x1A
+	0, // uint8_t reserved1B {0};		// offset 0x1B
+	0, // uint8_t reserved1C {0};		// offset 0x1C
+	0, // uint8_t reserved1D {0};		// offset 0x1D
+	0x02, // uint8_t sNrxbufSize {0x02};	// offset 0x1E
+	0x02, // uint8_t sNtxbufSize {0x02};	// offset 0x1F
+	0x08, // uint8_t sNtxFsr0 {0x08};	// offset 0x20
+	0, // uint8_t sNtxFsr1 {0};		// offset 0x21
+	0, // uint8_t sNtxRd0 {0};		// offset 0x22
+	0, // uint8_t sNtxRd1 {0};		// offset 0x23
+	0, // uint8_t sNtxWr0 {0};		// offset 0x24
+	0, // uint8_t sNtxWr1 {0};		// offset 0x25
+	0, // uint8_t sNrxRsr0 {0};		// offset 0x26
+	0, // uint8_t sNrxRsr1 {0};		// offset 0x27
+	0, // uint8_t sNrxRd0 {0};		// offset 0x28
+	0, // uint8_t sNrxRd1 {0};		// offset 0x29
+	0, // uint8_t sNrxWr0 {0};		// offset 0x2A
+	0, // uint8_t sNrxWr1 {0};		// offset 0x2B
+	0xFF, // uint8_t sNimr {0xFF};		// offset 0x2C
+	0x40, // uint8_t sNfrag0  {0x40};	// offset 0x2D
+	0, // uint8_t sNfrag1 {0};		// offset 0x2E
+	0, // uint8_t sNkpalvtr {0};		// offset 0x2F
+};
+
 // байт, прин�?тый по UART1
 uint8_t receivedByteUART {0};
 // пакет, прин�?тый по UART1
@@ -354,23 +609,7 @@ uint8_t receiveSocket2data[2054];
 uint16_t sizeOfReceiveSocket2data;
 
 
-char textConnected[] {"Setting ACTA.468353.020\n\n\rType IP address (1st bit) [   ]: "};
-char text0[] {"Type IP Address (2nd bit) [   ]: "};
-char text1[] {"Type IP Address (3rd bit) [   ]: "};
-char text2[] {"Type IP Address (4th bit) [   ]: "};
-char text3[] {"Type Subnet Mask Address (1st bit) [   ]: "};
-char text4[] {"Type Subnet Mask Address (2nd bit) [   ]: "};
-char text5[] {"Type Subnet Mask Address (3rd bit) [   ]: "};
-char text6[] {"Type Subnet Mask Address (4th bit) [   ]: "};
-char text7[] {"Type MAC Address (1st octet) [  ]: "};
-char text8[] {"Type MAC Address (2nd octet) [  ]: "};
-char text9[] {"Type MAC Address (3rd octet) [  ]: "};
-char text10[] {"Type MAC Address (4th octet) [  ]: "};
-char text11[] {"Type MAC Address (5th octet) [  ]: "};
-char text12[] {"Type MAC Address (6th octet) [  ]: "};
-char text13[] {"\n\rSo, your setting is:\n\rIP Address xxx.xxx.xxx.xxx\n\rSubnet Mask Address: xxx.xxx.xxx.xxx\n\rMAC Address xx:xx:xx:xx:xx:xx\n\n\rDo you want to save setting?[y/n]: "};
-char* arrText[] {text0, text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11, text12, text13};
-char textError[] {"ERROR"};
+
 
 
 char bufferTelnet[256];
@@ -1213,7 +1452,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				if (valueSn_IR & W5500_Sn_IR_CON) // �?оединение �? пиром у�?пешно у�?тановлено
 				{
-					ethernetA1.sendString(SOCKET2, textConnected);
+					ethernetA1.sendString(SOCKET2, text0);
 					// �?бра�?ываем флаг прерывани�? CON в реги�?тре S1_IR
 					ethernetA1.writeByteToSRB(SOCKET2, W5500_Sn_IR_CON, W5500_Sn_IR);
 				}
