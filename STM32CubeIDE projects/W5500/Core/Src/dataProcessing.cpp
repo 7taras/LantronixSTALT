@@ -150,9 +150,9 @@ void byte_int2string(const uint8_t& byte, char* text)
 // октет MAC-адреса в строку
 void macOctet2string(const uint8_t& byte, char* text)
 {
-	text[0] = crb.shar0 / 16;
+	text[0] = byte / 16;
 	hex2letter(text[0]);
-	text[1] = crb.shar0 % 16;
+	text[1] = byte % 16;
 	hex2letter(text[1]);
 	text[2] = '\0';
 }
@@ -257,9 +257,9 @@ void fillText()
 
 void fillFinalText()
 {
-	adr_int2string(receivedIPAddress, text16);
-	adr_int2string(receivedSubnetMask, text18);
-	mac_int2string(receivedMACAddress, text20);
+	adr_int2string(receivedIPAddress, text15);
+	adr_int2string(receivedSubnetMask, text17);
+	mac_int2string(receivedMACAddress, text19);
 	concatenate7strings(textFinal, arrFinalText);
 	return;
 }
