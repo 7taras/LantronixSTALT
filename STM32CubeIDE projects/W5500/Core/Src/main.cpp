@@ -631,6 +631,10 @@ extern char text0[];
 extern char textNotApply[];
 extern char textApply[];
 
+uint32_t tempCRBfromFlash[12];
+uint32_t tim2counter {0};
+uint32_t tim2fixCounter {0};
+bool tim2status {false};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -682,13 +686,23 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
+
+
   MX_USART1_UART_Init();
   MX_TIM4_Init();
   MX_TIM3_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-
+  readCRBfromFlash(tempCRBfromFlash);
+  if (tempCRBfromFlash[11] != 0xFFFFFFFF)
+  {
+	  uint32_t* pData32 = (uint32_t*) &crb;
+	  for (unsigned int i = 0; i < 12; i++)
+	  {
+		  *(pData32 + i) = tempCRBfromFlash[i];
+	  }
+  }
   //writeFLASH();
 
   //readFLASH();
@@ -768,8 +782,12 @@ int main(void)
   HAL_UART_Receive_IT(&huart1, &receivedByteUART, 1);
 
   // очищаем флаги прерываний
+  CLEAR_BIT(TIM2->SR, TIM_SR_UIF);
   CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
   CLEAR_BIT(TIM4->SR, TIM_SR_UIF);
+
+  // запу�?каем таймер TIM2, от�?читываем время по 100мс
+  HAL_TIM_Base_Start_IT(&htim2);
 
   /* USER CODE END 2 */
 
@@ -911,6 +929,7 @@ int main(void)
 				  else
 				  {
 					  ethernetA1.sendString(SOCKET2, textNotApply);
+
 				  }
 			  }
 
@@ -918,8 +937,15 @@ int main(void)
 			  {
 				  fillFinalText();
 			  }
+			  else if (typedValueCounter == 15)
+			  {
+				  ethernetA1.writeByteToSRB(SOCKET2, W5500_Sn_CR_DISCON, W5500_Sn_CR);
+			  }
 
-			  ethernetA1.sendString(SOCKET2, arrText[typedValueCounter]);
+			  if (typedValueCounter < 14)
+			  {
+				  ethernetA1.sendString(SOCKET2, arrText[typedValueCounter]);
+			  }
 			  ++typedValueCounter;
 		  }
 		  socket2dataReady = false;
@@ -1369,6 +1395,36 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	if(htim->Instance == TIM2) //check if the interrupt comes from TIM2
+	{
+		//HAL_TIM_Base_Stop(&htim2); tim2fixCounter RSTBUTTON
+		if(!HAL_GPIO_ReadPin(RSTBUTTON_GPIO_Port, RSTBUTTON_Pin))
+		{
+			if(!tim2status)
+			{
+				tim2fixCounter = tim2counter;
+				tim2status = true;
+			}
+		}
+		else
+		{
+			if(tim2status)
+			{
+				uint32_t pressTime = tim2counter - tim2fixCounter;
+				if(pressTime > 50)
+				{
+					eraseFLASH();
+					NVIC_SystemReset();
+				}
+				else if (pressTime > 10)
+				{
+					NVIC_SystemReset();
+				}
+				tim2status = false;
+			}
+		}
+		++tim2counter;
+	}
 	if(htim->Instance == TIM3) //check if the interrupt comes from TIM3
 	{
 		HAL_TIM_Base_Stop(&htim3);
@@ -1510,6 +1566,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 				if (valueSn_IR & W5500_Sn_IR_CON) // �?оединение �? пиром у�?пешно у�?тановлено
 				{
+					counterMessages = 0;
+					typedValueCounter = 0;
+					ptrReadBufferTelnet = bufferTelnet;
+					ptrWriteBufferTelnet = bufferTelnet;
 					ethernetA1.sendString(SOCKET2, text0);
 					// �?бра�?ываем флаг прерывани�? CON в реги�?тре S1_IR
 					ethernetA1.writeByteToSRB(SOCKET2, W5500_Sn_IR_CON, W5500_Sn_IR);

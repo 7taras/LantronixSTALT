@@ -46,7 +46,7 @@ char* arrText[] {text1, text2, text3, text4, text5, text6, text7, text8, text9, 
 char* arrFinalText[] {text14, text15, text16, text17, text18, text19, text20};
 char textError[] {"ERROR"};
 char textApply[] {"Your setting will be saved and device will be reboot"};
-char textNotApply[] {"Your setting is NOT saved"};
+char textNotApply[] {"Your setting is NOT saved\n\n\rPress [ENTER] to disconnect "};
 
 void hex2char(char& digit)
 {

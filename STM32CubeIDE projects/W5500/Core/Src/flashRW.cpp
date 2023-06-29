@@ -118,3 +118,36 @@ void readBlockFlash(uint32_t address, uint32_t* pData32, unsigned int size)
 	}
 	return;
 }
+
+// Чтение CRB из FLASH
+void readCRBfromFlash(uint32_t* pData32)
+{
+	for (unsigned int i = 0; i < 12; i++)
+	{
+		*(pData32 + i) = *((volatile uint32_t*)(CONFIG_FLASHPAGE+i*4));
+	}
+	return;
+}
+
+void eraseFLASH()
+{
+	// Открываем доступ к FLASH (она закрыта от случайной записи)
+	HAL_FLASH_Unlock();
+
+	// Объявляем структуру, необходимую для функции стирания страницы
+	FLASH_EraseInitTypeDef eraseInit;
+	eraseInit.TypeErase = FLASH_TYPEERASE_PAGES; // Стираем постранично
+	//eraseInit.Banks = FLASH_BANK_1;
+	eraseInit.PageAddress = CONFIG_FLASHPAGE; // Адрес страницы для стирания
+	eraseInit.NbPages = 1; // Число страниц = 1
+
+	// Объявляем переменную для сохранения результата стирания FLASH (функции HAL_FLASHEx_Erase()), д.б. 0xFFFFFFFF (не используем)
+	uint32_t statusFLASHerase {0};
+
+	// Очищаем страницу
+	HAL_FLASHEx_Erase(&eraseInit, &statusFLASHerase);
+
+	// Закрываем доступ к FLASH, от случайной записи
+	HAL_FLASH_Lock();
+	return;
+}
